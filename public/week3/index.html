@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="ko" class="lang-ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.4" />
+<title>프롬프트 엔지니어링 심화 · Week 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<style>
+  :root{ --bg:#ffffff; --ink:#18181b; --gray:#52525b; --gray2:#71717a; --hair:#e4e4e7; --hair2:#f4f4f5; --accent:#7c3aed; --accent-soft:#f5f3ff; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{ background:var(--bg); color:var(--ink); font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; height:100vh; }
+  .eyebrow .katex, .eyebrow .katex *, .keq-label .katex, .keq-label .katex *, .vcap .katex, .vcap .katex *, .intro-eyebrow .katex, .intro-eyebrow .katex *, table.ktab th .katex, table.ktab th .katex *{ text-transform:none; }
+  .mystery .mq, .mystery .ma, .lcard p, .aggrow .lab, .vs-col .q, .vs-col p, .stat .lbl, .stat .why, .term, .rm-item .rd, .intro-sub, .lede, .qtext, .prob-statement, .callout, .outcomes li, .sumcard li{ word-break:keep-all; }
+
+  header{ height:52px; display:flex; align-items:center; padding:0 26px; border-bottom:1px solid var(--hair); }
+  .brand{ font-size:13px; font-weight:700; color:var(--gray); flex:1; } .brand .sep{ color:var(--hair); margin:0 7px; font-weight:400; }
+  .chrail{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .chdot{ font-size:11px; font-weight:700; color:var(--gray2); border:1px solid var(--hair); border-radius:20px; padding:3px 9px; cursor:pointer; transition:all .12s ease; background:#fff; }
+  .chdot:hover{ border-color:var(--accent); color:var(--accent); }
+  .chdot.cur{ background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  .stepbar{ height:44px; display:flex; align-items:center; justify-content:center; gap:0; border-bottom:1px solid var(--hair); padding:0 16px; overflow:hidden; }
+  .step{ display:flex; align-items:center; font-size:12px; font-weight:600; color:var(--gray2); cursor:pointer; white-space:nowrap; }
+  .step .ix{ width:18px; height:18px; border-radius:50%; border:1px solid var(--hair); display:inline-flex; align-items:center; justify-content:center; font-size:10.5px; margin-right:5px; background:#fff; transition:all .12s; }
+  .step.cur{ color:var(--ink); font-weight:800; } .step.cur .ix{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .step.done{ color:var(--gray); } .step.done .ix{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); }
+  .step .link{ width:20px; height:1px; background:var(--hair); margin:0 7px; }
+  .step:hover:not(.cur){ color:var(--ink); }
+
+  main{ height:calc(100vh - 52px - 44px - 62px); display:flex; align-items:flex-start; justify-content:center; padding:20px 26px 8px; overflow:hidden; }
+  .stage{ width:100%; max-width:1020px; height:100%; display:flex; align-items:flex-start; justify-content:center; overflow:hidden; }
+  .screen{ display:none; width:100%; }
+  .screen.active{ display:block; transform-origin:top center; will-change:transform; animation:fade .16s ease both; }
+  @keyframes fade{ from{opacity:0} to{opacity:1} }
+  @media (prefers-reduced-motion: reduce){ .screen.active{ animation:none; } }
+
+  .eyebrow{ font-size:11.5px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+  .stage-h{ font-size:26px; font-weight:800; line-height:1.22; letter-spacing:-.01em; margin-bottom:2px; } .stage-h .en{ font-weight:600; color:var(--gray); font-size:17px; }
+  .lede{ font-size:15px; line-height:1.7; color:var(--gray); margin-top:13px; max-width:780px; } .lede strong{ color:var(--ink); font-weight:700; }
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:16px; align-items:start; } .two .col2{ min-width:0; }
+
+  .keqbox{ margin-top:14px; border-left:3px solid var(--accent); padding:2px 0 2px 18px; }
+  .keq-label{ font-size:11.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gray2); margin-bottom:11px; }
+  .keqrow{ display:flex; align-items:baseline; gap:14px; margin-bottom:7px; } .keqrow:last-child{ margin-bottom:0; }
+  .keqcap{ font-size:12.5px; font-weight:600; color:var(--gray2); width:200px; flex-shrink:0; } .keqline{ color:var(--ink); }
+  .keqnote{ font-size:12.5px; color:var(--gray2); margin-top:10px; line-height:1.6; }
+
+  /* key terms */
+  .terms{ margin-top:13px; display:grid; grid-template-columns:1fr 1fr; gap:6px 18px; }
+  .term{ font-size:13px; line-height:1.5; color:var(--gray); padding-left:12px; border-left:2px solid var(--hair); }
+  .term b{ color:var(--ink); font-weight:700; }
+
+  /* callouts */
+  .callout{ margin-top:16px; border-radius:10px; padding:13px 16px; font-size:13.5px; line-height:1.65; }
+  .callout .ct{ font-size:11.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .callout.key{ background:var(--accent-soft); border:1px solid #ddd6fe; } .callout.key .ct{ color:var(--accent); }
+  .callout.warn{ background:var(--hair2); border:1px solid var(--hair); } .callout.warn .ct{ color:var(--gray2); }
+  .callout.exam{ background:#fff; border:1px dashed var(--accent); } .callout.exam .ct{ color:var(--accent); }
+  .callout ul{ margin:0; padding-left:18px; } .callout li{ margin-bottom:3px; } .callout strong{ color:var(--ink); }
+
+  /* derivation */
+  .assume{ font-size:13px; color:var(--gray2); margin-top:10px; } .assume b{ color:var(--ink); }
+  .deriv{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:16px; }
+  .dcard{ border:1px solid var(--hair); border-radius:12px; padding:14px 14px 16px; }
+  .dcard h4{ font-size:13px; font-weight:800; margin-bottom:3px; } .dcard .sub{ font-size:11px; color:var(--gray2); font-weight:600; margin-bottom:10px; }
+  .dcard .eq{ background:var(--hair2); border-radius:8px; padding:9px 6px; text-align:center; margin-bottom:9px; } .dcard p{ font-size:12.5px; line-height:1.55; color:var(--gray); } .dcard p strong{ color:var(--ink); }
+  .dcard .ana{ font-size:11.5px; line-height:1.45; color:var(--accent); background:var(--accent-soft); border-radius:7px; padding:7px 9px; margin-bottom:9px; }
+  .analogy{ display:flex; gap:11px; align-items:center; margin-top:10px; background:var(--accent-soft); border:1px solid #ddd6fe; border-radius:10px; padding:9px 15px; } .analogy .ic{ font-size:20px; flex-shrink:0; } .analogy .tx{ font-size:13px; line-height:1.5; color:var(--ink); } .analogy .tx b{ color:var(--accent); font-weight:700; }
+  .steps{ margin-top:14px; } .dstep{ display:flex; gap:12px; margin-bottom:9px; align-items:baseline; }
+  .dstep .n{ flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
+  .dstep .body{ flex:1; } .dstep .body .t{ font-size:13px; color:var(--gray); line-height:1.5; } .dstep .body .t b{ color:var(--ink); }
+
+  /* reading */
+  .reading{ max-width:720px; margin-top:12px; } .reading p{ font-size:14px; line-height:1.66; color:#3f3f46; margin-bottom:8px; } .reading p strong{ color:var(--ink); font-weight:700; }
+  .pullquote{ border-left:3px solid var(--accent); padding:4px 0 4px 18px; margin:11px 0; font-size:15px; line-height:1.5; color:var(--ink); font-weight:600; }
+  .readmeta{ font-size:12px; color:var(--gray2); margin-top:4px; }
+
+  /* visual */
+  .vizgrid{ display:grid; grid-template-columns:1.05fr .95fr; gap:32px; margin-top:14px; align-items:center; }
+  .vcap{ font-size:11.5px; font-weight:700; color:var(--gray2); letter-spacing:.04em; text-transform:uppercase; margin-bottom:9px; }
+  table.ktab{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  table.ktab th{ text-align:left; font-size:11px; letter-spacing:.04em; text-transform:none; color:var(--gray2); font-weight:700; padding:6px 8px; border-bottom:1px solid var(--hair); }
+  table.ktab td{ padding:7px 8px; border-bottom:1px solid var(--hair2); color:var(--ink); } table.ktab td.k{ text-align:right; font-variant-numeric:tabular-nums; color:var(--gray); } table.ktab tr:last-child td{ border-bottom:none; }
+  .bar{ height:7px; background:var(--accent-soft); border-radius:4px; overflow:hidden; } .bar > span{ display:block; height:100%; background:var(--accent); border-radius:4px; min-width:3px; }
+
+  /* interactive calc widget */
+  .calc{ margin-top:14px; border:1px solid var(--hair); border-radius:14px; padding:18px 20px; max-width:760px; background:#fcfcfc; }
+  .calc-title{ font-size:13px; font-weight:800; color:var(--ink); margin-bottom:4px; } .calc-desc{ font-size:12.5px; color:var(--gray2); margin-bottom:14px; line-height:1.5; }
+  .calc-rows{ display:flex; flex-direction:column; gap:13px; }
+  .calc-row{ display:grid; grid-template-columns:190px 1fr 130px; align-items:center; gap:14px; }
+  .calc-lab{ font-size:13.5px; color:var(--ink); } .calc-val{ font-size:13px; color:var(--gray); font-variant-numeric:tabular-nums; text-align:right; }
+  .calc input[type=range]{ -webkit-appearance:none; appearance:none; height:4px; background:var(--hair); border-radius:4px; outline:none; }
+  .calc input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--accent); cursor:pointer; border:2px solid #fff; box-shadow:0 0 0 1px var(--accent); }
+  .calc-out{ margin-top:16px; padding-top:14px; border-top:1px solid var(--hair); font-size:18px; color:var(--ink); display:flex; align-items:baseline; gap:8px; }
+  .calc-out .calc-num{ font-size:24px; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; }
+  .calc-outbar{ margin-top:12px; } .calc-note{ font-size:12px; color:var(--gray2); margin-top:10px; line-height:1.5; }
+
+  /* concept question (cq) + practice (prob) */
+  .panel-head{ display:flex; align-items:center; gap:9px; margin-bottom:9px; }
+  .tag{ font-size:11px; font-weight:800; color:#fff; background:var(--ink); border-radius:5px; padding:2px 8px; } .panel-title{ font-size:15px; font-weight:700; }
+  .cq{ margin-bottom:12px; padding-bottom:4px; } .cq:last-child{ margin-bottom:0; }
+  .qtext{ font-size:14.5px; line-height:1.55; } .qtext .qn{ color:var(--accent); font-weight:800; margin-right:6px; }
+  .opts{ display:flex; flex-direction:column; gap:6px; margin-top:9px; max-width:620px; }
+  .opt{ font-family:inherit; text-align:left; font-size:13.5px; color:var(--ink); background:#fff; border:1px solid var(--hair); border-radius:9px; padding:8px 13px; cursor:pointer; transition:all .12s; } .opt:hover{ border-color:#d4d4d8; background:var(--hair2); } .opt.sel{ border-color:var(--accent); background:var(--accent-soft); } .opt.correct{ border-color:var(--accent); background:var(--accent-soft); font-weight:700; }
+  .submit-row{ display:flex; align-items:center; gap:12px; margin-top:9px; } .submit-fb{ font-size:12.5px; font-weight:700; color:var(--accent); }
+  .btn{ font-family:inherit; font-size:13px; font-weight:600; border-radius:9px; padding:8px 16px; cursor:pointer; border:1px solid var(--hair); background:#fff; color:var(--ink); transition:all .12s; } .btn:hover{ background:var(--hair2); } .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); } .btn.primary:hover{ background:#6d28d9; }
+  .prof{ display:none; margin-top:13px; border:1px dashed var(--hair); border-radius:11px; padding:13px 15px; background:#fcfcfc; max-width:600px; } .prof.show{ display:block; animation:fade .18s ease both; }
+  .cp-exp{ display:none; margin-top:9px; font-size:12.5px; line-height:1.55; color:var(--gray); background:var(--accent-soft); border:1px solid #ddd6fe; border-radius:10px; padding:9px 13px; max-width:660px; } .cp-exp.show{ display:block; animation:fade .18s ease both; }
+  .cp-exp .exp-h{ font-size:11px; font-weight:800; color:var(--accent); letter-spacing:.04em; margin-right:6px; } .cp-exp .ok{ color:var(--accent); font-weight:700; } .cp-exp .dim{ color:var(--gray2); } .cp-exp .agg{ display:block; margin-top:4px; font-size:11.5px; color:var(--gray2); }
+  .calc-sense{ margin-top:13px; font-size:12px; line-height:1.6; color:var(--gray); border-top:1px solid var(--hair2); padding-top:11px; max-width:760px; } .calc-sense .cs-h{ font-size:11px; font-weight:800; color:var(--accent); letter-spacing:.04em; margin-right:6px; }
+  .src{ font-size:11px; color:var(--gray2); font-weight:400; }
+  .prof .ph{ display:flex; align-items:center; gap:8px; font-size:11.5px; font-weight:800; color:var(--gray2); letter-spacing:.03em; margin-bottom:10px; } .prof .pill{ font-size:10px; font-weight:800; color:var(--accent); background:var(--accent-soft); border-radius:20px; padding:2px 9px; }
+  .agg{ display:flex; flex-direction:column; gap:8px; } .aggrow{ display:grid; grid-template-columns:112px 1fr 40px; align-items:center; gap:10px; font-size:12.5px; } .aggrow .lab{ color:var(--ink); font-weight:600; } .aggrow .cnt{ text-align:right; color:var(--gray2); font-variant-numeric:tabular-nums; }
+  .prof .note{ font-size:11px; color:var(--gray2); margin-top:10px; line-height:1.5; }
+
+  .prob{ margin-bottom:18px; }
+  .screen.active[data-stage="연습"]{ display:grid; grid-template-columns:1fr 1fr; column-gap:26px; align-content:start; }
+  .screen[data-stage="연습"] .panel-head{ grid-column:1 / -1; }
+  .screen[data-stage="연습"] .prob{ margin-bottom:0; min-width:0; } .prob:last-child{ margin-bottom:0; }
+  .prob-num{ font-size:11.5px; font-weight:800; color:var(--accent); letter-spacing:.04em; margin-bottom:5px; }
+  .prob-statement{ font-size:14px; line-height:1.6; color:var(--gray); max-width:720px; } .prob-statement strong{ color:var(--ink); }
+  .given{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; } .chip{ font-size:12.5px; color:var(--gray); border:1px solid var(--hair); background:var(--hair2); border-radius:6px; padding:4px 9px; }
+  .find{ font-size:13px; margin-top:9px; } .find b{ color:var(--gray2); font-weight:700; }
+  .ans-row{ display:flex; align-items:center; gap:9px; margin-top:10px; flex-wrap:wrap; } .ans-input{ font-family:inherit; font-size:14px; width:120px; border:1px solid var(--hair); border-radius:8px; padding:7px 11px; outline:none; } .ans-input:focus{ border-color:var(--accent); } .ans-unit{ font-size:13px; color:var(--gray2); } .check-fb{ font-size:12.5px; font-weight:700; } .check-fb.ok{ color:var(--accent); } .check-fb.no{ color:var(--gray2); }
+  .reveal-btn{ margin-top:11px; font-family:inherit; font-size:13px; font-weight:600; color:var(--ink); background:#fff; border:1px solid var(--hair); border-radius:8px; padding:7px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:7px; transition:all .12s; } .reveal-btn:hover{ background:var(--hair2); } .reveal-btn .caret{ font-size:10px; color:var(--gray2); transition:transform .15s; } .reveal-btn.is-open .caret{ transform:rotate(180deg); }
+  .revealable{ display:none; } .revealable.open{ display:block; animation:fade .15s ease both; }
+  .solution{ margin-top:11px; } .dstep2{ margin-bottom:6px; } .step-label{ font-size:12px; font-weight:700; color:var(--gray2); margin-bottom:1px; }
+  .solution .katex-display{ margin:.18em 0; } .solution .katex-display>.katex, .ans-final .katex-display>.katex, .keqline .katex-display>.katex{ text-align:left; } .dcard .eq .katex-display{ margin:.1em 0; }
+  .ans-final{ margin-top:6px; border-top:1px dashed var(--hair); padding-top:9px; font-size:12.5px; color:var(--gray); } .ans-final b{ color:var(--ink); } .ans-final .ans-eq{ color:var(--ink); margin-bottom:4px; }
+
+  /* summary */
+  .sumgrid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; }
+  .sumcard{ border:1px solid var(--hair); border-radius:12px; padding:15px 16px; } .sumcard.full{ grid-column:1 / -1; }
+  .sumcard h4{ font-size:12.5px; font-weight:800; letter-spacing:.03em; margin-bottom:9px; display:flex; align-items:center; gap:6px; } .sumcard.key h4{ color:var(--accent); }
+  .sumcard ul{ margin:0; padding-left:17px; } .sumcard li{ font-size:13px; line-height:1.6; color:var(--gray); margin-bottom:4px; } .sumcard li strong{ color:var(--ink); }
+
+  /* week intro */
+  .intro{ max-width:940px; }
+  .intro-eyebrow{ font-size:12.5px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
+  .intro-h{ font-size:38px; font-weight:800; line-height:1.18; letter-spacing:-.015em; margin-bottom:14px; } .intro-h .hl{ color:var(--accent); }
+  .intro-sub{ font-size:17px; line-height:1.65; color:var(--gray); max-width:780px; margin-bottom:26px; } .intro-sub strong{ color:var(--ink); }
+  .mystery-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .mystery{ border:1px solid var(--hair); border-radius:14px; padding:18px 18px 20px; background:#fff; }
+  .mystery .emoji{ font-size:24px; display:block; margin-bottom:10px; }
+  .mystery .mq{ font-size:14.5px; font-weight:700; color:var(--ink); line-height:1.45; margin-bottom:8px; }
+  .mystery .ma{ font-size:12.5px; line-height:1.55; color:var(--gray2); } .mystery .ma b{ color:var(--accent); font-weight:700; }
+  .intro-teaser{ margin-top:22px; border-left:3px solid var(--accent); padding:4px 0 4px 18px; font-size:16px; line-height:1.6; color:var(--ink); font-weight:600; } .intro-teaser em{ color:var(--accent); font-style:normal; }
+  .roadmap{ margin-top:6px; display:flex; flex-direction:column; gap:9px; }
+  .rm-item{ display:flex; align-items:baseline; gap:13px; }
+  .rm-item .rn{ flex-shrink:0; font-size:12px; font-weight:800; color:var(--accent); background:var(--accent-soft); border-radius:20px; padding:2px 10px; min-width:46px; text-align:center; }
+  .rm-item .rt{ font-size:14.5px; color:var(--ink); font-weight:700; } .rm-item .rd{ font-size:13px; color:var(--gray2); }
+  .outcomes{ margin-top:6px; border:1px solid var(--hair); border-radius:12px; padding:16px 18px; background:#fcfcfc; }
+  .outcomes h4{ font-size:12.5px; font-weight:800; color:var(--accent); margin-bottom:10px; letter-spacing:.03em; }
+  .outcomes ul{ margin:0; padding-left:18px; } .outcomes li{ font-size:13.5px; line-height:1.7; color:var(--gray); } .outcomes li strong{ color:var(--ink); }
+  /* intro extras */
+  .vs{ display:grid; grid-template-columns:1fr 56px 1fr; margin-top:20px; align-items:stretch; }
+  .vs-col{ border:1px solid var(--hair); border-radius:14px; padding:20px 22px; } .vs-col.b{ background:var(--accent-soft); border-color:#ddd6fe; }
+  .vs-mid{ display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--gray2); font-size:13px; }
+  .vs-col h4{ font-size:13px; font-weight:800; letter-spacing:.04em; margin-bottom:10px; color:var(--gray2); } .vs-col.b h4{ color:var(--accent); }
+  .vs-col .q{ font-size:16px; font-weight:700; color:var(--ink); line-height:1.45; margin-bottom:10px; } .vs-col p{ font-size:13.5px; line-height:1.6; color:var(--gray); } .vs-col p strong{ color:var(--ink); }
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px; }
+  .stat{ border:1px solid var(--hair); border-radius:14px; padding:17px 13px; text-align:center; }
+  .stat .big{ font-size:26px; font-weight:800; color:var(--accent); line-height:1.05; } .stat .lbl{ font-size:12.5px; color:var(--ink); margin-top:8px; line-height:1.4; font-weight:600; } .stat .lbl b{ color:var(--ink); }
+  .stat .why{ font-size:11px; color:var(--gray2); margin-top:9px; border-top:1px solid var(--hair2); padding-top:8px; line-height:1.55; }
+  .tl{ margin-top:20px; display:flex; flex-direction:column; gap:13px; max-width:760px; }
+  .tl-item{ display:flex; gap:16px; align-items:baseline; } .tl-item .yr{ flex-shrink:0; font-size:13px; font-weight:800; color:var(--accent); width:120px; } .tl-item .ev{ font-size:14px; color:var(--gray); line-height:1.5; } .tl-item .ev b{ color:var(--ink); font-weight:700; }
+  .flow{ display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:20px; }
+  .flowstep{ border:1px solid var(--hair); border-radius:9px; padding:8px 12px; font-size:13px; font-weight:700; color:var(--ink); background:#fff; } .flowstep.on{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .flow-arr{ color:var(--gray2); font-size:12px; }
+  .learn-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px; }
+  .lcard{ border:1px solid var(--hair); border-radius:14px; padding:18px; } .lcard .lh{ font-size:14px; font-weight:800; color:var(--ink); margin-bottom:7px; display:flex; align-items:center; gap:7px; } .lcard .le{ font-size:20px; } .lcard p{ font-size:13px; line-height:1.6; color:var(--gray); } .lcard p b{ color:var(--accent); }
+
+  footer{ height:62px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; border-top:1px solid var(--hair); }
+  .nav-btn{ font-family:inherit; font-size:14px; font-weight:600; border-radius:10px; padding:9px 17px; cursor:pointer; border:1px solid var(--hair); background:#fff; color:var(--ink); transition:all .12s; } .nav-btn:hover{ background:var(--hair2); } .nav-btn.prev[disabled]{ opacity:0; pointer-events:none; } .nav-btn.next{ background:var(--accent); color:#fff; border-color:var(--accent); } .nav-btn.next:hover{ background:#6d28d9; }
+  .foot-hint{ font-size:12px; color:var(--gray2); }
+  html.lang-en .lang-ko{display:none!important} html.lang-ko .lang-en{display:none!important}
+  .langtog{font:700 11.5px/1 inherit;color:var(--gray2);border:1px solid var(--hair);background:#fff;border-radius:20px;padding:4px 11px;cursor:pointer;margin-left:8px;transition:all .12s} .langtog:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Week 3</span>상변화열전달<span class="sep">·</span>Week N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
+<div class="stepbar" id="stepbar"></div>
+<main><div class="stage" id="stage">
+<!-- ════════ 시작1 / 환영 ════════ -->
+<section class="screen" data-ch="시작1" data-chtitle="3주차 개요" data-stage="환영">
+  <div class="intro">
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 3주차 · 시작</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 3 · Intro</div>
+
+    <h1 class="intro-h lang-ko">프롬프트를 넘어,<br><span class="hl">컨텍스트를 설계한다 — RAG와 에이전트</span></h1>
+    <h1 class="intro-h lang-en">Beyond the prompt:<br><span class="hl">engineering context — RAG and agents</span></h1>
+
+    <p class="lede lang-ko">더 좋은 문장을 고르는 일은 이미 한계에 닿았다. 모델의 성능을 결정하는 진짜 지렛대는 <strong>추론 시점에 무엇을 보여줄 것인가</strong> — 즉 컨텍스트 윈도우 안에 <strong>어떤 정보를, 어떤 순서로, 얼마나</strong> 넣느냐다. 문서 $N$개 중 상위 $k$개만 골라 넣는 검색 증강 생성(RAG)에서, 관련도 순위와 토큰 예산 $B$의 균형이 답의 정확도를 좌우한다. 나아가 모델이 스스로 도구를 부르고 결과를 되먹임하는 <strong>에이전트 루프</strong>에 이르면, 프롬프트는 더 이상 한 번의 지시가 아니라 <strong>계속 갱신되는 상태(state)</strong>가 된다. <span class="src">[Lewis et al., <i>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</i>, NeurIPS 2020]</span></p>
+    <p class="lede lang-en">Picking better wording has already hit its ceiling. The real lever on model performance is <strong>what you show it at inference time</strong> — that is, <strong>which information, in what order, and how much</strong> you place inside the context window. In retrieval-augmented generation (RAG), where only the top $k$ of $N$ documents are injected, the balance between relevance ranking and a token budget $B$ governs the accuracy of the answer. Push further to an <strong>agent loop</strong>, where the model calls tools and feeds the results back to itself, and the prompt stops being a single instruction — it becomes a <strong>continuously updated state</strong>. <span class="src">[Lewis et al., <i>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</i>, NeurIPS 2020]</span></p>
+  </div>
+</section>
+
+<!-- ════════ 시작2 / 여정 ════════ -->
+<section class="screen" data-ch="시작2" data-chtitle="3주차 지도" data-stage="여정">
+  <div class="intro">
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 3주차 지도</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 3 Roadmap</div>
+
+    <h1 class="intro-h lang-ko">이번 주, <span class="hl">네 개의 챕터</span>로 컨텍스트 설계를 완성한다</h1>
+    <h1 class="intro-h lang-en">This week: <span class="hl">four chapters</span> to master context engineering</h1>
+
+    <div class="roadmap lang-ko" style="margin-top:14px">
+      <div class="rm-item"><span class="rn">3-1</span><span><span class="rt">RAG 기초와 검색</span> <span class="rd">— 임베딩·벡터 유사도 $\cos\theta$·상위 $k$ 검색으로 컨텍스트를 채운다</span></span></div>
+      <div class="rm-item"><span class="rn">3-2</span><span><span class="rt">청킹·재순위·캐싱</span> <span class="rd">— 청크 크기와 겹침, 재순위(rerank), 토큰 예산 $B$와 캐시 재사용</span></span></div>
+      <div class="rm-item"><span class="rn">3-3</span><span><span class="rt">에이전트 루프</span> <span class="rd">— 도구 호출·관찰·되먹임의 반복과 종료 조건 설계</span></span></div>
+      <div class="rm-item"><span class="rn">3-4</span><span><span class="rt">명세주도·멀티에이전트</span> <span class="rd">— 명세로 작업을 고정하고 역할별 에이전트를 협업시킨다</span></span></div>
+    </div>
+    <div class="roadmap lang-en" style="margin-top:14px">
+      <div class="rm-item"><span class="rn">3-1</span><span><span class="rt">RAG Foundations &amp; Retrieval</span> <span class="rd">— embeddings, vector similarity $\cos\theta$, and top-$k$ search to fill the context</span></span></div>
+      <div class="rm-item"><span class="rn">3-2</span><span><span class="rt">Chunking, Reranking, Caching</span> <span class="rd">— chunk size and overlap, rerank, the token budget $B$, and cache reuse</span></span></div>
+      <div class="rm-item"><span class="rn">3-3</span><span><span class="rt">Agent Loop</span> <span class="rd">— iterating tool call, observation, and feedback; designing stop conditions</span></span></div>
+      <div class="rm-item"><span class="rn">3-4</span><span><span class="rt">Spec-Driven &amp; Multi-Agent</span> <span class="rd">— pinning work with a spec and orchestrating role-specialized agents</span></span></div>
+    </div>
+
+    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 주가 끝나면 할 수 있게 된다</h4><ul>
+      <li>임베딩과 벡터 유사도로 <strong>RAG 검색 파이프라인</strong>을 구성하고 상위 $k$를 선택한다.</li>
+      <li><strong>청킹·재순위·캐싱</strong>을 조합해 토큰 예산 $B$ 안에서 컨텍스트 품질을 최적화한다.</li>
+      <li>도구 호출과 되먹임으로 <strong>에이전트 루프</strong>를 설계하고 안전한 종료 조건을 정의한다.</li>
+      <li><strong>명세주도 워크플로</strong>와 멀티에이전트 협업으로 복잡한 작업을 분해·조율한다.</li>
+    </ul></div>
+    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this week you will be able to</h4><ul>
+      <li>Build a <strong>RAG retrieval pipeline</strong> with embeddings and vector similarity, and select the top $k$.</li>
+      <li>Combine <strong>chunking, reranking, and caching</strong> to optimize context quality within a token budget $B$.</li>
+      <li>Design an <strong>agent loop</strong> from tool calls and feedback, and define safe stop conditions.</li>
+      <li>Decompose and orchestrate complex tasks with a <strong>spec-driven workflow</strong> and multi-agent collaboration.</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- ══════════ 3-1 / 개념 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="개념">
+    <div class="eyebrow lang-ko">3-1 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">3-1 · Concept</div>
+    <h1 class="stage-h lang-ko">RAG — 모델에게 "열린 책"을 쥐여주기</h1>
+    <h1 class="stage-h lang-en">RAG — Handing the Model an "Open Book"</h1>
+    <div class="analogy lang-ko"><span class="ic">📚</span><div class="tx"><b>직관</b> — 폐쇄형 시험(closed-book)을 보는 학생은 오직 암기에 의존해 답하고, 모르면 그럴듯하게 <b>지어냅니다</b>(환각). 반면 오픈북 시험은 <b>먼저 관련 페이지를 찾고</b>, 그 페이지를 앞에 펼쳐 놓은 채 답을 씁니다. RAG는 LLM을 <b>오픈북 응시자</b>로 바꿉니다 — 질문이 오면 문서를 <b>검색(retrieve)</b>하고, 찾은 근거를 프롬프트에 <b>주입(augment)</b>한 뒤 <b>생성(generate)</b>합니다. <span class="src">(출처: Lewis et al. 2020, "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks," NeurIPS)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">📚</span><div class="tx"><b>Intuition</b> — A student in a closed-book exam relies only on memory and, when unsure, <b>makes things up</b> plausibly (hallucination). An open-book exam instead lets you <b>first find the relevant pages</b> and write the answer with those pages open in front of you. RAG turns an LLM into an <b>open-book test-taker</b> — given a query, it <b>retrieves</b> documents, <b>augments</b> the prompt with the found evidence, then <b>generates</b>. <span class="src">(Source: Lewis et al. 2020, "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks," NeurIPS)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede"><strong>RAG(Retrieval-Augmented Generation)</strong>는 매개변수에 <em>암묵적으로</em> 저장된 지식(parametric memory)에, 외부 코퍼스에서 <em>명시적으로</em> 끌어온 지식(non-parametric memory)을 결합하는 구조입니다. 세 단계 — <strong>검색 → 증강 → 생성</strong> — 로 이루어지며, 핵심 하이퍼파라미터는 <strong>검색 문서 수 $k$</strong>입니다. 이 구조는 <strong>지식 컷오프</strong>(학습 시점 이후 정보 부재)와 <strong>환각</strong>을 완화하고, 답변에 <strong>출처 근거</strong>를 부여합니다.</p>
+        <div class="keqbox">
+          <div class="keq-label">RAG 파이프라인 세 단계</div>
+          <div class="keqrow"><span class="keqcap">① 검색 retrieve</span><span class="keqline">$ D_k = \text{top-}k\ \operatorname{sim}(q,\,d_i) $</span></div>
+          <div class="keqrow"><span class="keqcap">② 증강 augment</span><span class="keqline">$ \text{prompt} = [D_k;\ q] $</span></div>
+          <div class="keqrow"><span class="keqcap">③ 생성 generate</span><span class="keqline">$ y \sim p_\theta(y \mid D_k,\, q) $</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>질의 $q$</b> 사용자 질문 — 검색의 입력</div>
+          <div class="term"><b>코퍼스 $\{d_i\}$</b> 검색 대상 외부 문서 집합(knowledge base)</div>
+          <div class="term"><b>검색 문서 수 $k$</b> 상위 몇 개 문서를 문맥으로 주입할지</div>
+          <div class="term"><b>parametric memory</b> 가중치 $\theta$에 저장된 암묵 지식</div>
+          <div class="term"><b>non-parametric memory</b> 외부 코퍼스의 명시 지식(교체·갱신 가능)</div>
+          <div class="term"><b>grounding</b> 생성 답변을 검색 근거에 정박(출처 제시)</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>RAG는 <strong>지식을 가중치에서 분리</strong>합니다. 새 사실이 생기면 모델을 재학습할 필요 없이 <strong>코퍼스만 갱신</strong>하면 됩니다 — 지식 컷오프를 넘어서고, 답변을 실제 문서에 <strong>정박(grounding)</strong>해 환각을 줄입니다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede"><strong>RAG (Retrieval-Augmented Generation)</strong> combines knowledge stored <em>implicitly</em> in weights (parametric memory) with knowledge pulled <em>explicitly</em> from an external corpus (non-parametric memory). It runs in three stages — <strong>retrieve → augment → generate</strong> — and its key hyperparameter is the <strong>number of retrieved documents $k$</strong>. This design mitigates the <strong>knowledge cutoff</strong> (no information after training) and <strong>hallucination</strong>, while giving each answer <strong>source grounding</strong>.</p>
+        <div class="keqbox">
+          <div class="keq-label">The three-stage RAG pipeline</div>
+          <div class="keqrow"><span class="keqcap">① retrieve</span><span class="keqline">$ D_k = \text{top-}k\ \operatorname{sim}(q,\,d_i) $</span></div>
+          <div class="keqrow"><span class="keqcap">② augment</span><span class="keqline">$ \text{prompt} = [D_k;\ q] $</span></div>
+          <div class="keqrow"><span class="keqcap">③ generate</span><span class="keqline">$ y \sim p_\theta(y \mid D_k,\, q) $</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>Query $q$</b> the user's question — input to retrieval</div>
+          <div class="term"><b>Corpus $\{d_i\}$</b> external document set to search (knowledge base)</div>
+          <div class="term"><b>Retrieved count $k$</b> how many top documents to inject as context</div>
+          <div class="term"><b>parametric memory</b> implicit knowledge held in weights $\theta$</div>
+          <div class="term"><b>non-parametric memory</b> explicit corpus knowledge (swappable, updatable)</div>
+          <div class="term"><b>grounding</b> anchoring the answer to retrieved evidence (citing sources)</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>RAG <strong>decouples knowledge from weights</strong>. When a new fact appears, you need not retrain the model — just <strong>update the corpus</strong>. This crosses the knowledge cutoff and <strong>grounds</strong> answers in real documents, reducing hallucination.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-1 / 유도 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="유도">
+    <div class="eyebrow lang-ko">3-1 · 메커니즘 유도 · Derivation</div>
+    <div class="eyebrow lang-en">3-1 · Derivation</div>
+    <h1 class="stage-h lang-ko">검색은 왜 잘 되는가 — 유사도와 주변화</h1>
+    <h1 class="stage-h lang-en">Why Retrieval Works — Similarity and Marginalization</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> RAG 생성은 <b>어떤 문서를 봤느냐</b>에 대한 확률적 평균입니다. 질의 $q$와 각 문서 $d$를 벡터로 임베딩해 <b>유사도</b>로 상위 $k$개를 고르고, 그 문서들에 <b>조건부 생성</b>을 한 뒤 검색 확률로 <b>가중 평균(주변화)</b>합니다.</p>
+    <p class="lede lang-en"><b>Unifying view:</b> RAG generation is a probabilistic average over <b>which documents were seen</b>. We embed the query $q$ and each document $d$ as vectors, pick the top-$k$ by <b>similarity</b>, condition generation on those documents, and <b>marginalize</b> (weighted average) by the retrieval probability.</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>Step 1 · 임베딩 유사도</h4><div class="sub">검색 점수화</div><div class="ana">🧲 뜻이 가까운 문서를 끌어당긴다</div><div class="eq">$ s(q,d) = \dfrac{\mathbf{E}(q)\cdot\mathbf{E}(d)}{\lVert\mathbf{E}(q)\rVert\,\lVert\mathbf{E}(d)\rVert} $</div><p>질의·문서를 인코더 $\mathbf{E}$로 벡터화하고 <strong>코사인 유사도</strong>로 점수를 매깁니다. 점수 상위 $k$개가 $D_k$.</p></div>
+      <div class="dcard"><h4>Step 2 · 검색 분포</h4><div class="sub">softmax 정규화</div><div class="ana">⚖️ 유사도를 확률로 바꾼다</div><div class="eq">$ p_\eta(d\mid q) = \dfrac{\exp\big(s(q,d)/\tau\big)}{\sum_{d'\in D_k}\exp\big(s(q,d')/\tau\big)} $</div><p>상위 $k$ 문서의 유사도를 <strong>softmax</strong>로 정규화해 각 문서에 검색 확률을 부여. $\tau$는 온도.</p></div>
+      <div class="dcard"><h4>Step 3 · 주변화 생성</h4><div class="sub">RAG-Sequence 근사</div><div class="ana">🎯 여러 근거를 확률로 섞는다</div><div class="eq">$ p(y\mid q) \approx \sum_{d\in D_k} p_\eta(d\mid q)\, p_\theta(y\mid d,q) $</div><p>각 문서 조건 생성 확률을 검색 확률로 <strong>가중 합</strong>(주변화). $k$를 늘리면 더 많은 근거를 섞습니다.</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>Step 1 · Embedding similarity</h4><div class="sub">scoring retrieval</div><div class="ana">🧲 Pull in documents close in meaning</div><div class="eq">$ s(q,d) = \dfrac{\mathbf{E}(q)\cdot\mathbf{E}(d)}{\lVert\mathbf{E}(q)\rVert\,\lVert\mathbf{E}(d)\rVert} $</div><p>Encode query and document with encoder $\mathbf{E}$ and score by <strong>cosine similarity</strong>. The top-$k$ scores form $D_k$.</p></div>
+      <div class="dcard"><h4>Step 2 · Retrieval distribution</h4><div class="sub">softmax normalization</div><div class="ana">⚖️ Turn similarities into probabilities</div><div class="eq">$ p_\eta(d\mid q) = \dfrac{\exp\big(s(q,d)/\tau\big)}{\sum_{d'\in D_k}\exp\big(s(q,d')/\tau\big)} $</div><p>Normalize the top-$k$ similarities with a <strong>softmax</strong> to assign each document a retrieval probability. $\tau$ is temperature.</p></div>
+      <div class="dcard"><h4>Step 3 · Marginalized generation</h4><div class="sub">RAG-Sequence approx.</div><div class="ana">🎯 Blend several sources by probability</div><div class="eq">$ p(y\mid q) \approx \sum_{d\in D_k} p_\eta(d\mid q)\, p_\theta(y\mid d,q) $</div><p>Take a <strong>weighted sum</strong> of per-document generation probabilities, weighted by retrieval probability (marginalization). Larger $k$ blends more evidence.</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · $k$는 공짜가 아니다</div>$k$를 키우면 정답 문서가 포함될 확률(재현율)은 오르지만, <strong>무관 문서</strong>도 함께 섞여 문맥을 희석하고 토큰 예산·지연을 늘립니다. 실제로 관련 없는 문맥은 정확도를 <strong>떨어뜨릴 수 있습니다</strong>(context distraction). 그래서 곡선은 <strong>포화·역전</strong> 형태입니다. <span class="src">(경향은 대표적 서술이며 절대 수치는 UNVERIFIED)</span></div>
+    <div class="callout warn lang-en"><div class="ct">Caution · $k$ is not free</div>Increasing $k$ raises the chance the gold document is included (recall), but it also mixes in <strong>irrelevant documents</strong> that dilute context and cost more tokens and latency. Irrelevant context can in fact <strong>lower</strong> accuracy (context distraction), so the curve tends to <strong>saturate and reverse</strong>. <span class="src">(This trend is a representative account; absolute numbers are UNVERIFIED)</span></div>
+  </section>
+
+  <!-- ══════════ 3-1 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">3-1 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">3-1 · Reading</div>
+    <h1 class="stage-h lang-ko">Lewis et al. 2020 — RAG의 탄생</h1>
+    <h1 class="stage-h lang-en">Lewis et al. 2020 — the Birth of RAG</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p>2020년 <strong>Patrick Lewis</strong>와 동료들(Facebook AI Research)은 지식 집약형 과제에서 순수 파라미터 모델의 한계를 지적하며 <strong>RAG</strong>를 제안했습니다. 핵심 아이디어는 <strong>사전학습된 seq2seq 생성기(BART)</strong>에 <strong>밀집 검색기(DPR)</strong>와 <strong>위키피디아 벡터 인덱스</strong>를 결합해, 검색과 생성을 <strong>함께 미세조정(end-to-end)</strong>하는 것이었습니다.</p>
+        <p class="pullquote">지식을 가중치에 <em>가두지</em> 말고, 필요할 때 <em>찾아오게</em> 하라.</p>
+        <p>논문은 두 변종을 제시합니다 — <strong>RAG-Sequence</strong>(전체 답변을 하나의 문서에 조건)와 <strong>RAG-Token</strong>(토큰마다 다른 문서를 참조). 이렇게 분리된 <strong>비파라미터 메모리</strong>는 재학습 없이 인덱스만 교체해 <strong>지식을 갱신</strong>할 수 있고, 생성 근거를 문서로 <strong>추적(provenance)</strong>할 수 있게 합니다. 오늘날 대부분의 실무 RAG는 이 골격을 단순화해 <em>검색 → 문맥 주입 → 생성</em>의 3단으로 씁니다.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>RAG = <strong>parametric(가중치) + non-parametric(코퍼스)</strong> 결합.</li><li>검색기와 생성기를 <strong>end-to-end</strong>로 함께 학습 가능(원논문).</li><li>실무 최소 골격은 <strong>retrieve → augment → generate</strong> 3단.</li></ul></div>
+        <p class="readmeta">참고: Lewis et al. (2020) NeurIPS / Karpukhin et al. (2020) DPR, EMNLP</p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p>In 2020, <strong>Patrick Lewis</strong> and colleagues (Facebook AI Research) proposed <strong>RAG</strong>, noting the limits of purely parametric models on knowledge-intensive tasks. The core idea was to combine a <strong>pretrained seq2seq generator (BART)</strong> with a <strong>dense retriever (DPR)</strong> and a <strong>Wikipedia vector index</strong>, and to <strong>fine-tune retrieval and generation jointly (end-to-end)</strong>.</p>
+        <p class="pullquote">Don't <em>lock</em> knowledge into the weights — let the model <em>fetch</em> it when needed.</p>
+        <p>The paper offers two variants — <strong>RAG-Sequence</strong> (the whole answer conditioned on one document) and <strong>RAG-Token</strong> (each token can attend to a different document). This separated <strong>non-parametric memory</strong> lets you <strong>update knowledge</strong> by swapping the index without retraining, and makes generation traceable to its documents (<strong>provenance</strong>). Most production RAG today simplifies this skeleton to a three-step <em>retrieve → augment → generate</em>.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>RAG = <strong>parametric (weights) + non-parametric (corpus)</strong>.</li><li>Retriever and generator can be trained <strong>end-to-end</strong> (original paper).</li><li>Minimal production skeleton is <strong>retrieve → augment → generate</strong>.</li></ul></div>
+        <p class="readmeta">Refs: Lewis et al. (2020) NeurIPS / Karpukhin et al. (2020) DPR, EMNLP</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-1 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="그림·표">
+    <div class="eyebrow lang-ko">3-1 · 그림 · 파이프라인 · 표</div>
+    <div class="eyebrow lang-en">3-1 · Figure · Pipeline · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — 검색·증강·생성 파이프라인</h1>
+    <h1 class="stage-h lang-en">At a Glance — the Retrieve–Augment–Generate Pipeline</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">RAG 파이프라인 (질의 → 검색 → 증강 → 생성)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="rag31ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="22" y="18" width="120" height="40" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+<text x="82" y="43" font-size="12" fill="#1d4ed8" text-anchor="middle" font-weight="700">질의 $q$</text>
+<line x1="82" y1="58" x2="82" y2="82" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31ko)"/>
+<rect x="22" y="84" width="120" height="46" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
+<text x="82" y="103" font-size="11.5" fill="#15803d" text-anchor="middle" font-weight="700">① 검색 retrieve</text>
+<text x="82" y="120" font-size="10" fill="#52525b" text-anchor="middle">top-$k$ 유사도</text>
+<rect x="288" y="84" width="168" height="46" rx="8" fill="#fafafa" stroke="#a1a1aa" stroke-width="1.4"/>
+<text x="372" y="103" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">코퍼스 $\{d_i\}$</text>
+<text x="372" y="120" font-size="10" fill="#71717a" text-anchor="middle">벡터 인덱스</text>
+<line x1="288" y1="107" x2="146" y2="107" stroke="#a1a1aa" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#rag31ko)"/>
+<line x1="82" y1="130" x2="82" y2="154" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31ko)"/>
+<rect x="22" y="156" width="120" height="46" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.6"/>
+<text x="82" y="175" font-size="11.5" fill="#a16207" text-anchor="middle" font-weight="700">② 증강 augment</text>
+<text x="82" y="192" font-size="10" fill="#52525b" text-anchor="middle">$[D_k;\,q]$</text>
+<line x1="82" y1="202" x2="82" y2="226" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31ko)"/>
+<rect x="22" y="228" width="120" height="46" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="82" y="247" font-size="11.5" fill="#b91c1c" text-anchor="middle" font-weight="700">③ 생성 generate</text>
+<text x="82" y="264" font-size="10" fill="#52525b" text-anchor="middle">$y\sim p_\theta$</text>
+<rect x="288" y="228" width="168" height="46" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+<text x="372" y="247" font-size="11" fill="#6d28d9" text-anchor="middle" font-weight="700">답변 + 출처</text>
+<text x="372" y="264" font-size="10" fill="#71717a" text-anchor="middle">grounded</text>
+<line x1="142" y1="251" x2="286" y2="251" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31ko)"/>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">닫힌책 LLM vs RAG 비교</div>
+        <table class="ktab"><thead><tr><th>기준</th><th>닫힌책 LLM</th><th style="text-align:right">RAG</th></tr></thead><tbody>
+          <tr><td>지식 갱신</td><td class="k">재학습 필요</td><td>코퍼스 교체</td></tr>
+          <tr><td>지식 컷오프</td><td class="k">고정</td><td>극복 가능</td></tr>
+          <tr><td>출처 근거</td><td class="k">없음</td><td>문서 인용</td></tr>
+          <tr><td>환각</td><td class="k">높음</td><td>완화</td></tr>
+          <tr><td>핵심 파라미터</td><td class="k">—</td><td>문서 수 $k$</td></tr>
+        </tbody></table>
+        <div class="keqnote">파이프라인은 원논문(Lewis et al. 2020)의 학습형 RAG를 실무용 3단으로 단순화한 형태. 코사인 유사도·벡터 인덱스는 대표적 구현이며 세부는 시스템마다 다름. <span class="src">(출처: Lewis et al. 2020 NeurIPS)</span></div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">RAG pipeline (query → retrieve → augment → generate)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="rag31en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="22" y="18" width="120" height="40" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+<text x="82" y="43" font-size="12" fill="#1d4ed8" text-anchor="middle" font-weight="700">query $q$</text>
+<line x1="82" y1="58" x2="82" y2="82" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31en)"/>
+<rect x="22" y="84" width="120" height="46" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
+<text x="82" y="103" font-size="11.5" fill="#15803d" text-anchor="middle" font-weight="700">① retrieve</text>
+<text x="82" y="120" font-size="10" fill="#52525b" text-anchor="middle">top-$k$ similar</text>
+<rect x="288" y="84" width="168" height="46" rx="8" fill="#fafafa" stroke="#a1a1aa" stroke-width="1.4"/>
+<text x="372" y="103" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">corpus $\{d_i\}$</text>
+<text x="372" y="120" font-size="10" fill="#71717a" text-anchor="middle">vector index</text>
+<line x1="288" y1="107" x2="146" y2="107" stroke="#a1a1aa" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#rag31en)"/>
+<line x1="82" y1="130" x2="82" y2="154" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31en)"/>
+<rect x="22" y="156" width="120" height="46" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.6"/>
+<text x="82" y="175" font-size="11.5" fill="#a16207" text-anchor="middle" font-weight="700">② augment</text>
+<text x="82" y="192" font-size="10" fill="#52525b" text-anchor="middle">$[D_k;\,q]$</text>
+<line x1="82" y1="202" x2="82" y2="226" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31en)"/>
+<rect x="22" y="228" width="120" height="46" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="82" y="247" font-size="11.5" fill="#b91c1c" text-anchor="middle" font-weight="700">③ generate</text>
+<text x="82" y="264" font-size="10" fill="#52525b" text-anchor="middle">$y\sim p_\theta$</text>
+<rect x="288" y="228" width="168" height="46" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+<text x="372" y="247" font-size="11" fill="#6d28d9" text-anchor="middle" font-weight="700">answer + cites</text>
+<text x="372" y="264" font-size="10" fill="#71717a" text-anchor="middle">grounded</text>
+<line x1="142" y1="251" x2="286" y2="251" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31en)"/>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Closed-book LLM vs RAG</div>
+        <table class="ktab"><thead><tr><th>Criterion</th><th>Closed-book LLM</th><th style="text-align:right">RAG</th></tr></thead><tbody>
+          <tr><td>Knowledge update</td><td class="k">retrain</td><td>swap corpus</td></tr>
+          <tr><td>Knowledge cutoff</td><td class="k">fixed</td><td>can overcome</td></tr>
+          <tr><td>Source grounding</td><td class="k">none</td><td>cite docs</td></tr>
+          <tr><td>Hallucination</td><td class="k">high</td><td>mitigated</td></tr>
+          <tr><td>Key parameter</td><td class="k">—</td><td>doc count $k$</td></tr>
+        </tbody></table>
+        <div class="keqnote">The pipeline simplifies the trainable RAG of the original paper (Lewis et al. 2020) into a production 3-step form. Cosine similarity and vector indexes are representative implementations; details vary by system. <span class="src">(Source: Lewis et al. 2020 NeurIPS)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-1 / 실습 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="실습">
+    <div class="eyebrow lang-ko">3-1 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">3-1 · Interactive</div>
+    <h1 class="stage-h lang-ko">검색 문서 수 $k$의 딜레마 — 근거성 점수 조절</h1>
+    <h1 class="stage-h lang-en">The Dilemma of $k$ — Tuning the Grounding Score</h1>
+    <p class="lede lang-ko">$k$를 늘리면 정답 문서가 포함될 확률(재현율)은 <strong>포화 곡선</strong>으로 오르지만, 무관 문서가 문맥을 <strong>희석</strong>해 페널티가 붙습니다. 아래 <strong>장난감 모델</strong>로 근거성 점수 $G(k)=\big(1-e^{-k/k_0}\big)-\lambda\,k$를 조절해보세요 — 재현항은 포화, 희석항 $\lambda k$는 선형 페널티. <span class="src">(교육용 모형이며 절대 수치는 UNVERIFIED)</span></p>
+    <p class="lede lang-en">Raising $k$ improves recall (chance the gold document is included) as a <strong>saturating curve</strong>, but irrelevant documents <strong>dilute</strong> the context and add a penalty. Tune the <strong>toy model</strong> below: grounding score $G(k)=\big(1-e^{-k/k_0}\big)-\lambda\,k$ — a saturating recall term minus a linear dilution penalty $\lambda k$. <span class="src">(An illustrative model; absolute numbers are UNVERIFIED)</span></p>
+    <div class="calc lang-ko"
+      data-title="근거성 점수 $G(k) = \big(1-e^{-k/k_0}\big) - \lambda\,k$"
+      data-desc="k = 검색 문서 수, k0 = 재현 포화 스케일, λ = 무관 문서 희석 페널티. 기본값 k=5, k0=3, λ=0.02 → G≈0.71. k를 너무 키우면 희석항이 이겨 G가 다시 감소."
+      data-vars='[{"sym":"k","label":"$k$ · 검색 문서 수","min":1,"max":20,"val":5,"step":1,"unit":"개"},{"sym":"k0","label":"$k_0$ · 재현 포화 스케일","min":1,"max":8,"val":3,"step":1,"unit":""},{"sym":"lam","label":"$\\lambda$ · 희석 페널티","min":0,"max":0.1,"val":0.02,"step":0.005,"unit":""}]'
+      data-expr="(1 - Math.exp(-k/k0)) - lam*k"
+      data-out="$G$" data-out-unit="점수"
+      data-barmax="1"
+      data-note="k를 1→5로 늘리면 재현이 급증(포화 이전)해 G가 오르지만, λ=0.02에서 k를 계속 키우면 희석항이 이겨 G가 정점 후 하락 — 최적 k가 존재."></div>
+    <div class="calc lang-en"
+      data-title="Grounding score $G(k) = \big(1-e^{-k/k_0}\big) - \lambda\,k$"
+      data-desc="k = retrieved doc count, k0 = recall saturation scale, λ = irrelevant-doc dilution penalty. Default k=5, k0=3, λ=0.02 → G≈0.71. Push k too high and the dilution term wins, so G falls again."
+      data-vars='[{"sym":"k","label":"$k$ · retrieved docs","min":1,"max":20,"val":5,"step":1,"unit":"docs"},{"sym":"k0","label":"$k_0$ · recall saturation scale","min":1,"max":8,"val":3,"step":1,"unit":""},{"sym":"lam","label":"$\\lambda$ · dilution penalty","min":0,"max":0.1,"val":0.02,"step":0.005,"unit":""}]'
+      data-expr="(1 - Math.exp(-k/k0)) - lam*k"
+      data-out="$G$" data-out-unit="score"
+      data-barmax="1"
+      data-note="From k=1→5, recall rises steeply (before saturation) so G climbs; but at λ=0.02, pushing k higher lets dilution win, so G peaks then declines — an optimal k exists."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — RAG에서 $k$는 정확도와 비용의 <strong>손잡이</strong>입니다. 재현항 $1-e^{-k/k_0}$은 $k\!\gg\!k_0$에서 $1$에 포화 — 더 넣어도 새 정답 정보가 거의 없습니다. 반면 희석·토큰·지연 비용은 $k$에 <strong>선형</strong>으로 늘죠. 실무 감: 짧은 사실 질의는 $k$가 작게(예 $3\!\sim\!5$), 종합·비교 질의는 크게 잡되 <strong>재순위화(re-rank)</strong>로 무관 문서를 거릅니다. <span class="src">(모형·경향은 교육용, 절대 수치 UNVERIFIED / 개념 출처: Lewis et al. 2020)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — In RAG, $k$ is the <strong>knob</strong> between accuracy and cost. The recall term $1-e^{-k/k_0}$ saturates toward $1$ when $k\!\gg\!k_0$ — adding more brings almost no new gold information. Meanwhile dilution, token, and latency costs grow <strong>linearly</strong> in $k$. Rule of thumb: short factual queries want a small $k$ (e.g. $3\!\sim\!5$); synthesis/comparison queries want more but with <strong>re-ranking</strong> to filter irrelevant documents. <span class="src">(Model and trend are illustrative; absolute numbers UNVERIFIED / concept: Lewis et al. 2020)</span></div>
+  </section>
+
+  <!-- ══════════ 3-1 / 점검 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>RAG 파이프라인의 <strong>세 단계</strong>를 올바른 순서로 나열한 것은?</p>
+      <div class="opts">
+        <button class="opt">① 생성 → 검색 → 증강</button>
+        <button class="opt" data-correct="1">② 검색(retrieve) → 증강(augment) → 생성(generate)</button>
+        <button class="opt">③ 증강 → 생성 → 검색</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — RAG는 질의에 대해 먼저 문서를 <strong>검색</strong>하고, 찾은 근거를 프롬프트에 <strong>증강(주입)</strong>한 뒤 그 문맥으로 <strong>생성</strong>한다. <span class="dim">오답 ①·③: 생성이나 증강이 검색보다 앞서면 근거 없이 답을 만들게 되어 grounding이 성립하지 않는다.</span> <span class="agg">학급 n=41 · ① 5 · ② 33 · ③ 3</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>Which lists the <strong>three RAG stages</strong> in the correct order?</p>
+      <div class="opts">
+        <button class="opt">① generate → retrieve → augment</button>
+        <button class="opt" data-correct="1">② retrieve → augment → generate</button>
+        <button class="opt">③ augment → generate → retrieve</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — RAG first <strong>retrieves</strong> documents for the query, <strong>augments</strong> the prompt with the found evidence, then <strong>generates</strong> using that context. <span class="dim">Wrong ①·③: if generation or augmentation precedes retrieval, the answer is produced without evidence and grounding fails.</span> <span class="agg">class n=41 · ① 5 · ② 33 · ③ 3</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>검색 문서 수 <strong>$k$</strong>를 무한정 키우면 왜 정확도가 항상 좋아지지는 않는가?</p>
+      <div class="opts">
+        <button class="opt">① 재현율이 $k$에 반비례해 떨어지기 때문</button>
+        <button class="opt" data-correct="1">② 무관 문서가 문맥을 희석·산만하게 하고 토큰·지연 비용이 늘기 때문</button>
+        <button class="opt">③ 임베딩 유사도 계산이 $k$가 커지면 불가능해지기 때문</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 재현항은 포화하는 반면, $k$가 커지면 <strong>무관 문서</strong>가 섞여 context distraction을 일으키고 토큰 예산·지연이 선형으로 증가한다. 그래서 최적 $k$가 존재한다. <span class="dim">오답 ①·③: ①재현율은 $k$에 따라 (반비례가 아니라) 포화하며 증가하고, ③유사도 계산은 $k$와 무관하게 가능하다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>Why does increasing the retrieved count <strong>$k$</strong> indefinitely not always improve accuracy?</p>
+      <div class="opts">
+        <button class="opt">① because recall falls inversely with $k$</button>
+        <button class="opt" data-correct="1">② because irrelevant docs dilute/distract context and raise token & latency cost</button>
+        <button class="opt">③ because embedding similarity becomes impossible for large $k$</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the recall term saturates, while a larger $k$ mixes in <strong>irrelevant documents</strong> that cause context distraction and grow token budget and latency linearly. Hence an optimal $k$ exists. <span class="dim">Wrong ①·③: ① recall increases and saturates with $k$ (not inversely); ③ similarity computation is independent of $k$.</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-1 / 연습 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Computation · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 코사인 유사도</div>
+      <p class="prob-statement">질의 임베딩 $\mathbf{E}(q)=(3,\,4)$와 문서 임베딩 $\mathbf{E}(d)=(4,\,3)$이 주어졌다. 두 벡터의 <strong>코사인 유사도 $s(q,d)$</strong>를 구하시오(소수 둘째 자리).</p>
+      <div class="given"><span class="chip">$\mathbf{E}(q)=(3,4)$</span><span class="chip">$\mathbf{E}(d)=(4,3)$</span></div>
+      <div class="find"><b>구할 것:</b> $s(q,d)$ (무차원)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.96" data-tol="0.02"/><span class="ans-unit">(무차원)</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 내적</div>$$ \mathbf{E}(q)\cdot\mathbf{E}(d) = 3\cdot4 + 4\cdot3 = 24 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 노름</div>$$ \lVert\mathbf{E}(q)\rVert=\lVert\mathbf{E}(d)\rVert=\sqrt{3^2+4^2}=5 $$</div>
+        <div class="dstep2"><div class="step-label">Step 3 · 코사인</div>$$ s = \frac{24}{5\cdot5} = \frac{24}{25} = 0.96 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ s(q,d) = 0.96 $$</div><b>정답:</b> 방향이 거의 일치 → 뜻이 매우 유사한 문서로 상위에 검색된다.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · cosine similarity</div>
+      <p class="prob-statement">Given a query embedding $\mathbf{E}(q)=(3,\,4)$ and a document embedding $\mathbf{E}(d)=(4,\,3)$, compute the <strong>cosine similarity $s(q,d)$</strong> (to two decimals).</p>
+      <div class="given"><span class="chip">$\mathbf{E}(q)=(3,4)$</span><span class="chip">$\mathbf{E}(d)=(4,3)$</span></div>
+      <div class="find"><b>Find:</b> $s(q,d)$ (dimensionless)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.96" data-tol="0.02"/><span class="ans-unit">(dimensionless)</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · dot product</div>$$ \mathbf{E}(q)\cdot\mathbf{E}(d) = 3\cdot4 + 4\cdot3 = 24 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · norms</div>$$ \lVert\mathbf{E}(q)\rVert=\lVert\mathbf{E}(d)\rVert=\sqrt{3^2+4^2}=5 $$</div>
+        <div class="dstep2"><div class="step-label">Step 3 · cosine</div>$$ s = \frac{24}{5\cdot5} = \frac{24}{25} = 0.96 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ s(q,d) = 0.96 $$</div><b>Answer:</b> nearly aligned directions → a highly similar document, ranked near the top.</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 검색 확률(softmax)</div>
+      <p class="prob-statement">상위 두 문서의 유사도 점수가 $s_1=2$, $s_2=1$이다. 온도 $\tau=1$의 <strong>softmax</strong>로 정규화할 때 문서 1의 <strong>검색 확률 $p_\eta(d_1\mid q)$</strong>를 구하시오(소수 둘째 자리). ($e\approx2.718$)</p>
+      <div class="given"><span class="chip">$s_1=2$</span><span class="chip">$s_2=1$</span><span class="chip">$\tau=1$</span></div>
+      <div class="find"><b>구할 것:</b> $p_\eta(d_1\mid q)$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.73" data-tol="0.02"/><span class="ans-unit">(확률)</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 지수화</div>$$ e^{2}\approx 7.389,\qquad e^{1}\approx 2.718 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · softmax</div>$$ p_\eta(d_1\mid q)=\frac{e^{2}}{e^{2}+e^{1}}=\frac{7.389}{10.107} $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ p_\eta(d_1\mid q)\approx 0.73 $$</div><b>정답:</b> 유사도 차 1이 검색 확률 약 0.73:0.27로 벌어짐 — 상위 문서가 생성 가중에서 지배적.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · retrieval probability (softmax)</div>
+      <p class="prob-statement">The top two documents have similarity scores $s_1=2$, $s_2=1$. Normalizing with a <strong>softmax</strong> at temperature $\tau=1$, find the <strong>retrieval probability $p_\eta(d_1\mid q)$</strong> of document 1 (to two decimals). ($e\approx2.718$)</p>
+      <div class="given"><span class="chip">$s_1=2$</span><span class="chip">$s_2=1$</span><span class="chip">$\tau=1$</span></div>
+      <div class="find"><b>Find:</b> $p_\eta(d_1\mid q)$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.73" data-tol="0.02"/><span class="ans-unit">(probability)</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · exponentiate</div>$$ e^{2}\approx 7.389,\qquad e^{1}\approx 2.718 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · softmax</div>$$ p_\eta(d_1\mid q)=\frac{e^{2}}{e^{2}+e^{1}}=\frac{7.389}{10.107} $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ p_\eta(d_1\mid q)\approx 0.73 $$</div><b>Answer:</b> a score gap of 1 spreads retrieval probability to about 0.73:0.27 — the top document dominates the generation weighting.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-1 / 정리 ══════════ -->
+  <section class="screen" data-ch="3-1" data-chtitle="RAG 기초와 검색" data-stage="정리">
+    <div class="eyebrow lang-ko">3-1 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">3-1 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>RAG 3단계 = <strong>검색(retrieve) → 증강(augment) → 생성(generate)</strong>.</li>
+        <li><strong>parametric(가중치) + non-parametric(코퍼스)</strong> 결합 → 컷오프·환각 완화, 출처 근거.</li>
+        <li>핵심 파라미터 <strong>$k$</strong>: 재현은 포화, 무관 문서 희석은 선형 → <strong>최적 $k$</strong> 존재.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>순서를 생성 우선으로 착각 → 반드시 <strong>검색이 먼저</strong>.</li>
+        <li>$k$를 크게 할수록 무조건 좋다는 오해 → <strong>희석·비용</strong> 고려.</li>
+        <li>RAG를 "재학습"으로 착각 → 실제는 <strong>코퍼스 교체</strong>로 지식 갱신.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>파이프라인 3단계 순서와 각 단계 역할.</li>
+        <li>코사인 유사도·softmax 검색 확률 계산.</li>
+        <li>$k$의 재현–희석 트레이드오프와 최적 $k$의 존재(Lewis et al. 2020 배경).</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>RAG 3 stages = <strong>retrieve → augment → generate</strong>.</li>
+        <li><strong>Parametric (weights) + non-parametric (corpus)</strong> → mitigates cutoff & hallucination, adds grounding.</li>
+        <li>Key parameter <strong>$k$</strong>: recall saturates, irrelevant-doc dilution is linear → an <strong>optimal $k$</strong> exists.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Assuming a generate-first order → retrieval must come <strong>first</strong>.</li>
+        <li>Believing bigger $k$ is always better → account for <strong>dilution & cost</strong>.</li>
+        <li>Mistaking RAG for "retraining" → knowledge is updated by <strong>swapping the corpus</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Order of the three pipeline stages and each stage's role.</li>
+        <li>Computing cosine similarity and softmax retrieval probability.</li>
+        <li>The recall–dilution trade-off in $k$ and existence of an optimal $k$ (background: Lewis et al. 2020).</li>
+      </ul></div>
+    </div>
+  </section>
+
+<!-- ══════════ 3-2 / 개념 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="개념">
+    <div class="eyebrow lang-ko">3-2 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">3-2 · Concept</div>
+    <h1 class="stage-h lang-ko">청킹·재순위·캐싱 — RAG 검색 파이프라인의 세 손잡이</h1>
+    <h1 class="stage-h lang-en">Chunking, Reranking, Caching — Three Knobs of the RAG Pipeline</h1>
+    <div class="analogy lang-ko"><span class="ic">📚</span><div class="tx"><b>직관</b> — 도서관 사서에게 질문할 때, ① 책을 <b>몇 쪽씩 잘라 색인</b>할지(청크 크기), ② 후보 20권을 뽑은 뒤 <b>정말 관련 있는 3권을 다시 골라</b> 위로 올릴지(재순위), ③ 매번 반복하는 <b>서문·규정을 미리 복사해두고 재사용</b>할지(프롬프트 캐싱). 이 세 손잡이가 검색-증강 생성(RAG)의 정확도와 비용·지연을 동시에 결정한다. <span class="src">(출처: Lewis et al. 2020, "Retrieval-Augmented Generation for Knowledge-Intensive NLP", NeurIPS / Anthropic Prompt Caching docs)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">📚</span><div class="tx"><b>Intuition</b> — When you ask a librarian a question: ① how many pages to <b>slice and index</b> a book into (chunk size), ② whether to pull 20 candidates and then <b>re-pick the 3 truly relevant ones</b> to the top (reranking), ③ whether to <b>pre-copy and reuse the repeated preface/rules</b> (prompt caching). These three knobs jointly set the accuracy, cost, and latency of retrieval-augmented generation (RAG). <span class="src">(Source: Lewis et al. 2020, "Retrieval-Augmented Generation for Knowledge-Intensive NLP", NeurIPS / Anthropic Prompt Caching docs)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede"><strong>청킹(chunking)</strong>은 문서를 임베딩·검색 단위로 자르는 것입니다. 청크가 <strong>너무 작으면</strong> 임베딩은 정밀하지만 <strong>문맥이 조각나</strong> 답에 필요한 앞뒤 정보가 다른 청크로 흩어집니다. 반대로 <strong>너무 크면</strong> 한 청크에 여러 주제가 섞여 <strong>임베딩 신호가 잡음으로 희석</strong>됩니다. <strong>재순위(rerank)</strong>는 1차 검색(임베딩 유사도)로 뽑은 상위 $k$ 후보를 <strong>교차-인코더</strong>로 다시 채점해 순서를 바로잡습니다. <strong>프롬프트 캐싱</strong>은 반복되는 <strong>접두부(prefix)</strong>를 재사용해 처리 비용과 지연을 줄입니다.</p>
+        <div class="keqbox">
+          <div class="keq-label">세 손잡이 요약</div>
+          <div class="keqrow"><span class="keqcap">청크 크기</span><span class="keqline">정밀도 ↔ 문맥 보존 트레이드오프</span></div>
+          <div class="keqrow"><span class="keqcap">재순위 $k$</span><span class="keqline">recall(넓게) → precision(다시 정렬)</span></div>
+          <div class="keqrow"><span class="keqcap">캐시 히트율 $h$</span><span class="keqline">비용·지연 감소 ($\text{read} \approx 0.1\times\text{base}$)</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>청크(chunk)</b> 문서를 자른 임베딩·검색 단위 (예: 256–1024 토큰)</div>
+          <div class="term"><b>오버랩(overlap)</b> 인접 청크가 공유하는 겹침 토큰 — 경계 문맥 손실 완화</div>
+          <div class="term"><b>재순위기(reranker)</b> 후보 $k$개를 재채점하는 교차-인코더 (query+doc 동시 입력)</div>
+          <div class="term"><b>Recall@k</b> 정답이 상위 $k$ 후보 안에 포함될 확률</div>
+          <div class="term"><b>캐시 히트율 $h$</b> 요청 접두부가 캐시에서 재사용되는 비율 $[0,1]$</div>
+          <div class="term"><b>접두부(prefix)</b> tools → system → messages 순서로 렌더된 앞부분</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>청크·재순위는 <strong>정확도</strong> 손잡이, 캐싱은 <strong>비용·지연</strong> 손잡이. 캐싱은 <strong>접두부 정확 일치(prefix match)</strong>가 조건 — 접두부 한 바이트만 바뀌어도 그 뒤 캐시는 전부 무효화됩니다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede"><strong>Chunking</strong> slices a document into units for embedding and retrieval. Chunks that are <strong>too small</strong> give precise embeddings but <strong>fragment the context</strong>, scattering the surrounding information a good answer needs across different chunks. Chunks that are <strong>too large</strong> mix multiple topics into one, <strong>diluting the embedding signal with noise</strong>. <strong>Reranking</strong> takes the top-$k$ candidates from first-stage retrieval (embedding similarity) and re-scores them with a <strong>cross-encoder</strong> to fix the ordering. <strong>Prompt caching</strong> reuses the repeated <strong>prefix</strong> to cut processing cost and latency.</p>
+        <div class="keqbox">
+          <div class="keq-label">The three knobs</div>
+          <div class="keqrow"><span class="keqcap">Chunk size</span><span class="keqline">precision ↔ context-preservation tradeoff</span></div>
+          <div class="keqrow"><span class="keqcap">Rerank $k$</span><span class="keqline">recall (wide) → precision (re-sort)</span></div>
+          <div class="keqrow"><span class="keqcap">Cache hit rate $h$</span><span class="keqline">cost/latency drop ($\text{read} \approx 0.1\times\text{base}$)</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>Chunk</b> an embedding/retrieval unit cut from a document (e.g. 256–1024 tokens)</div>
+          <div class="term"><b>Overlap</b> tokens shared by adjacent chunks — mitigates boundary context loss</div>
+          <div class="term"><b>Reranker</b> a cross-encoder that re-scores the $k$ candidates (query+doc jointly)</div>
+          <div class="term"><b>Recall@k</b> probability the answer is within the top-$k$ candidates</div>
+          <div class="term"><b>Cache hit rate $h$</b> fraction of the request prefix reused from cache $[0,1]$</div>
+          <div class="term"><b>Prefix</b> the front span rendered in order tools → system → messages</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>Chunking and reranking are <strong>accuracy</strong> knobs; caching is a <strong>cost/latency</strong> knob. Caching requires an exact <strong>prefix match</strong> — a single byte change in the prefix invalidates the entire cache after it.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-2 / 유도 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="유도">
+    <div class="eyebrow lang-ko">3-2 · 메커니즘 유도 · Derivation</div>
+    <div class="eyebrow lang-en">3-2 · Derivation</div>
+    <h1 class="stage-h lang-ko">왜 이렇게 되는가 — 세 메커니즘의 수식</h1>
+    <h1 class="stage-h lang-en">Why It Works — the Math of Three Mechanisms</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> ① 청크 크기는 <b>정밀도(작을수록↑)</b>와 <b>문맥 보존(클수록↑)</b>의 곱으로 recall이 결정되는 <b>단봉(unimodal) 곡선</b>을 만들고, ② 재순위는 <b>2단계 파이프라인(넓은 recall → 정밀 rerank)</b>으로 계산량을 아끼며, ③ 캐싱은 히트율 $h$에 <b>선형인 유효비용</b>을 만듭니다.</p>
+    <p class="lede lang-en"><b>Unifying view:</b> ① chunk size makes a <b>unimodal curve</b> where recall is the product of <b>precision (rises as size↓)</b> and <b>context preservation (rises as size↑)</b>, ② reranking saves compute via a <b>two-stage pipeline (wide recall → precise rerank)</b>, and ③ caching produces an <b>effective cost linear in the hit rate $h$</b>.</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>① 청크 크기 곡선</h4><div class="sub">정밀도 × 문맥</div><div class="ana">🔪 작게 자를수록 임베딩은 날카롭지만 문맥이 흩어진다</div><div class="eq">$ \text{recall}(s) \approx P_{\text{prec}}(s)\cdot P_{\text{ctx}}(s) $</div><p>$P_{\text{prec}}$는 청크가 작을수록↑(신호 집중), $P_{\text{ctx}}$는 클수록↑(문맥 보존). 두 감소·증가 함수의 곱 → <strong>중간에 최댓값</strong>을 갖는 단봉 곡선.</p></div>
+      <div class="dcard"><h4>② 재순위 2단계</h4><div class="sub">recall → precision</div><div class="ana">🎯 넓게 20개 뽑고, 무거운 채점은 20개에만</div><div class="eq">$ C \approx C_{\text{emb}}\!\cdot\! N + C_{\text{ce}}\!\cdot\! k,\ \ k\ll N $</div><p>1차: 값싼 임베딩 유사도로 전체 $N$에서 상위 $k$. 2차: 비싼 교차-인코더 $C_{\text{ce}}$를 <strong>$k$개에만</strong> 적용($k\ll N$)해 precision↑ 하되 계산량 억제.</p></div>
+      <div class="dcard"><h4>③ 캐싱 유효비용</h4><div class="sub">히트율 $h$에 선형</div><div class="ana">📋 반복 접두부는 read 요금(≈0.1×)으로</div><div class="eq">$ \bar{c}(h) = c_f(1-h) + c_c\,h $</div><p>미스분($1-h$)은 정가 $c_f$, 히트분($h$)은 캐시 read $c_c\approx 0.1\,c_f$. $h$가 클수록 <strong>유효비용이 선형으로 감소</strong>.</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>① Chunk-size curve</h4><div class="sub">precision × context</div><div class="ana">🔪 smaller cuts sharpen embeddings but scatter context</div><div class="eq">$ \text{recall}(s) \approx P_{\text{prec}}(s)\cdot P_{\text{ctx}}(s) $</div><p>$P_{\text{prec}}$ rises as size↓ (concentrated signal); $P_{\text{ctx}}$ rises as size↑ (context kept). The product of a decreasing and an increasing function → a unimodal curve with an <strong>interior maximum</strong>.</p></div>
+      <div class="dcard"><h4>② Two-stage rerank</h4><div class="sub">recall → precision</div><div class="ana">🎯 pull 20 wide; run the heavy scorer on just those 20</div><div class="eq">$ C \approx C_{\text{emb}}\!\cdot\! N + C_{\text{ce}}\!\cdot\! k,\ \ k\ll N $</div><p>Stage 1: cheap embedding similarity picks top-$k$ from all $N$. Stage 2: apply the costly cross-encoder $C_{\text{ce}}$ to <strong>only $k$ items</strong> ($k\ll N$), raising precision while bounding compute.</p></div>
+      <div class="dcard"><h4>③ Cache effective cost</h4><div class="sub">linear in hit rate $h$</div><div class="ana">📋 repeated prefix billed at read rate (≈0.1×)</div><div class="eq">$ \bar{c}(h) = c_f(1-h) + c_c\,h $</div><p>The miss share $(1-h)$ pays full price $c_f$; the hit share $h$ pays the cache read $c_c\approx 0.1\,c_f$. Larger $h$ → effective cost <strong>drops linearly</strong>.</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · 캐시 write 프리미엄 & 무효화</div>캐시 <strong>write</strong>는 정가의 약 <strong>1.25×</strong>(5분 TTL)입니다. 따라서 접두부를 <strong>2번 이상 재사용</strong>해야 손익분기($1.25\times + 0.1\times < 2\times$). 접두부에 <strong>타임스탬프·UUID</strong>가 섞이면 매 요청마다 write만 하고 read=0 → 비용이 오히려 늘어납니다. <span class="src">(출처: Anthropic Prompt Caching — 경제성 · 무효화 규칙. 제공사별 구체 할인율은 UNVERIFIED)</span></div>
+    <div class="callout warn lang-en"><div class="ct">Caution · cache write premium & invalidation</div>A cache <strong>write</strong> costs about <strong>1.25×</strong> full price (5-minute TTL). So you must <strong>reuse the prefix at least twice</strong> to break even ($1.25\times + 0.1\times < 2\times$). If a <strong>timestamp or UUID</strong> leaks into the prefix, every request only writes (read=0) and cost <em>increases</em>. <span class="src">(Source: Anthropic Prompt Caching — economics & invalidation rules. Provider-specific discount percentages are UNVERIFIED.)</span></div>
+  </section>
+
+  <!-- ══════════ 3-2 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">3-2 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">3-2 · Reading</div>
+    <h1 class="stage-h lang-ko">교차-인코더 재순위의 근거와 캐싱의 프리픽스 불변식</h1>
+    <h1 class="stage-h lang-en">Why Cross-Encoder Reranking, and the Prefix Invariant of Caching</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p>1차 검색의 <strong>bi-encoder</strong>는 질의와 문서를 <em>따로</em> 벡터로 인코딩해 내적으로 유사도를 잽니다 — 빠르지만 상호작용을 못 봅니다. <strong>재순위기(cross-encoder)</strong>는 [질의; 문서]를 <em>함께</em> 넣어 토큰 단위 상호작용을 계산하므로 정밀하지만 느립니다(Nogueira &amp; Cho 2019, "Passage Re-ranking with BERT"). 그래서 <strong>전체 $N$은 bi-encoder로 좁히고, 상위 $k$만 cross-encoder로 재채점</strong>하는 2단계가 표준입니다.</p>
+        <p class="pullquote">넓게 뽑아 recall을 확보하고, 좁게 다시 채점해 precision을 얻는다.</p>
+        <p>프롬프트 <strong>캐싱</strong>의 유일한 불변식은 <strong>접두부 정확 일치</strong>입니다. 렌더 순서는 <strong>tools → system → messages</strong>이며, 캐시 키는 <strong>각 breakpoint까지의 정확한 바이트</strong>로 결정됩니다. 안정적인 내용(고정 system, 결정적 tool 목록)을 앞에, 변동 내용(질문·per-request ID)을 <strong>마지막 breakpoint 뒤</strong>에 두어야 합니다. <code>usage.cache_read_input_tokens</code>이 반복 요청에서 0이면 <strong>조용한 무효화</strong> 범인이 있는 것입니다.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>재순위는 <strong>recall→precision</strong> 2단계 — cross-encoder는 상위 $k$에만.</li><li>캐시는 <strong>prefix match</strong> 불변식 — 앞이 바뀌면 뒤 전부 무효.</li><li>손익분기: 접두부 <strong>≥2회 재사용</strong>(5분 TTL 기준).</li><li>read≈$0.1\times$, write≈$1.25\times$(5분) / $2\times$(1시간).</li></ul></div>
+        <p class="readmeta">참고: Nogueira &amp; Cho (2019) arXiv:1901.04085 / Lewis et al. (2020) NeurIPS / Anthropic Prompt Caching docs (제공사별 수치는 UNVERIFIED)</p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p>First-stage <strong>bi-encoders</strong> encode query and document into vectors <em>separately</em> and measure similarity by dot product — fast, but they never see the interaction. A <strong>cross-encoder reranker</strong> feeds [query; document] <em>together</em>, computing token-level interaction — precise but slow (Nogueira &amp; Cho 2019, "Passage Re-ranking with BERT"). Hence the standard two-stage design: <strong>narrow all $N$ with the bi-encoder, then re-score only the top-$k$ with the cross-encoder</strong>.</p>
+        <p class="pullquote">Pull wide to secure recall; re-score narrow to earn precision.</p>
+        <p>Prompt <strong>caching</strong> has one invariant: an <strong>exact prefix match</strong>. The render order is <strong>tools → system → messages</strong>, and the cache key is the <strong>exact bytes up to each breakpoint</strong>. Put stable content (frozen system, deterministic tool list) first, and volatile content (the question, per-request IDs) <strong>after the last breakpoint</strong>. If <code>usage.cache_read_input_tokens</code> is zero across repeated requests, a <strong>silent invalidator</strong> is at work.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>Reranking is a <strong>recall→precision</strong> two-stage — cross-encoder on the top-$k$ only.</li><li>Caching is a <strong>prefix-match</strong> invariant — change the front, lose everything after.</li><li>Break-even: reuse the prefix <strong>≥2×</strong> (5-minute TTL).</li><li>read≈$0.1\times$, write≈$1.25\times$(5m) / $2\times$(1h).</li></ul></div>
+        <p class="readmeta">Refs: Nogueira &amp; Cho (2019) arXiv:1901.04085 / Lewis et al. (2020) NeurIPS / Anthropic Prompt Caching docs (provider percentages UNVERIFIED)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-2 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="그림·표">
+    <div class="eyebrow lang-ko">3-2 · 그림 · 그래프 · 표</div>
+    <div class="eyebrow lang-en">3-2 · Figure · Graph · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — 청크 크기 vs Recall 곡선</h1>
+    <h1 class="stage-h lang-en">At a Glance — Chunk Size vs Recall Curve</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">청크 크기 → Recall (단봉 곡선, 대표값)</div>
+        <svg viewBox="0 0 480 285" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar32ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<line x1="52" y1="248" x2="452" y2="248" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar32ko)"/>
+<line x1="52" y1="248" x2="52" y2="24" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar32ko)"/>
+<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">청크 크기 (토큰, 로그) →</text>
+<text x="20" y="135" font-size="11.5" fill="#52525b" text-anchor="middle" transform="rotate(-90 20 135)">Recall@k</text>
+<path d="M62 226 Q150 96 236 74 Q320 96 444 210" fill="none" stroke="#2563eb" stroke-width="2.75" stroke-linecap="round"/>
+<circle cx="236" cy="74" r="5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="236" y="60" font-size="11.5" fill="#2563eb" text-anchor="middle" font-weight="700">최적 지점</text>
+<line x1="236" y1="74" x2="236" y2="248" stroke="#2563eb" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="112" y="200" font-size="10.5" fill="#71717a" text-anchor="middle">작음:</text>
+<text x="112" y="214" font-size="10.5" fill="#71717a" text-anchor="middle">문맥 손실</text>
+<text x="392" y="188" font-size="10.5" fill="#71717a" text-anchor="middle">큼:</text>
+<text x="392" y="202" font-size="10.5" fill="#71717a" text-anchor="middle">잡음 희석</text>
+<text x="236" y="244" font-size="10" fill="#2563eb" text-anchor="middle" font-weight="700">≈512</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">세 손잡이 비교 (대표값)</div>
+        <table class="ktab"><thead><tr><th>손잡이</th><th>작게/낮게</th><th style="text-align:right">크게/높게</th></tr></thead><tbody>
+          <tr><td>청크 크기</td><td class="k">정밀·문맥손실</td><td>문맥보존·잡음</td></tr>
+          <tr><td>오버랩</td><td class="k">경계손실↑</td><td>중복·비용↑</td></tr>
+          <tr><td>재순위 $k$</td><td class="k">precision↑·recall↓</td><td>recall↑·비용↑</td></tr>
+          <tr><td>캐시 $h$</td><td class="k">절감 작음</td><td>절감 큼</td></tr>
+        </tbody></table>
+        <div class="keqnote">일반 RAG 문헌의 실무 대표값: 청크 $256\!\sim\!1024$ 토큰, 오버랩 $10\!\sim\!20\%$, rerank $k\approx 20\!\to\!3\!\sim\!5$. 캐시 read $\approx 0.1\times$ 정가. (출처: Lewis et al. 2020 / Anthropic docs. 위 곡선·값은 대표값이며 도메인 의존 — UNVERIFIED)</div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">Chunk size → Recall (unimodal, representative)</div>
+        <svg viewBox="0 0 480 285" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar32en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<line x1="52" y1="248" x2="452" y2="248" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar32en)"/>
+<line x1="52" y1="248" x2="52" y2="24" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar32en)"/>
+<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">chunk size (tokens, log) →</text>
+<text x="20" y="135" font-size="11.5" fill="#52525b" text-anchor="middle" transform="rotate(-90 20 135)">Recall@k</text>
+<path d="M62 226 Q150 96 236 74 Q320 96 444 210" fill="none" stroke="#2563eb" stroke-width="2.75" stroke-linecap="round"/>
+<circle cx="236" cy="74" r="5" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+<text x="236" y="60" font-size="11.5" fill="#2563eb" text-anchor="middle" font-weight="700">sweet spot</text>
+<line x1="236" y1="74" x2="236" y2="248" stroke="#2563eb" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="112" y="200" font-size="10.5" fill="#71717a" text-anchor="middle">small:</text>
+<text x="112" y="214" font-size="10.5" fill="#71717a" text-anchor="middle">context loss</text>
+<text x="392" y="188" font-size="10.5" fill="#71717a" text-anchor="middle">large:</text>
+<text x="392" y="202" font-size="10.5" fill="#71717a" text-anchor="middle">noise dilute</text>
+<text x="236" y="244" font-size="10" fill="#2563eb" text-anchor="middle" font-weight="700">≈512</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Three knobs compared (representative)</div>
+        <table class="ktab"><thead><tr><th>Knob</th><th>Small/low</th><th style="text-align:right">Large/high</th></tr></thead><tbody>
+          <tr><td>Chunk size</td><td class="k">precise·ctx loss</td><td>ctx kept·noise</td></tr>
+          <tr><td>Overlap</td><td class="k">boundary loss↑</td><td>redundancy·cost↑</td></tr>
+          <tr><td>Rerank $k$</td><td class="k">precision↑·recall↓</td><td>recall↑·cost↑</td></tr>
+          <tr><td>Cache $h$</td><td class="k">small saving</td><td>large saving</td></tr>
+        </tbody></table>
+        <div class="keqnote">Common practical values in RAG literature: chunk $256\!\sim\!1024$ tokens, overlap $10\!\sim\!20\%$, rerank $k\approx 20\!\to\!3\!\sim\!5$. Cache read $\approx 0.1\times$ full price. (Source: Lewis et al. 2020 / Anthropic docs. The curve and values are representative and domain-dependent — UNVERIFIED.)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-2 / 실습 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="실습">
+    <div class="eyebrow lang-ko">3-2 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">3-2 · Interactive</div>
+    <h1 class="stage-h lang-ko">캐시 히트율 → 유효비용 절감 — 직접 조절해보기</h1>
+    <h1 class="stage-h lang-en">Cache Hit Rate → Effective Cost Saving — Try It</h1>
+    <p class="lede lang-ko">유효비용 $\bar{c}(h)=c_f(1-h)+c_c\,h$에서 캐시 read를 $c_c\approx 0.1\,c_f$로 두면, 절감률 = $1-\bar{c}/c_f = h\,(1-c_c/c_f)$입니다. 슬라이더로 히트율 $h$와 <strong>read 비율</strong> $r=c_c/c_f$를 바꾸며 <strong>절감률(%)</strong>이 어떻게 변하는지 확인하세요.</p>
+    <p class="lede lang-en">With effective cost $\bar{c}(h)=c_f(1-h)+c_c\,h$ and cache read $c_c\approx 0.1\,c_f$, the saving rate = $1-\bar{c}/c_f = h\,(1-c_c/c_f)$. Move the sliders for hit rate $h$ and the <strong>read ratio</strong> $r=c_c/c_f$ to see how the <strong>saving (%)</strong> changes.</p>
+    <div class="calc lang-ko"
+      data-title="캐시 절감률 $\ =\ h\,(1-r)\times 100\%$"
+      data-desc="h = 캐시 히트율(0~1), r = read/base 비율(≈0.1). 기본값 h=0.7, r=0.1 → 절감률 ≈ 63%. h=1이면 완전 재사용, r=1이면 캐시 이득 없음."
+      data-vars='[{"sym":"h","label":"$h$ · 캐시 히트율","min":0,"max":1,"val":0.7,"step":0.05,"unit":""},{"sym":"r","label":"$r$ · read/base 비율","min":0.05,"max":1,"val":0.1,"step":0.05,"unit":""}]'
+      data-expr="h*(1-r)*100"
+      data-out="절감률" data-out-unit="%"
+      data-barmax="100"
+      data-note="히트율 0.7 · read 0.1× → 약 63% 절감. read 비율 r이 커질수록(예: write 프리미엄 잦은 무효화) 절감이 줄어듭니다."></div>
+    <div class="calc lang-en"
+      data-title="Cache saving $\ =\ h\,(1-r)\times 100\%$"
+      data-desc="h = cache hit rate (0–1), r = read/base ratio (≈0.1). Default h=0.7, r=0.1 → saving ≈ 63%. h=1 is full reuse; r=1 means no cache benefit."
+      data-vars='[{"sym":"h","label":"$h$ · cache hit rate","min":0,"max":1,"val":0.7,"step":0.05,"unit":""},{"sym":"r","label":"$r$ · read/base ratio","min":0.05,"max":1,"val":0.1,"step":0.05,"unit":""}]'
+      data-expr="h*(1-r)*100"
+      data-out="saving" data-out-unit="%"
+      data-barmax="100"
+      data-note="Hit rate 0.7 · read 0.1× → about 63% saving. As the read ratio r grows (e.g. write premium from frequent invalidation) the saving shrinks."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 절감률 감: 캐시 미사용 $=0\%$ · 히트율 0.5 & read 0.1× $\approx 45\%$ · 히트율 0.9 & read 0.1× $\approx 81\%$. 현재 기본값($h=0.7$, $r=0.1$)은 $\approx 63\%$ — 반복 접두부가 큰 시스템 프롬프트일수록 이득이 큽니다. 단, 손익분기(접두부 $\ge 2$회 재사용)를 못 넘기면 write 프리미엄($1.25\times$)만 물어 오히려 손해. <span class="src">(출처: Anthropic Prompt Caching 경제성. 제공사별 정확 할인율은 UNVERIFIED)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — feel for saving: no caching $=0\%$ · hit rate 0.5 & read 0.1× $\approx 45\%$ · hit rate 0.9 & read 0.1× $\approx 81\%$. The default ($h=0.7$, $r=0.1$) gives $\approx 63\%$ — the larger the repeated prefix (e.g. a big system prompt), the bigger the win. But if you don't clear break-even (reuse the prefix $\ge 2\times$), you only pay the write premium ($1.25\times$) and lose. <span class="src">(Source: Anthropic Prompt Caching economics. Provider-specific exact discounts are UNVERIFIED.)</span></div>
+  </section>
+
+  <!-- ══════════ 3-2 / 점검 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>청크를 <strong>너무 작게</strong> 자를 때 생기는 대표적 문제는?</p>
+      <div class="opts">
+        <button class="opt">① 임베딩 신호가 잡음으로 희석된다</button>
+        <button class="opt" data-correct="1">② 문맥이 조각나 답에 필요한 정보가 다른 청크로 흩어진다</button>
+        <button class="opt">③ 캐시 히트율이 0이 된다</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 청크가 작으면 임베딩은 정밀하지만 앞뒤 문맥이 여러 청크로 흩어져 검색이 필요한 정보를 한 번에 못 가져온다. <span class="dim">오답 ①·③: ①은 <strong>너무 클 때</strong>의 문제(잡음 희석)이고, ③ 캐시 히트율은 청크 크기가 아니라 접두부 재사용에 좌우된다.</span> <span class="agg">학급 n=41 · ① 8 · ② 29 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>What is the characteristic problem of cutting chunks <strong>too small</strong>?</p>
+      <div class="opts">
+        <button class="opt">① the embedding signal is diluted by noise</button>
+        <button class="opt" data-correct="1">② context fragments, scattering needed info across different chunks</button>
+        <button class="opt">③ the cache hit rate becomes zero</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — small chunks give precise embeddings but scatter surrounding context across many chunks, so retrieval can't fetch the needed information at once. <span class="dim">Wrong ①·③: ① is the problem of chunks that are <strong>too large</strong> (noise dilution); ③ the cache hit rate depends on prefix reuse, not chunk size.</span> <span class="agg">class n=41 · ① 8 · ② 29 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>프롬프트 캐싱에서 <strong>read≈0.1×</strong>, <strong>write≈1.25×</strong>(5분 TTL)일 때, 손익분기를 넘기려면?</p>
+      <div class="opts">
+        <button class="opt">① 접두부를 한 번만 써도 항상 이득이다</button>
+        <button class="opt" data-correct="1">② 같은 접두부를 최소 2번 이상 재사용해야 한다</button>
+        <button class="opt">③ 접두부에 타임스탬프를 넣어 매번 새로 쓴다</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 첫 요청은 write($1.25\times$), 이후는 read($0.1\times$). 2회 사용 시 $1.25+0.1=1.35 < 2$(캐시 미사용 2회)로 손익분기를 넘는다. <span class="dim">오답 ①·③: ①1회면 write만 물어 오히려 비싸고, ③타임스탬프는 매 요청 접두부를 바꿔 캐시를 조용히 무효화한다(read=0).</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>With <strong>read≈0.1×</strong> and <strong>write≈1.25×</strong> (5-minute TTL), what is needed to clear break-even?</p>
+      <div class="opts">
+        <button class="opt">① using the prefix once is always a win</button>
+        <button class="opt" data-correct="1">② the same prefix must be reused at least twice</button>
+        <button class="opt">③ put a timestamp in the prefix so it's rewritten each time</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the first request writes ($1.25\times$), later ones read ($0.1\times$). Two uses give $1.25+0.1=1.35 < 2$ (two uncached calls), clearing break-even. <span class="dim">Wrong ①·③: ① one use only pays the write premium and costs more; ③ a timestamp changes the prefix every request and silently invalidates the cache (read=0).</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-2 / 연습 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Calculation · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 캐시 절감률</div>
+      <p class="prob-statement">캐시 히트율 $h=0.8$, read 비율 $r=c_c/c_f=0.1$이다. 유효비용 $\bar{c}=c_f(1-h)+c_c h$에서 <strong>절감률 $=(1-\bar{c}/c_f)\times 100\%$</strong>을 구하시오.</p>
+      <div class="given"><span class="chip">$h=0.8$</span><span class="chip">$r=c_c/c_f=0.1$</span></div>
+      <div class="find"><b>구할 것:</b> 절감률 $[\%]$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="72" data-tol="0.02"/><span class="ans-unit">%</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 절감률 식 정리</div>$$ 1-\frac{\bar{c}}{c_f} = 1-\big[(1-h)+r\,h\big] = h(1-r) $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 대입</div>$$ h(1-r)=0.8\,(1-0.1)=0.8\times 0.9 = 0.72 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{절감률}=72\% $$</div><b>정답:</b> 히트율이 높고 read 비율이 낮을수록 절감이 커진다.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · cache saving</div>
+      <p class="prob-statement">Cache hit rate $h=0.8$, read ratio $r=c_c/c_f=0.1$. From $\bar{c}=c_f(1-h)+c_c h$, find the <strong>saving $=(1-\bar{c}/c_f)\times 100\%$</strong>.</p>
+      <div class="given"><span class="chip">$h=0.8$</span><span class="chip">$r=c_c/c_f=0.1$</span></div>
+      <div class="find"><b>Find:</b> saving $[\%]$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="72" data-tol="0.02"/><span class="ans-unit">%</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · simplify the saving</div>$$ 1-\frac{\bar{c}}{c_f} = 1-\big[(1-h)+r\,h\big] = h(1-r) $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · substitute</div>$$ h(1-r)=0.8\,(1-0.1)=0.8\times 0.9 = 0.72 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{saving}=72\% $$</div><b>Answer:</b> higher hit rate and lower read ratio → larger saving.</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 재순위 계산량 비율</div>
+      <p class="prob-statement">문서 $N=10000$개, 1차 후보 $k=20$개를 재순위한다. 만약 <strong>모든 $N$을 교차-인코더로 채점</strong>했을 때 대비, <strong>상위 $k$만</strong> 채점하면 교차-인코더 호출 수는 몇 <strong>배</strong>로 줄어드는가?</p>
+      <div class="given"><span class="chip">$N=10000$</span><span class="chip">$k=20$</span></div>
+      <div class="find"><b>구할 것:</b> 감소 배수 $=N/k$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="500" data-tol="0.02"/><span class="ans-unit">배</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 비율 세우기</div>$$ \frac{\text{전체 채점}}{\text{상위-}k\ \text{채점}} = \frac{C_{\text{ce}}\cdot N}{C_{\text{ce}}\cdot k} = \frac{N}{k} $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 대입</div>$$ \frac{N}{k}=\frac{10000}{20}=500 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ N/k = 500\ \text{배} $$</div><b>정답:</b> 2단계 파이프라인이 값비싼 교차-인코더 호출을 500배 줄인다($k\ll N$).</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · rerank compute ratio</div>
+      <p class="prob-statement">With $N=10000$ documents and $k=20$ first-stage candidates to rerank: compared to <strong>scoring all $N$ with the cross-encoder</strong>, scoring <strong>only the top-$k$</strong> reduces cross-encoder calls by how many <strong>times</strong>?</p>
+      <div class="given"><span class="chip">$N=10000$</span><span class="chip">$k=20$</span></div>
+      <div class="find"><b>Find:</b> reduction factor $=N/k$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="500" data-tol="0.02"/><span class="ans-unit">×</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · form the ratio</div>$$ \frac{\text{score all}}{\text{score top-}k} = \frac{C_{\text{ce}}\cdot N}{C_{\text{ce}}\cdot k} = \frac{N}{k} $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · substitute</div>$$ \frac{N}{k}=\frac{10000}{20}=500 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ N/k = 500\times $$</div><b>Answer:</b> the two-stage pipeline cuts costly cross-encoder calls by 500× ($k\ll N$).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-2 / 정리 ══════════ -->
+  <section class="screen" data-ch="3-2" data-chtitle="청킹·재순위·프롬프트 캐싱" data-stage="정리">
+    <div class="eyebrow lang-ko">3-2 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">3-2 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>청크 크기: 작으면 <strong>정밀·문맥손실</strong>, 크면 <strong>문맥보존·잡음</strong> → recall은 <strong>단봉 곡선</strong>(중간 최적, 대표 $\approx 512$ 토큰).</li>
+        <li>재순위: <strong>recall→precision</strong> 2단계 — 전체 $N$은 bi-encoder, 상위 $k$만 cross-encoder ($k\ll N$).</li>
+        <li>캐싱: 유효비용 $\bar{c}=c_f(1-h)+c_c h$, 절감 $=h(1-r)$, read $\approx 0.1\times$ · write $\approx 1.25\times$(5분).</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>"청크는 작을수록 좋다" 오해 → <strong>문맥손실</strong>로 recall↓.</li>
+        <li>접두부에 <strong>타임스탬프·UUID</strong> → 매번 write, read=0.</li>
+        <li>접두부 <strong>1회</strong>만 쓰고 캐싱 → write 프리미엄만 손해.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>절감률 $=h(1-r)$ 계산 (히트율·read 비율 주고 %).</li>
+        <li>2단계 재순위 계산량 비 $N/k$.</li>
+        <li>캐시 무효화(prefix match) 원리 · 손익분기($\ge 2$회 재사용).</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>Chunk size: small = <strong>precise·context loss</strong>, large = <strong>context kept·noise</strong> → recall is a <strong>unimodal curve</strong> (interior optimum, representative $\approx 512$ tokens).</li>
+        <li>Reranking: a <strong>recall→precision</strong> two-stage — all $N$ by bi-encoder, only top-$k$ by cross-encoder ($k\ll N$).</li>
+        <li>Caching: effective cost $\bar{c}=c_f(1-h)+c_c h$, saving $=h(1-r)$, read $\approx 0.1\times$ · write $\approx 1.25\times$ (5m).</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Thinking "smaller chunks are always better" → recall drops from <strong>context loss</strong>.</li>
+        <li>A <strong>timestamp/UUID</strong> in the prefix → writes every time, read=0.</li>
+        <li>Caching a prefix used <strong>only once</strong> → you eat the write premium for nothing.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Compute saving $=h(1-r)$ (given hit rate & read ratio → %).</li>
+        <li>Two-stage rerank compute ratio $N/k$.</li>
+        <li>Cache invalidation (prefix match) & break-even (reuse $\ge 2\times$).</li>
+      </ul></div>
+    </div>
+  </section>
+
+<!-- ══════════ 3-3 / 개념 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="개념">
+    <div class="eyebrow lang-ko">3-3 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">3-3 · Concept</div>
+    <h1 class="stage-h lang-ko">에이전트 루프 — 계획·실행·검증의 삼박자</h1>
+    <h1 class="stage-h lang-en">The Agent Loop — Plan, Act, Verify in Rhythm</h1>
+    <div class="analogy lang-ko"><span class="ic">🧭</span><div class="tx"><b>직관</b> — 낯선 도시에서 목적지를 찾는다고 해봅시다. 무작정 걷는 게 아니라 <b>지도를 보고 경로를 짜고</b>(계획), <b>한 블록 걸어가고</b>(실행), <b>표지판으로 위치를 확인</b>(검증)한 뒤 다시 경로를 고칩니다. LLM 자율 에이전트도 똑같습니다 — 한 번의 생성으로 끝내지 않고, <b>추론과 행동을 번갈아</b> 반복하며 외부 세계의 피드백으로 자신을 교정합니다. <span class="src">(출처: Yao et al. 2023, "ReAct: Synergizing Reasoning and Acting in Language Models", ICLR 2023)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">🧭</span><div class="tx"><b>Intuition</b> — imagine finding a destination in an unfamiliar city. You don't just walk blindly: you <b>read the map and plan a route</b> (plan), <b>walk one block</b> (act), <b>check your position by the signs</b> (verify), then revise the route. An autonomous LLM agent works the same way — instead of one-shot generation, it <b>interleaves reasoning and action</b> repeatedly, correcting itself with feedback from the outside world. <span class="src">(Source: Yao et al. 2023, "ReAct: Synergizing Reasoning and Acting in Language Models", ICLR 2023)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede">단발성 프롬프트는 <strong>모델의 한 번의 추측</strong>에 결과를 겁니다. 반대로 <strong>에이전트 루프</strong>는 <strong>계획(plan) → 실행(act) → 검증(verify)</strong>의 세 단계를 하나의 사이클로 묶어 반복합니다. 핵심은 <strong>검증 게이트</strong>입니다 — 실행 결과가 테스트·컴파일·명세 같은 <strong>외부 기준</strong>을 통과해야만 다음으로 넘어가고, 실패하면 관측(observation)을 근거로 다시 계획합니다. 코딩 에이전트가 <strong>테스트가 통과할 때까지 반복</strong>하는 것이 대표적인 형태입니다.</p>
+        <div class="keqbox">
+          <div class="keq-label">에이전트 루프의 한 사이클</div>
+          <div class="keqrow"><span class="keqcap">계획 plan</span><span class="keqline">목표 → 다음 행동 결정 (reasoning)</span></div>
+          <div class="keqrow"><span class="keqcap">실행 act</span><span class="keqline">도구·코드 호출 → 관측 획득</span></div>
+          <div class="keqrow"><span class="keqcap">검증 verify</span><span class="keqline">테스트·게이트 통과? (pass/fail)</span></div>
+          <div class="keqrow"><span class="keqcap">반복 loop</span><span class="keqline">fail → 관측 반영 → 재계획</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>plan</b> 목표와 현재 상태로부터 다음 행동을 고르는 추론 단계</div>
+          <div class="term"><b>act (tool use)</b> 코드 실행·검색·파일 편집 등 외부 도구 호출</div>
+          <div class="term"><b>observation</b> 행동의 결과 (테스트 로그·에러·출력)</div>
+          <div class="term"><b>verify (gate)</b> 진행 허용 여부를 결정하는 외부 판정기 (테스트·린트·타입체크)</div>
+          <div class="term"><b>환각 누적</b> 검증 없는 루프에서 오류가 다음 단계 입력으로 전파되는 현상</div>
+          <div class="term"><b>reflection</b> 실패를 언어적 피드백으로 요약해 다음 시도에 반영 (Reflexion)</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>루프의 성패는 <strong>검증 게이트의 존재</strong>에 달려 있습니다. 검증이 없으면 모델의 잘못된 관측이 <strong>다음 계획의 전제</strong>가 되어 오류가 눈덩이처럼 불어납니다(환각 누적). 검증은 루프를 <strong>수렴</strong>시키는 앵커입니다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede">A single-shot prompt bets the outcome on <strong>one guess by the model</strong>. An <strong>agent loop</strong>, by contrast, ties three stages — <strong>plan → act → verify</strong> — into one repeated cycle. The key is the <strong>verification gate</strong>: the acted result must pass an <strong>external criterion</strong> (tests, compilation, spec) before proceeding; on failure the agent re-plans using the observation. A coding agent that <strong>iterates until tests pass</strong> is the canonical instance.</p>
+        <div class="keqbox">
+          <div class="keq-label">One cycle of the agent loop</div>
+          <div class="keqrow"><span class="keqcap">plan</span><span class="keqline">goal → decide next action (reasoning)</span></div>
+          <div class="keqrow"><span class="keqcap">act</span><span class="keqline">call tool/code → obtain observation</span></div>
+          <div class="keqrow"><span class="keqcap">verify</span><span class="keqline">tests/gate passed? (pass/fail)</span></div>
+          <div class="keqrow"><span class="keqcap">loop</span><span class="keqline">fail → fold in observation → re-plan</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>plan</b> the reasoning step that picks the next action from goal + state</div>
+          <div class="term"><b>act (tool use)</b> calling external tools: run code, search, edit files</div>
+          <div class="term"><b>observation</b> the result of an action (test logs, errors, output)</div>
+          <div class="term"><b>verify (gate)</b> an external judge deciding whether to proceed (tests, lint, type-check)</div>
+          <div class="term"><b>hallucination compounding</b> in an ungated loop, errors propagate into later inputs</div>
+          <div class="term"><b>reflection</b> summarizing failure as verbal feedback for the next attempt (Reflexion)</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>The loop's success hinges on <strong>the presence of a verification gate</strong>. Without it, a wrong observation becomes the <strong>premise of the next plan</strong> and errors snowball (hallucination compounding). Verification is the anchor that makes the loop <strong>converge</strong>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-3 / 유도 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="유도">
+    <div class="eyebrow lang-ko">3-3 · 메커니즘 유도 · Derivation</div>
+    <div class="eyebrow lang-en">3-3 · Derivation</div>
+    <h1 class="stage-h lang-ko">왜 검증이 루프를 수렴시키는가 — 성공확률 모델</h1>
+    <h1 class="stage-h lang-en">Why Verification Makes the Loop Converge — a Success-Probability Model</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> 한 번의 시도가 성공할 확률을 $q$라 합시다. <b>검증 게이트</b>가 있으면 실패한 시도는 <b>버려지고</b> 성공한 시도만 채택됩니다 — 그래서 $N$번 반복 시 <b>적어도 한 번 성공</b>할 확률로 품질이 결정됩니다. 검증이 없으면 실패를 걸러내지 못해 <b>마지막 한 번</b>의 결과에 운명을 겁니다.</p>
+    <p class="lede lang-en"><b>Unifying view:</b> let one attempt succeed with probability $q$. With a <b>verification gate</b>, failed attempts are <b>discarded</b> and only a passing one is accepted — so quality is set by the probability of <b>at least one success</b> over $N$ tries. Without verification, failures are not filtered and you gamble on the <b>last single</b> result.</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>① 한 번 시도의 성공률</h4><div class="sub">단일 attempt</div><div class="ana">🎯 한 발 — 맞을 확률 q, 빗나갈 확률 1−q</div><div class="eq">$ P_1 = q,\quad P_{\text{fail}} = 1-q $</div><p>검증 유무와 무관하게 한 번의 계획-실행이 정답을 낼 확률은 $q$입니다.</p></div>
+      <div class="dcard"><h4>② 검증 있는 N회 반복</h4><div class="sub">gate ON</div><div class="ana">🔁 통과할 때까지 — 모두 실패해야 최종 실패</div><div class="eq">$ P_{\text{pass}}(N) = 1-(1-q)^{N} $</div><p>게이트가 실패를 걸러내므로, $N$번 중 <strong>단 한 번만 통과</strong>해도 채택됩니다. $N$이 커지면 $1$로 수렴.</p></div>
+      <div class="dcard"><h4>③ 검증 없는 N단계</h4><div class="sub">gate OFF</div><div class="ana">☠️ 오류 전파 — 각 단계가 앞 단계에 의존</div><div class="eq">$ P_{\text{ok}}(N) = q^{N} $</div><p>검증이 없으면 <strong>모든 단계가 옳아야</strong> 최종이 맞습니다. 반복이 늘수록 오히려 $0$으로 붕괴(환각 누적).</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>① Success of one attempt</h4><div class="sub">single attempt</div><div class="ana">🎯 One shot — hit q, miss 1−q</div><div class="eq">$ P_1 = q,\quad P_{\text{fail}} = 1-q $</div><p>Regardless of verification, one plan-act cycle produces a correct result with probability $q$.</p></div>
+      <div class="dcard"><h4>② N tries with verification</h4><div class="sub">gate ON</div><div class="ana">🔁 Until it passes — all must fail to fail</div><div class="eq">$ P_{\text{pass}}(N) = 1-(1-q)^{N} $</div><p>The gate filters failures, so <strong>a single passing try</strong> among $N$ is accepted. As $N$ grows it converges to $1$.</p></div>
+      <div class="dcard"><h4>③ N steps without verification</h4><div class="sub">gate OFF</div><div class="ana">☠️ Error propagation — each step depends on the last</div><div class="eq">$ P_{\text{ok}}(N) = q^{N} $</div><p>Without verification <strong>every step must be right</strong>. More iterations collapse toward $0$ (hallucination compounding).</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · 반복이 항상 좋은 것은 아니다</div>$1-(1-q)^{N}$ 모델은 <strong>검증 게이트가 완벽하다고 가정</strong>합니다. 실제로는 테스트가 불완전하면(거짓 통과) 잘못된 결과가 게이트를 뚫고, 검증 없는 루프에서는 반복이 <strong>오류를 증폭</strong>시킵니다($q^{N}\!\to\!0$). 즉 <strong>반복 자체가 아니라 "믿을 수 있는 검증"</strong>이 품질의 원천입니다.</div>
+    <div class="callout warn lang-en"><div class="ct">Caution · more iterations aren't always better</div>The $1-(1-q)^{N}$ model <strong>assumes a perfect gate</strong>. In reality, an incomplete test suite lets wrong results slip through (false pass), and an ungated loop <strong>amplifies</strong> errors ($q^{N}\!\to\!0$). So the source of quality is <strong>"trustworthy verification," not iteration itself</strong>.</div>
+  </section>
+
+  <!-- ══════════ 3-3 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">3-3 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">3-3 · Reading</div>
+    <h1 class="stage-h lang-ko">ReAct에서 Reflexion으로 — 관측과 성찰의 힘</h1>
+    <h1 class="stage-h lang-en">From ReAct to Reflexion — the Power of Observation and Reflection</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p><strong>ReAct</strong>(Yao et al. 2023)는 언어모델이 <strong>추론(reasoning) 흔적</strong>과 <strong>행동(action)</strong>을 번갈아 생성하도록 하여, 순수 추론만 할 때 발생하는 사실 환각을 외부 도구의 <strong>관측</strong>으로 줄였습니다. 저자들은 이 interleaving이 계획을 유연하게 조정하고 예외를 처리하게 만든다고 보고했습니다.</p>
+        <p class="pullquote">추론만으로는 환각하고, 행동만으로는 계획하지 못한다 — 둘을 엮어야 한다.</p>
+        <p><strong>Reflexion</strong>(Shinn et al. 2023, NeurIPS)은 여기에 <strong>자기 성찰</strong>을 더했습니다. 에이전트가 실패하면 그 원인을 <strong>언어적 피드백</strong>으로 요약해 메모리에 저장하고, 다음 시도의 프롬프트에 넣어 <strong>같은 실수를 반복하지 않도록</strong> 합니다. 가중치를 갱신하는 강화학습 대신, <strong>텍스트 피드백</strong>으로 학습하는 것이 특징입니다. 코딩 벤치마크에서 반복적 자기수정이 단발 생성보다 통과율을 높였다고 보고되었습니다. <span class="src">(정확한 수치는 원논문 표 참조 — 본 강의에서는 UNVERIFIED로 둡니다)</span></p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>ReAct = <strong>reasoning ⨯ acting</strong>의 interleaving으로 관측을 계획에 되먹임.</li><li>Reflexion = 실패를 <strong>언어 피드백</strong>으로 요약해 다음 시도에 주입 (가중치 갱신 없음).</li><li>공통 앵커 = <strong>외부 신호(관측·테스트)</strong>가 루프를 교정한다.</li></ul></div>
+        <p class="readmeta">참고: Yao et al. (2023) ICLR / Shinn et al. (2023) "Reflexion", NeurIPS / SWE-bench(Jimenez et al. 2024)</p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p><strong>ReAct</strong> (Yao et al. 2023) has the language model alternate <strong>reasoning traces</strong> and <strong>actions</strong>, reducing the factual hallucination of reasoning-only prompting by grounding on <strong>observations</strong> from external tools. The authors report that this interleaving lets the model flexibly adjust plans and handle exceptions.</p>
+        <p class="pullquote">Reasoning alone hallucinates; acting alone cannot plan — the two must be interwoven.</p>
+        <p><strong>Reflexion</strong> (Shinn et al. 2023, NeurIPS) adds <strong>self-reflection</strong>. When the agent fails, it summarizes the cause as <strong>verbal feedback</strong>, stores it in memory, and injects it into the next attempt's prompt so it <strong>avoids repeating the mistake</strong>. Notably it learns from <strong>text feedback</strong> rather than updating weights via reinforcement learning. On coding benchmarks, iterative self-correction was reported to raise pass rates over single-shot generation. <span class="src">(For exact figures see the original tables — treated here as UNVERIFIED.)</span></p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>ReAct = interleaving <strong>reasoning ⨯ acting</strong>, feeding observations back into the plan.</li><li>Reflexion = summarize failure as <strong>verbal feedback</strong> injected next try (no weight update).</li><li>Common anchor = <strong>external signal (observation/test)</strong> corrects the loop.</li></ul></div>
+        <p class="readmeta">Refs: Yao et al. (2023) ICLR / Shinn et al. (2023) "Reflexion", NeurIPS / SWE-bench (Jimenez et al. 2024)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-3 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="그림·표">
+    <div class="eyebrow lang-ko">3-3 · 그림 · 도해 · 표</div>
+    <div class="eyebrow lang-en">3-3 · Figure · Diagram · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — 계획·실행·검증 루프</h1>
+    <h1 class="stage-h lang-en">At a Glance — the Plan·Act·Verify Loop</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">에이전트 루프 (fail 시 재계획, pass 시 종료)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:450px">
+<defs>
+<marker id="arw33ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+<marker id="arw33kog" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#15803d"/></marker>
+<marker id="arw33kor" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+</defs>
+<rect x="40" y="30" width="120" height="46" rx="9" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+<text x="100" y="52" font-size="12.5" fill="#4338ca" text-anchor="middle" font-weight="700">계획 plan</text>
+<text x="100" y="68" font-size="9.5" fill="#6366f1" text-anchor="middle">다음 행동 결정</text>
+<rect x="320" y="30" width="120" height="46" rx="9" fill="#ecfeff" stroke="#0891b2" stroke-width="1.6"/>
+<text x="380" y="52" font-size="12.5" fill="#0e7490" text-anchor="middle" font-weight="700">실행 act</text>
+<text x="380" y="68" font-size="9.5" fill="#0891b2" text-anchor="middle">도구·코드 호출</text>
+<polygon points="240,150 320,190 240,230 160,190" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="240" y="188" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">검증</text>
+<text x="240" y="204" font-size="9.5" fill="#c2410c" text-anchor="middle">테스트 게이트?</text>
+<rect x="150" y="262" width="180" height="34" rx="9" fill="#f0fdf4" stroke="#15803d" stroke-width="1.6"/>
+<text x="240" y="284" font-size="11.5" fill="#15803d" text-anchor="middle" font-weight="700">완료 (pass ✓)</text>
+<line x1="160" y1="53" x2="318" y2="53" stroke="#71717a" stroke-width="1.6" marker-end="url(#arw33ko)"/>
+<line x1="380" y1="76" x2="270" y2="150" stroke="#71717a" stroke-width="1.6" marker-end="url(#arw33ko)"/>
+<text x="352" y="120" font-size="9.5" fill="#52525b" text-anchor="middle">관측</text>
+<path d="M160 190 Q70 190 70 100 Q70 60 96 76" fill="none" stroke="#c2410c" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arw33kor)"/>
+<text x="66" y="150" font-size="9.5" fill="#c2410c" text-anchor="middle" font-weight="700">fail</text>
+<text x="66" y="163" font-size="8.5" fill="#c2410c" text-anchor="middle">재계획</text>
+<line x1="240" y1="230" x2="240" y2="260" stroke="#15803d" stroke-width="1.8" marker-end="url(#arw33kog)"/>
+<text x="258" y="248" font-size="9.5" fill="#15803d" text-anchor="middle" font-weight="700">pass</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">검증 게이트 유무 × 반복 (성공확률, $q=0.5$ 예시)</div>
+        <table class="ktab"><thead><tr><th>반복 $N$</th><th>검증 ON $1-(1-q)^N$</th><th style="text-align:right">검증 OFF $q^N$</th></tr></thead><tbody>
+          <tr><td>1</td><td class="k">0.50</td><td>0.50</td></tr>
+          <tr><td>2</td><td class="k">0.75</td><td>0.25</td></tr>
+          <tr><td>3</td><td class="k">0.88</td><td>0.13</td></tr>
+          <tr><td>5</td><td class="k">0.97</td><td>0.03</td></tr>
+          <tr><td>10</td><td class="k">0.999</td><td>0.001</td></tr>
+        </tbody></table>
+        <div class="keqnote">검증이 있으면 반복이 늘수록 $1$로 수렴하고, 검증이 없으면 오류 전파로 $0$으로 붕괴한다. 표의 $q=0.5$는 <strong>설명용 예시값</strong>이며 실제 모델·과제에 따라 다르다(UNVERIFIED). 완벽한 게이트 가정.</div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">Agent loop (re-plan on fail, exit on pass)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:450px">
+<defs>
+<marker id="arw33en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+<marker id="arw33eng" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#15803d"/></marker>
+<marker id="arw33enr" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+</defs>
+<rect x="40" y="30" width="120" height="46" rx="9" fill="#eef2ff" stroke="#6366f1" stroke-width="1.6"/>
+<text x="100" y="52" font-size="12.5" fill="#4338ca" text-anchor="middle" font-weight="700">plan</text>
+<text x="100" y="68" font-size="9.5" fill="#6366f1" text-anchor="middle">decide next action</text>
+<rect x="320" y="30" width="120" height="46" rx="9" fill="#ecfeff" stroke="#0891b2" stroke-width="1.6"/>
+<text x="380" y="52" font-size="12.5" fill="#0e7490" text-anchor="middle" font-weight="700">act</text>
+<text x="380" y="68" font-size="9.5" fill="#0891b2" text-anchor="middle">call tool/code</text>
+<polygon points="240,150 320,190 240,230 160,190" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="240" y="188" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">verify</text>
+<text x="240" y="204" font-size="9.5" fill="#c2410c" text-anchor="middle">test gate?</text>
+<rect x="150" y="262" width="180" height="34" rx="9" fill="#f0fdf4" stroke="#15803d" stroke-width="1.6"/>
+<text x="240" y="284" font-size="11.5" fill="#15803d" text-anchor="middle" font-weight="700">done (pass ✓)</text>
+<line x1="160" y1="53" x2="318" y2="53" stroke="#71717a" stroke-width="1.6" marker-end="url(#arw33en)"/>
+<line x1="380" y1="76" x2="270" y2="150" stroke="#71717a" stroke-width="1.6" marker-end="url(#arw33en)"/>
+<text x="352" y="120" font-size="9.5" fill="#52525b" text-anchor="middle">observe</text>
+<path d="M160 190 Q70 190 70 100 Q70 60 96 76" fill="none" stroke="#c2410c" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arw33enr)"/>
+<text x="66" y="150" font-size="9.5" fill="#c2410c" text-anchor="middle" font-weight="700">fail</text>
+<text x="66" y="163" font-size="8.5" fill="#c2410c" text-anchor="middle">re-plan</text>
+<line x1="240" y1="230" x2="240" y2="260" stroke="#15803d" stroke-width="1.8" marker-end="url(#arw33eng)"/>
+<text x="258" y="248" font-size="9.5" fill="#15803d" text-anchor="middle" font-weight="700">pass</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Gate on/off × iterations (success prob., $q=0.5$ example)</div>
+        <table class="ktab"><thead><tr><th>iters $N$</th><th>gate ON $1-(1-q)^N$</th><th style="text-align:right">gate OFF $q^N$</th></tr></thead><tbody>
+          <tr><td>1</td><td class="k">0.50</td><td>0.50</td></tr>
+          <tr><td>2</td><td class="k">0.75</td><td>0.25</td></tr>
+          <tr><td>3</td><td class="k">0.88</td><td>0.13</td></tr>
+          <tr><td>5</td><td class="k">0.97</td><td>0.03</td></tr>
+          <tr><td>10</td><td class="k">0.999</td><td>0.001</td></tr>
+        </tbody></table>
+        <div class="keqnote">With verification, more iterations converge to $1$; without it, error propagation collapses toward $0$. The $q=0.5$ in the table is an <strong>illustrative value</strong> and varies by model/task (UNVERIFIED). Assumes a perfect gate.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-3 / 실습 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="실습">
+    <div class="eyebrow lang-ko">3-3 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">3-3 · Interactive</div>
+    <h1 class="stage-h lang-ko">검증 게이트 × 반복수 — 통과율 직접 조절</h1>
+    <h1 class="stage-h lang-en">Gate × Iterations — Steer the Pass Rate</h1>
+    <p class="lede lang-ko">검증 게이트가 있는 코딩 에이전트는 <strong>테스트가 통과할 때까지 반복</strong>합니다. 한 번 시도의 성공률 $q$와 반복수 $N$으로 최종 통과율은 <strong>$1-(1-q)^{N}$</strong>(간단 모델). 슬라이더로 $q$와 $N$을 바꾸며 반복이 낮은 $q$를 얼마나 보완하는지 확인하세요. (게이트가 없다면 통과율은 오히려 $q^{N}$으로 떨어집니다.)</p>
+    <p class="lede lang-en">A coding agent with a verification gate <strong>iterates until tests pass</strong>. With per-attempt success $q$ and $N$ iterations, the final pass rate is <strong>$1-(1-q)^{N}$</strong> (a simple model). Move the sliders for $q$ and $N$ to see how iteration compensates for a low $q$. (Without a gate the rate instead falls as $q^{N}$.)</p>
+    <div class="calc lang-ko"
+      data-title="검증 게이트 통과율 $\;P = 1-(1-q)^{N}$"
+      data-desc="q = 한 번 시도의 성공률 (0~1), N = 반복 횟수. 기본값 q=0.4, N=3 → P≈0.784. 완벽한 게이트 가정(거짓 통과 없음)."
+      data-vars='[{"sym":"q","label":"$q$ · 한 번 성공률","min":0.05,"max":0.95,"val":0.4,"step":0.05,"unit":""},{"sym":"N","label":"$N$ · 반복 횟수","min":1,"max":15,"val":3,"step":1,"unit":"회"}]'
+      data-expr="1-(1-q)**N"
+      data-out="$P$ 통과율" data-out-unit=""
+      data-barmax="1"
+      data-note="q=0.4(약한 모델)라도 N=3이면 P≈0.78, N=6이면 P≈0.95 — 검증 반복이 단발 성공률을 크게 끌어올린다."></div>
+    <div class="calc lang-en"
+      data-title="Gated pass rate $\;P = 1-(1-q)^{N}$"
+      data-desc="q = per-attempt success (0–1), N = number of iterations. Default q=0.4, N=3 → P≈0.784. Assumes a perfect gate (no false pass)."
+      data-vars='[{"sym":"q","label":"$q$ · per-attempt success","min":0.05,"max":0.95,"val":0.4,"step":0.05,"unit":""},{"sym":"N","label":"$N$ · iterations","min":1,"max":15,"val":3,"step":1,"unit":"x"}]'
+      data-expr="1-(1-q)**N"
+      data-out="$P$ pass rate" data-out-unit=""
+      data-barmax="1"
+      data-note="Even at q=0.4 (a weak model), N=3 gives P≈0.78 and N=6 gives P≈0.95 — verified iteration lifts a low single-shot rate sharply."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 이 곡선은 <strong>수확 체감</strong>을 보입니다: 처음 몇 번의 반복이 통과율을 가장 크게 올리고, 이후엔 이득이 작아집니다. 단, 이 모델은 <strong>게이트가 완벽</strong>하고 각 시도가 <strong>독립</strong>이라 가정합니다. 실제로는 (a) 불완전한 테스트가 거짓 통과를 허용하고, (b) 시도들이 같은 오류를 반복(상관)할 수 있어 실질 $q$가 고정되지 않습니다. 그래서 <strong>테스트 커버리지</strong>와 <strong>성찰(Reflexion) 기반 재계획</strong>이 반복수 늘리기보다 중요할 때가 많습니다. <span class="src">(모델: 독립 시행 이항 근사 / 개념: ReAct·Reflexion 계열)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — the curve shows <strong>diminishing returns</strong>: the first few iterations lift the pass rate most, and later gains shrink. But the model assumes a <strong>perfect gate</strong> and <strong>independent</strong> attempts. In reality (a) incomplete tests allow false passes, and (b) attempts may repeat the same error (correlated), so effective $q$ isn't fixed. Hence <strong>test coverage</strong> and <strong>reflection-based re-planning</strong> often matter more than raising the iteration count. <span class="src">(Model: independent-trial binomial approximation / Concept: ReAct·Reflexion family)</span></div>
+  </section>
+
+  <!-- ══════════ 3-3 / 점검 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>에이전트 루프에서 <strong>검증 게이트</strong>가 하는 본질적 역할은?</p>
+      <div class="opts">
+        <button class="opt">① 모델의 응답을 더 길고 자세하게 만든다</button>
+        <button class="opt" data-correct="1">② 실행 결과를 외부 기준으로 판정해, 실패를 걸러내고 루프를 수렴시킨다</button>
+        <button class="opt">③ 반복 횟수를 무조건 늘려 통과율을 100%로 만든다</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 게이트는 테스트·타입체크 같은 <strong>외부 기준</strong>으로 pass/fail을 판정하여 실패한 결과를 버리고 성공만 채택하게 한다. 이것이 $1-(1-q)^{N}$처럼 반복을 <strong>수렴</strong>시키는 힘이다. <span class="dim">오답 ①·③: ①길이는 무관하고, ③완벽한 게이트라도 $N$이 유한하면 $100\%$는 아니며 게이트가 불완전하면 거짓 통과가 생긴다.</span> <span class="agg">학급 n=41 · ① 5 · ② 31 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>What is the essential role of the <strong>verification gate</strong> in an agent loop?</p>
+      <div class="opts">
+        <button class="opt">① it makes the model's response longer and more detailed</button>
+        <button class="opt" data-correct="1">② it judges results by an external criterion, filtering failures so the loop converges</button>
+        <button class="opt">③ it always raises iteration count to force a 100% pass rate</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the gate judges pass/fail by an <strong>external criterion</strong> (tests, type-check), discarding failures and accepting only successes. That is what makes iteration <strong>converge</strong> as in $1-(1-q)^{N}$. <span class="dim">Wrong ①·③: ① length is irrelevant; ③ even a perfect gate with finite $N$ isn't $100\%$, and an imperfect gate admits false passes.</span> <span class="agg">class n=41 · ① 5 · ② 31 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>검증 없이 여러 단계를 이어 붙이면 최종 성공확률은 왜 <strong>$q^{N}$</strong>으로 붕괴하는가?</p>
+      <div class="opts">
+        <button class="opt" data-correct="1">① 각 단계의 오류가 다음 단계 입력으로 전파되어 모든 단계가 옳아야만 최종이 맞기 때문</button>
+        <button class="opt">② 모델이 반복할수록 점점 똑똑해지기 때문</button>
+        <button class="opt">③ 반복이 토큰을 절약해 정확도가 올라가기 때문</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 게이트가 없으면 실패를 걸러내지 못해 각 단계가 앞 단계에 의존한다. 독립 가정 하에 $N$단계가 모두 옳을 확률은 $q\times q\times\cdots=q^{N}$이고, $q<1$이면 $N$이 커질수록 $0$으로 붕괴한다(환각 누적). <span class="dim">오답 ②·③: 반복 자체가 지능이나 정확도를 높이는 것이 아니며, 오히려 검증이 없으면 오류가 증폭된다.</span> <span class="agg">학급 n=41 · ① 30 · ② 6 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>Why does chaining steps without verification collapse the final success to <strong>$q^{N}$</strong>?</p>
+      <div class="opts">
+        <button class="opt" data-correct="1">① each step's error propagates into the next input, so all steps must be right for the whole to be right</button>
+        <button class="opt">② the model gets smarter the more it repeats</button>
+        <button class="opt">③ iterating saves tokens, which raises accuracy</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — without a gate, failures aren't filtered and each step depends on the last. Under independence, the probability that all $N$ steps are right is $q\times q\times\cdots=q^{N}$, which collapses to $0$ as $N$ grows when $q<1$ (hallucination compounding). <span class="dim">Wrong ②·③: iteration alone raises neither intelligence nor accuracy; without verification it amplifies errors.</span> <span class="agg">class n=41 · ① 30 · ② 6 · ③ 5</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-3 / 연습 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Calculation · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 게이트 통과율</div>
+      <p class="prob-statement">한 번 시도의 성공률이 $q=0.5$인 코딩 에이전트가 <strong>검증 게이트</strong>를 두고 $N=3$번 반복한다. 최종 통과율 <strong>$P=1-(1-q)^{N}$</strong>을 구하시오.</p>
+      <div class="given"><span class="chip">$q=0.5$</span><span class="chip">$N=3$</span><span class="chip">게이트 ON</span></div>
+      <div class="find"><b>구할 것:</b> $P$ (소수)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.875" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 모두 실패할 확률</div>$$ (1-q)^{N} = (1-0.5)^{3} = 0.5^{3} = 0.125 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 여사건</div>$$ P = 1 - 0.125 = 0.875 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P = 0.875 $$</div><b>정답:</b> 단발 $50\%$였지만 검증 반복 3회로 약 $87.5\%$까지 상승.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · gated pass rate</div>
+      <p class="prob-statement">A coding agent with per-attempt success $q=0.5$ uses a <strong>verification gate</strong> and iterates $N=3$ times. Find the final pass rate <strong>$P=1-(1-q)^{N}$</strong>.</p>
+      <div class="given"><span class="chip">$q=0.5$</span><span class="chip">$N=3$</span><span class="chip">gate ON</span></div>
+      <div class="find"><b>Find:</b> $P$ (decimal)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.875" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · probability all fail</div>$$ (1-q)^{N} = (1-0.5)^{3} = 0.5^{3} = 0.125 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · complement</div>$$ P = 1 - 0.125 = 0.875 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P = 0.875 $$</div><b>Answer:</b> from a single-shot $50\%$ up to about $87.5\%$ with 3 verified iterations.</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 검증 없는 파이프라인</div>
+      <p class="prob-statement">같은 $q=0.5$이지만 <strong>검증이 없는</strong> 3단계 파이프라인(각 단계 출력이 다음 단계 입력)을 생각하자. 세 단계가 <strong>모두</strong> 옳을 최종 확률 <strong>$P=q^{N}$</strong>을 구하고, 연습 1과 비교하시오.</p>
+      <div class="given"><span class="chip">$q=0.5$</span><span class="chip">$N=3$</span><span class="chip">게이트 OFF</span></div>
+      <div class="find"><b>구할 것:</b> $P$ (소수)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.125" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 독립 곱셈</div>$$ P = q^{N} = 0.5^{3} = 0.125 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 대비</div>$$ 0.125\ (\text{검증 OFF}) \ \ll\ 0.875\ (\text{검증 ON}) $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P = 0.125 $$</div><b>정답:</b> 같은 $q$·$N$인데 검증 유무로 통과율이 $7$배 차이 — 반복이 아니라 <strong>검증</strong>이 방향을 바꾼다.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · pipeline without verification</div>
+      <p class="prob-statement">Keep $q=0.5$ but consider an <strong>unverified</strong> 3-stage pipeline (each stage's output feeds the next). Find the probability that <strong>all</strong> three stages are right, <strong>$P=q^{N}$</strong>, and compare with Practice 1.</p>
+      <div class="given"><span class="chip">$q=0.5$</span><span class="chip">$N=3$</span><span class="chip">gate OFF</span></div>
+      <div class="find"><b>Find:</b> $P$ (decimal)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.125" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · multiply (independent)</div>$$ P = q^{N} = 0.5^{3} = 0.125 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · contrast</div>$$ 0.125\ (\text{gate OFF}) \ \ll\ 0.875\ (\text{gate ON}) $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P = 0.125 $$</div><b>Answer:</b> same $q$ and $N$, yet a $7\times$ gap — it's <strong>verification</strong>, not iteration, that flips the direction.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-3 / 정리 ══════════ -->
+  <section class="screen" data-ch="3-3" data-chtitle="에이전트 루프: 계획-실행-검증" data-stage="정리">
+    <div class="eyebrow lang-ko">3-3 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">3-3 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>에이전트 루프 = <strong>계획(plan) → 실행(act) → 검증(verify) → 반복</strong>의 사이클.</li>
+        <li>검증 게이트 ON: <strong>$P=1-(1-q)^{N}\to 1$</strong> (실패를 걸러 수렴).</li>
+        <li>검증 OFF: <strong>$P=q^{N}\to 0$</strong> (오류 전파 = 환각 누적).</li>
+        <li>코딩 에이전트 = <strong>테스트 통과까지 반복</strong>; ReAct·Reflexion 계열.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>반복 횟수 자체를 품질로 착각 → 진짜 앵커는 <strong>믿을 수 있는 검증</strong>.</li>
+        <li>불완전한 테스트의 <strong>거짓 통과</strong>를 무시 → 게이트 품질이 상한을 정한다.</li>
+        <li>ReAct(추론+행동)와 Reflexion(언어 성찰)을 혼동 → 후자는 <strong>가중치 갱신 없음</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>$q$, $N$ 주고 $1-(1-q)^{N}$ vs $q^{N}$ 계산·대비 문제 빈출.</li>
+        <li>검증 게이트가 왜 루프를 수렴시키는가(실패 필터링) 서술.</li>
+        <li>ReAct(Yao 2023)·Reflexion(Shinn 2023)의 핵심 아이디어와 차이.</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>Agent loop = the cycle <strong>plan → act → verify → repeat</strong>.</li>
+        <li>Gate ON: <strong>$P=1-(1-q)^{N}\to 1$</strong> (filter failures, converge).</li>
+        <li>Gate OFF: <strong>$P=q^{N}\to 0$</strong> (error propagation = hallucination compounding).</li>
+        <li>Coding agent = <strong>iterate until tests pass</strong>; ReAct·Reflexion family.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Mistaking iteration count for quality → the real anchor is <strong>trustworthy verification</strong>.</li>
+        <li>Ignoring <strong>false passes</strong> from incomplete tests → gate quality sets the ceiling.</li>
+        <li>Confusing ReAct (reason+act) with Reflexion (verbal reflection) → the latter has <strong>no weight update</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Given $q$, $N$: compute and contrast $1-(1-q)^{N}$ vs $q^{N}$ (frequent).</li>
+        <li>Explain why a gate makes the loop converge (failure filtering).</li>
+        <li>Core ideas and differences of ReAct (Yao 2023) & Reflexion (Shinn 2023).</li>
+      </ul></div>
+    </div>
+  </section>
+
+<!-- ══════════ 3-4 / 개념 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="개념">
+    <div class="eyebrow lang-ko">3-4 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">3-4 · Concept</div>
+    <h1 class="stage-h lang-ko">명세 먼저, 코드 나중 — 그리고 역할을 나눈 에이전트들</h1>
+    <h1 class="stage-h lang-en">Spec First, Code Later — and Agents That Divide the Work</h1>
+    <div class="analogy lang-ko"><span class="ic">🏗️</span><div class="tx"><b>직관</b> — 집을 지을 때 도면·검수 기준 없이 벽부터 올리면, 나중에 문이 안 맞아 <b>다시 허물게</b> 됩니다. "바이브 코딩(vibe coding)"으로 LLM에게 곧장 코드를 시키면 초기 속도는 빠르지만 <b>무엇이 맞는지의 기준(수용기준)</b>이 없어 재작업이 쌓입니다. <b>명세 주도 개발</b>은 도면(명세)과 검수표(수용기준)를 먼저 확정하고, 큰 공사는 <b>설계자·시공자·감리자</b>로 역할을 나누듯 <b>멀티 에이전트</b>로 나눕니다. <span class="src">(출처: IEEE 830-1998 SRS 권고 / Boehm, <i>Software Engineering Economics</i>, 1981 — 결함 조기 발견 원리)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">🏗️</span><div class="tx"><b>Intuition</b> — Building a house by stacking walls with no blueprint or inspection checklist means the doors won't fit later, forcing you to <b>tear it back down</b>. "Vibe coding" — asking an LLM to write code immediately — is fast at first, but with no <b>standard of correctness (acceptance criteria)</b> the rework piles up. <b>Spec-driven development</b> fixes the blueprint (specification) and inspection checklist (acceptance criteria) first, and — as big projects split into <b>architect, builder, inspector</b> — divides work across <b>multiple agents</b>. <span class="src">(Source: IEEE 830-1998 SRS guidance / Boehm, <i>Software Engineering Economics</i>, 1981 — early-defect-detection principle)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede"><strong>명세 주도(spec-driven)</strong>란 코드를 쓰기 전에 <strong>① 요구 명세(무엇을) → ② 수용기준(어떻게 검증) → ③ 구현(코드)</strong> 순서를 강제하는 방식입니다. 프롬프트 관점에서는 "이걸 만들어줘"가 아니라 <strong>"이 명세와 수용기준을 만족하는 코드를 작성하라"</strong>로 지시가 바뀝니다. 명세가 검증 가능한 <strong>테스트</strong>로 번역되면, LLM 출력은 "그럴듯함"이 아니라 <strong>통과/실패</strong>로 판정됩니다.</p>
+        <div class="keqbox">
+          <div class="keq-label">명세 주도 파이프라인</div>
+          <div class="keqrow"><span class="keqcap">1 · 명세</span><span class="keqline">요구사항 + 제약 + 예외</span></div>
+          <div class="keqrow"><span class="keqcap">2 · 수용기준</span><span class="keqline">검증 가능한 테스트로 번역</span></div>
+          <div class="keqrow"><span class="keqcap">3 · 구현</span><span class="keqline">LLM 생성 → 테스트로 판정</span></div>
+          <div class="keqrow"><span class="keqcap">4 · 반복</span><span class="keqline">실패 시 명세/코드 수정</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>명세(spec)</b> 무엇을 만들지의 검증 가능한 기술 — 요구·제약·예외</div>
+          <div class="term"><b>수용기준(AC)</b> "완료"의 정의 — 통과 시 인수, given/when/then 형태</div>
+          <div class="term"><b>바이브 코딩</b> 명세 없이 감으로 곧장 코드 생성 — 초기 빠름, 부채 축적</div>
+          <div class="term"><b>재작업(rework)</b> 잘못된 산출물을 되돌리고 다시 만드는 비용</div>
+          <div class="term"><b>오케스트레이터</b> 하위 에이전트를 지시·통합하는 상위 조정자</div>
+          <div class="term"><b>역할 분리</b> 작성 / 검토 / 실행 에이전트를 분리해 편향·오류 상쇄</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>명세가 <strong>수용기준(=테스트)</strong>으로 바뀌는 순간, LLM 출력의 정확성은 <strong>측정 가능</strong>해지고 재작업이 줄어듭니다. 멀티 에이전트는 이 파이프라인을 <strong>역할별로 병렬화</strong>하되, 조율 비용이 이득을 넘으면 단일 에이전트가 낫습니다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede"><strong>Spec-driven</strong> means enforcing the order <strong>① requirement spec (what) → ② acceptance criteria (how to verify) → ③ implementation (code)</strong> before writing code. As a prompt, the instruction shifts from "build me this" to <strong>"write code that satisfies this spec and these acceptance criteria."</strong> Once the spec is translated into verifiable <strong>tests</strong>, LLM output is judged not by "plausibility" but by <strong>pass/fail</strong>.</p>
+        <div class="keqbox">
+          <div class="keq-label">Spec-driven pipeline</div>
+          <div class="keqrow"><span class="keqcap">1 · Spec</span><span class="keqline">requirements + constraints + edge cases</span></div>
+          <div class="keqrow"><span class="keqcap">2 · Acceptance</span><span class="keqline">translated into verifiable tests</span></div>
+          <div class="keqrow"><span class="keqcap">3 · Implement</span><span class="keqline">LLM generates → judged by tests</span></div>
+          <div class="keqrow"><span class="keqcap">4 · Iterate</span><span class="keqline">on failure, revise spec/code</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>Spec</b> a verifiable description of what to build — requirements, constraints, edge cases</div>
+          <div class="term"><b>Acceptance criteria (AC)</b> the definition of "done" — given/when/then, accept on pass</div>
+          <div class="term"><b>Vibe coding</b> generating code by feel with no spec — fast early, accrues debt</div>
+          <div class="term"><b>Rework</b> the cost of undoing a wrong artifact and rebuilding it</div>
+          <div class="term"><b>Orchestrator</b> the supervisor that directs and integrates sub-agents</div>
+          <div class="term"><b>Role separation</b> splitting writer / reviewer / executor agents to cancel bias and error</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>The moment a spec becomes <strong>acceptance criteria (= tests)</strong>, the correctness of LLM output becomes <strong>measurable</strong> and rework drops. Multi-agent setups <strong>parallelize this pipeline by role</strong> — but if coordination cost exceeds the gain, a single agent wins.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-4 / 유도 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="유도">
+    <div class="eyebrow lang-ko">3-4 · 원리 유도 · Derivation</div>
+    <div class="eyebrow lang-en">3-4 · Derivation</div>
+    <h1 class="stage-h lang-ko">왜 명세가 재작업을 줄이는가 — 부채의 수식</h1>
+    <h1 class="stage-h lang-en">Why Specs Cut Rework — the Debt Equation</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> 재작업은 <b>"산출물이 기준과 어긋난 채 다음 단계로 넘어간 양"</b>에 비례합니다. 명세가 없으면 기준 자체가 모호해 어긋남이 뒤늦게 발견되고, 발견이 늦을수록 되돌릴 코드가 많아집니다. 명세 완성도 $s$를 높이면 어긋남의 기대값이 줄어 재작업이 감소합니다.</p>
+    <p class="lede lang-en"><b>Unifying view:</b> rework is proportional to <b>"how much output passed to the next stage while misaligned with the standard."</b> Without a spec the standard is vague, misalignment is caught late, and the later it is caught the more code must be undone. Raising spec completeness $s$ lowers the expected misalignment and thus rework.</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>기대 재작업 모델</h4><div class="sub">명세 완성도 → 재작업</div><div class="ana">📉 명세가 촘촘할수록 되돌릴 일이 준다</div><div class="eq">$ R(s) = k\left(1-\tfrac{s}{100}\right) $</div><p>$s$: 명세 완성도(%), $k$: 명세 전무($s{=}0$) 시 기대 재작업 횟수. 선형 골격 — $s{\to}100$이면 $R{\to}0$.</p></div>
+      <div class="dcard"><h4>결함 조기 발견</h4><div class="sub">늦게 잡을수록 비쌈</div><div class="ana">🐞 하류에서 잡힌 결함은 비용이 커진다</div><div class="eq">$ C \approx c_0\, m^{\,d} $</div><p>$d$: 결함이 흘러간 단계 수, $m{>}1$: 단계당 배율. Boehm(1981)의 "늦게 잡을수록 비싸다" 정성 관계. 배율 값은 <strong>UNVERIFIED</strong>.</p></div>
+      <div class="dcard"><h4>멀티 에이전트 순이득</h4><div class="sub">품질 이득 − 조율 비용</div><div class="ana">⚖️ 나눠서 얻는 것 vs 합치느라 드는 것</div><div class="eq">$ G = \Delta Q - \alpha(n-1) $</div><p>$\Delta Q$: 역할 분리로 얻는 품질 이득, $\alpha(n{-}1)$: 에이전트 $n$개의 조율·통합 비용. $G{\le}0$이면 단일이 낫다.</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>Expected-rework model</h4><div class="sub">spec completeness → rework</div><div class="ana">📉 A tighter spec means less to undo</div><div class="eq">$ R(s) = k\left(1-\tfrac{s}{100}\right) $</div><p>$s$: spec completeness (%), $k$: expected rework count with no spec ($s{=}0$). Linear skeleton — as $s{\to}100$, $R{\to}0$.</p></div>
+      <div class="dcard"><h4>Early defect detection</h4><div class="sub">later = costlier</div><div class="ana">🐞 A defect caught downstream costs more</div><div class="eq">$ C \approx c_0\, m^{\,d} $</div><p>$d$: stages the defect flowed through, $m{>}1$: per-stage multiplier. Boehm's (1981) qualitative "later is costlier" relation; the multiplier value is <strong>UNVERIFIED</strong>.</p></div>
+      <div class="dcard"><h4>Multi-agent net gain</h4><div class="sub">quality gain − coordination cost</div><div class="ana">⚖️ What splitting buys vs what merging costs</div><div class="eq">$ G = \Delta Q - \alpha(n-1) $</div><p>$\Delta Q$: quality gain from role separation, $\alpha(n{-}1)$: coordination/integration cost of $n$ agents. If $G{\le}0$, a single agent is better.</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · 선형 모델의 한계</div>$R(s)=k(1-s/100)$은 <strong>직관용 골격</strong>일 뿐 실측 상수가 아닙니다($k$, 선형성 모두 <strong>UNVERIFIED</strong>). 실제로는 명세 완성도가 매우 높아도 <strong>사양 자체의 오류·모호성</strong>이 남아 잔여 재작업 $R_{min}{>}0$이 존재합니다. 또한 "멀티 에이전트가 항상 낫다"는 일반적 우위는 <strong>입증되지 않았습니다(UNVERIFIED)</strong> — 태스크 의존성·조율 비용에 따라 단일이 우세할 수 있습니다.</div>
+    <div class="callout warn lang-en"><div class="ct">Caution · limits of the linear model</div>$R(s)=k(1-s/100)$ is only an <strong>intuition skeleton</strong>, not a measured constant (both $k$ and linearity are <strong>UNVERIFIED</strong>). In practice, even with very high completeness, <strong>errors/ambiguity in the spec itself</strong> leave a residual rework $R_{min}{>}0$. Likewise, a general claim that "multi-agent is always better" is <strong>UNVERIFIED</strong> — depending on task dependency and coordination cost, a single agent can win.</div>
+  </section>
+
+  <!-- ══════════ 3-4 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">3-4 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">3-4 · Reading</div>
+    <h1 class="stage-h lang-ko">명세는 오래된 지혜, 에이전트는 새 무대</h1>
+    <h1 class="stage-h lang-en">Specs Are Old Wisdom; Agents Are the New Stage</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p><strong>수용기준</strong>과 검증 가능한 요구는 소프트웨어공학에서 오래 다뤄졌습니다. <strong>IEEE 830-1998</strong>은 좋은 요구 명세의 성질로 <em>정확·모호하지 않음·검증 가능·완전·일관</em>을 제시했고, <strong>행위 주도 개발(BDD)</strong>은 이를 <em>given/when/then</em> 시나리오로 실행 가능한 명세로 만들었습니다(North, 2006). 바이브 코딩 시대에도 원리는 같습니다 — <strong>검증할 수 없는 요구는 프롬프트로도 검증할 수 없습니다.</strong></p>
+        <p class="pullquote">"검증할 수 없으면 요구가 아니다." — 명세의 제1원칙</p>
+        <p><strong>멀티 에이전트</strong>는 새 무대입니다. 토론·역할극이 추론을 개선한다는 보고가 있으나(예: Du et al., 2023, multiagent debate; Wu et al., AutoGen, 2023), <strong>단일 강한 에이전트 + 좋은 명세</strong>가 더 낫거나 대등한 경우도 흔합니다. 태스크가 <strong>분해 가능하고 병렬적</strong>이면 역할 분리가 유리하고, 단계가 <strong>강하게 의존</strong>하면 조율 비용이 이득을 잠식합니다(태스크 의존에 따른 일반 우위는 <strong>UNVERIFIED</strong>).</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>명세는 <strong>검증 가능한 수용기준</strong>으로 번역돼야 값이 생긴다.</li><li>테스트가 곧 "완료의 정의" — LLM 출력의 <strong>합격 판정선</strong>.</li><li>멀티 에이전트의 우위는 <strong>조건부</strong> — 조율 비용을 항상 계산하라.</li></ul></div>
+        <p class="readmeta">참고: IEEE Std 830-1998 / D. North, "Introducing BDD"(2006) / Du et al.(2023) <em>arXiv:2305.14325</em> / Wu et al., AutoGen(2023) <em>arXiv:2308.08155</em></p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p><strong>Acceptance criteria</strong> and verifiable requirements are long-standing in software engineering. <strong>IEEE 830-1998</strong> lists the qualities of a good requirement spec as <em>correct, unambiguous, verifiable, complete, consistent</em>; <strong>behavior-driven development (BDD)</strong> turned these into executable specs via <em>given/when/then</em> scenarios (North, 2006). The principle survives into the vibe-coding era — <strong>a requirement you cannot verify, you cannot verify with a prompt either.</strong></p>
+        <p class="pullquote">"If you can't verify it, it isn't a requirement." — first principle of specs</p>
+        <p><strong>Multi-agent</strong> is the new stage. Debate and role-play are reported to improve reasoning (e.g., Du et al., 2023, multiagent debate; Wu et al., AutoGen, 2023), yet a <strong>single strong agent + a good spec</strong> is often better or on par. When a task is <strong>decomposable and parallel</strong>, role separation helps; when stages are <strong>tightly dependent</strong>, coordination cost erodes the gain (a general advantage by task dependency is <strong>UNVERIFIED</strong>).</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>A spec earns its value only when translated into <strong>verifiable acceptance criteria</strong>.</li><li>Tests are the "definition of done" — the <strong>pass line</strong> for LLM output.</li><li>Multi-agent advantage is <strong>conditional</strong> — always price the coordination cost.</li></ul></div>
+        <p class="readmeta">Refs: IEEE Std 830-1998 / D. North, "Introducing BDD" (2006) / Du et al. (2023) <em>arXiv:2305.14325</em> / Wu et al., AutoGen (2023) <em>arXiv:2308.08155</em></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-4 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="그림·표">
+    <div class="eyebrow lang-ko">3-4 · 그림 · 표</div>
+    <div class="eyebrow lang-en">3-4 · Figure · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — 오케스트레이션과 명세→테스트→구현</h1>
+    <h1 class="stage-h lang-en">At a Glance — Orchestration and Spec→Test→Implement</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">오케스트레이터 → 하위 에이전트 + 명세→테스트→구현 흐름</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:460px">
+<defs>
+<marker id="ar34ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="180" y="16" width="120" height="34" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="240" y="37" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">오케스트레이터</text>
+<line x1="210" y1="50" x2="100" y2="88" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34ko)"/>
+<line x1="240" y1="50" x2="240" y2="88" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34ko)"/>
+<line x1="270" y1="50" x2="380" y2="88" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34ko)"/>
+<rect x="40" y="90" width="112" height="34" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="96" y="111" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">작성 에이전트</text>
+<rect x="184" y="90" width="112" height="34" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="240" y="111" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">검토 에이전트</text>
+<rect x="328" y="90" width="112" height="34" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="384" y="111" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">실행 에이전트</text>
+<line x1="96" y1="124" x2="220" y2="150" stroke="#71717a" stroke-width="1.3" marker-end="url(#ar34ko)"/>
+<line x1="240" y1="124" x2="240" y2="150" stroke="#71717a" stroke-width="1.3" marker-end="url(#ar34ko)"/>
+<line x1="384" y1="124" x2="260" y2="150" stroke="#71717a" stroke-width="1.3" marker-end="url(#ar34ko)"/>
+<rect x="150" y="150" width="180" height="30" rx="7" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+<text x="240" y="170" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="700">통합 · 판정(테스트)</text>
+<rect x="60" y="212" width="100" height="32" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="110" y="232" font-size="11.5" fill="#c2410c" text-anchor="middle" font-weight="700">① 명세</text>
+<rect x="190" y="212" width="100" height="32" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="240" y="232" font-size="11.5" fill="#c2410c" text-anchor="middle" font-weight="700">② 테스트</text>
+<rect x="320" y="212" width="100" height="32" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="370" y="232" font-size="11.5" fill="#c2410c" text-anchor="middle" font-weight="700">③ 구현</text>
+<line x1="160" y1="228" x2="190" y2="228" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34ko)"/>
+<line x1="290" y1="228" x2="320" y2="228" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34ko)"/>
+<path d="M370 244 Q370 276 240 276 Q110 276 110 244" fill="none" stroke="#71717a" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ar34ko)"/>
+<text x="240" y="292" font-size="10" fill="#71717a" text-anchor="middle">실패 시 명세로 되돌아 반복</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">단일 vs 멀티 에이전트 — 언제 무엇을</div>
+        <table class="ktab"><thead><tr><th>조건</th><th>단일</th><th style="text-align:right">멀티</th></tr></thead><tbody>
+          <tr><td>태스크 분해성</td><td class="k">낮음</td><td>높음(병렬)</td></tr>
+          <tr><td>단계 간 의존</td><td class="k">강함</td><td>약함</td></tr>
+          <tr><td>조율 비용 $\alpha$</td><td class="k">낮게 유지</td><td>높아짐</td></tr>
+          <tr><td>편향/오류 상쇄</td><td class="k">약함</td><td>강함(검토)</td></tr>
+          <tr><td>순이득 $G$</td><td class="k">$G\le 0$</td><td>$G>0$</td></tr>
+        </tbody></table>
+        <div class="keqnote">$G=\Delta Q-\alpha(n-1)$. 표의 우열은 <strong>정성적 골격</strong>이며 태스크 의존에 따른 일반 우위는 <strong>UNVERIFIED</strong>. (출처: AutoGen 2023 / 멀티에이전트 토론 문헌; 상수·경계값 미검증)</div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">Orchestrator → sub-agents + Spec→Test→Implement flow</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:460px">
+<defs>
+<marker id="ar34en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="180" y="16" width="120" height="34" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="240" y="37" font-size="12" fill="#c2410c" text-anchor="middle" font-weight="700">Orchestrator</text>
+<line x1="210" y1="50" x2="100" y2="88" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34en)"/>
+<line x1="240" y1="50" x2="240" y2="88" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34en)"/>
+<line x1="270" y1="50" x2="380" y2="88" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34en)"/>
+<rect x="40" y="90" width="112" height="34" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="96" y="111" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">Writer</text>
+<rect x="184" y="90" width="112" height="34" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="240" y="111" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">Reviewer</text>
+<rect x="328" y="90" width="112" height="34" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="384" y="111" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">Executor</text>
+<line x1="96" y1="124" x2="220" y2="150" stroke="#71717a" stroke-width="1.3" marker-end="url(#ar34en)"/>
+<line x1="240" y1="124" x2="240" y2="150" stroke="#71717a" stroke-width="1.3" marker-end="url(#ar34en)"/>
+<line x1="384" y1="124" x2="260" y2="150" stroke="#71717a" stroke-width="1.3" marker-end="url(#ar34en)"/>
+<rect x="150" y="150" width="180" height="30" rx="7" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+<text x="240" y="170" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="700">Integrate · judge (tests)</text>
+<rect x="60" y="212" width="100" height="32" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="110" y="232" font-size="11.5" fill="#c2410c" text-anchor="middle" font-weight="700">① Spec</text>
+<rect x="190" y="212" width="100" height="32" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="240" y="232" font-size="11.5" fill="#c2410c" text-anchor="middle" font-weight="700">② Tests</text>
+<rect x="320" y="212" width="100" height="32" rx="7" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="370" y="232" font-size="11.5" fill="#c2410c" text-anchor="middle" font-weight="700">③ Implement</text>
+<line x1="160" y1="228" x2="190" y2="228" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34en)"/>
+<line x1="290" y1="228" x2="320" y2="228" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar34en)"/>
+<path d="M370 244 Q370 276 240 276 Q110 276 110 244" fill="none" stroke="#71717a" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ar34en)"/>
+<text x="240" y="292" font-size="10" fill="#71717a" text-anchor="middle">on failure, loop back to the spec</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Single vs multi-agent — when to use which</div>
+        <table class="ktab"><thead><tr><th>Condition</th><th>Single</th><th style="text-align:right">Multi</th></tr></thead><tbody>
+          <tr><td>Task decomposability</td><td class="k">low</td><td>high (parallel)</td></tr>
+          <tr><td>Inter-stage dependency</td><td class="k">strong</td><td>weak</td></tr>
+          <tr><td>Coordination cost $\alpha$</td><td class="k">kept low</td><td>rises</td></tr>
+          <tr><td>Bias/error cancellation</td><td class="k">weak</td><td>strong (review)</td></tr>
+          <tr><td>Net gain $G$</td><td class="k">$G\le 0$</td><td>$G>0$</td></tr>
+        </tbody></table>
+        <div class="keqnote">$G=\Delta Q-\alpha(n-1)$. The winners in this table are a <strong>qualitative skeleton</strong>; a general advantage by task dependency is <strong>UNVERIFIED</strong>. (Source: AutoGen 2023 / multi-agent debate literature; constants and thresholds unverified)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-4 / 실습 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="실습">
+    <div class="eyebrow lang-ko">3-4 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">3-4 · Interactive</div>
+    <h1 class="stage-h lang-ko">명세 완성도 → 기대 재작업 — 직접 조절해보기</h1>
+    <h1 class="stage-h lang-en">Spec Completeness → Expected Rework — Try It</h1>
+    <p class="lede lang-ko">기대 재작업 골격 <strong>$R(s)=k\,(1-s/100)$</strong>에서 명세 완성도 <strong>$s$</strong>(0–100%)와 명세 전무 시 기대 재작업 <strong>$k$</strong>를 조절해, 명세를 촘촘히 할수록 되돌릴 일이 얼마나 주는지 확인하세요. 상수와 선형성은 직관용이며 실측이 아닙니다(<strong>UNVERIFIED</strong>).</p>
+    <p class="lede lang-en">In the rework skeleton <strong>$R(s)=k\,(1-s/100)$</strong>, adjust spec completeness <strong>$s$</strong> (0–100%) and the no-spec expected rework <strong>$k$</strong> to see how much a tighter spec cuts what must be undone. The constant and linearity are for intuition, not measured (<strong>UNVERIFIED</strong>).</p>
+    <div class="calc lang-ko"
+      data-title="기대 재작업 $R(s)=k\,(1-s/100)$"
+      data-desc="s = 명세 완성도(%), k = 명세 전무 시 기대 재작업 횟수. 기본값 s=40%, k=5 → R=3.0회. s=80%면 R=1.0회로 감소."
+      data-vars='[{"sym":"s","label":"$s$ · 명세 완성도","min":0,"max":100,"val":40,"step":5,"unit":"%"},{"sym":"k","label":"$k$ · 명세 전무 시 재작업","min":1,"max":10,"val":5,"step":1,"unit":"회"}]'
+      data-expr="k*(1-s/100)"
+      data-out="$R$" data-out-unit="회"
+      data-barmax="10"
+      data-note="s를 40→80%로 올리면 R이 3.0→1.0회로 줄어듭니다 — 명세가 재작업을 직접 깎는 골격(값은 UNVERIFIED)."></div>
+    <div class="calc lang-en"
+      data-title="Expected rework $R(s)=k\,(1-s/100)$"
+      data-desc="s = spec completeness (%), k = expected rework with no spec. Default s=40%, k=5 → R=3.0. At s=80%, R falls to 1.0."
+      data-vars='[{"sym":"s","label":"$s$ · spec completeness","min":0,"max":100,"val":40,"step":5,"unit":"%"},{"sym":"k","label":"$k$ · rework with no spec","min":1,"max":10,"val":5,"step":1,"unit":"×"}]'
+      data-expr="k*(1-s/100)"
+      data-out="$R$" data-out-unit="×"
+      data-barmax="10"
+      data-note="Raising s from 40→80% cuts R from 3.0 to 1.0 — the skeleton where the spec directly shaves rework (values UNVERIFIED)."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">실무 감각</b> — 기대 재작업 $R$ 감(직관용, 단위=회): 명세 없이 바이브 코딩 $R\approx k$ (전량 위험) · 요구만 대충 $R\approx 0.5k\!\sim\!0.7k$ · 요구+수용기준+예외까지 촘촘 $R\approx 0.1k\!\sim\!0.2k$. 기본값($s{=}40\%,\,k{=}5$)은 $R{=}3.0$회 — 절반 이상이 되돌림 위험이다. 여기서 <strong>수용기준을 테스트로 번역</strong>하면 $s$가 크게 오른다. 단, 사양 자체 오류로 $R_{min}{>}0$은 남는다(<strong>UNVERIFIED</strong>). <span class="src">(출처: 재작업-결함 조기발견 정성 관계 = Boehm 1981; 상수 미검증)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Practical sense</b> — feel for expected rework $R$ (intuition, units = passes): vibe coding with no spec $R\approx k$ (all at risk) · loose requirements only $R\approx 0.5k\!\sim\!0.7k$ · requirements + acceptance + edge cases tight $R\approx 0.1k\!\sim\!0.2k$. The default ($s{=}40\%,\,k{=}5$) gives $R{=}3.0$ — over half is at risk of undo. Here, <strong>translating acceptance criteria into tests</strong> raises $s$ sharply. Yet spec errors leave $R_{min}{>}0$ (<strong>UNVERIFIED</strong>). <span class="src">(Source: rework / early-detection qualitative relation = Boehm 1981; constants unverified)</span></div>
+  </section>
+
+  <!-- ══════════ 3-4 / 점검 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>명세 주도 개발에서 <strong>수용기준(acceptance criteria)</strong>의 핵심 역할은?</p>
+      <div class="opts">
+        <button class="opt">① 프롬프트를 더 길고 정중하게 만드는 것</button>
+        <button class="opt" data-correct="1">② "완료"를 검증 가능한 테스트로 정의해 LLM 출력을 통과/실패로 판정하는 것</button>
+        <button class="opt">③ 에이전트 수를 늘려 병렬성을 높이는 것</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 수용기준은 "완료의 정의"이며, 검증 가능한 테스트로 번역될 때 LLM 출력이 "그럴듯함"이 아니라 <strong>통과/실패</strong>로 판정된다(BDD의 given/when/then). <span class="dim">오답 ①·③: ①길이·어투는 무관하고, ③에이전트 수는 별개의 조율 문제다.</span> <span class="agg">학급 n=41 · ① 5 · ② 31 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>In spec-driven development, the core role of <strong>acceptance criteria</strong> is to:</p>
+      <div class="opts">
+        <button class="opt">① make the prompt longer and more polite</button>
+        <button class="opt" data-correct="1">② define "done" as verifiable tests so LLM output is judged pass/fail</button>
+        <button class="opt">③ increase the number of agents to raise parallelism</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — acceptance criteria are the "definition of done"; translated into verifiable tests, LLM output is judged <strong>pass/fail</strong> rather than by plausibility (BDD's given/when/then). <span class="dim">Wrong ①·③: ① length/tone is irrelevant; ③ agent count is a separate coordination concern.</span> <span class="agg">class n=41 · ① 5 · ② 31 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>$G=\Delta Q-\alpha(n-1)$일 때, <strong>단일 에이전트</strong>가 멀티보다 나은 상황은?</p>
+      <div class="opts">
+        <button class="opt">① 태스크가 독립적으로 분해되고 병렬화가 쉬울 때</button>
+        <button class="opt" data-correct="1">② 단계 간 의존이 강하고 조율 비용 $\alpha(n-1)$이 품질 이득 $\Delta Q$를 넘어 $G\le 0$일 때</button>
+        <button class="opt">③ 검토 에이전트가 편향을 상쇄해 품질이 크게 오를 때</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 멀티 에이전트의 순이득은 품질 이득에서 조율·통합 비용을 뺀 $G$로, 단계 의존이 강해 $\alpha(n-1)$이 $\Delta Q$를 넘으면 $G\le 0$이 되어 단일이 낫다. "멀티가 항상 우위"는 <strong>UNVERIFIED</strong>. <span class="dim">오답 ①·③: 둘 다 $\Delta Q$가 크거나 병렬이 쉬운 경우로, 오히려 멀티가 유리한 조건이다.</span> <span class="agg">학급 n=41 · ① 7 · ② 28 · ③ 6</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>With $G=\Delta Q-\alpha(n-1)$, when is a <strong>single agent</strong> better than multi?</p>
+      <div class="opts">
+        <button class="opt">① when the task decomposes independently and parallelizes easily</button>
+        <button class="opt" data-correct="1">② when inter-stage dependency is strong and coordination cost $\alpha(n-1)$ exceeds quality gain $\Delta Q$, so $G\le 0$</button>
+        <button class="opt">③ when a reviewer agent cancels bias and quality rises sharply</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the net gain is quality gain minus coordination/integration cost, $G$; when dependency is strong and $\alpha(n-1)$ exceeds $\Delta Q$, $G\le 0$ and a single agent wins. "Multi is always better" is <strong>UNVERIFIED</strong>. <span class="dim">Wrong ①·③: both describe large $\Delta Q$ or easy parallelism — conditions that favor multi.</span> <span class="agg">class n=41 · ① 7 · ② 28 · ③ 6</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-4 / 연습 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">모델 계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Model calc · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 기대 재작업 계산</div>
+      <p class="prob-statement">기대 재작업 골격 $R(s)=k\,(1-s/100)$에서 명세 전무 시 재작업 $k=6$회이고 명세 완성도 $s=75\%$이다. <strong>기대 재작업 $R$</strong>을 구하시오.</p>
+      <div class="given"><span class="chip">$k=6$회</span><span class="chip">$s=75\%$</span></div>
+      <div class="find"><b>구할 것:</b> $R\ [\text{회}]$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="1.5" data-tol="0.02"/><span class="ans-unit">회</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 완성도 항</div>$$ 1-\frac{s}{100} = 1-\frac{75}{100} = 0.25 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 대입</div>$$ R = k\left(1-\frac{s}{100}\right) = 6\times 0.25 = 1.5\ \text{회} $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ R = 1.5\ \text{회} $$</div><b>정답:</b> 명세를 75%까지 채우면 기대 재작업이 $k=6$의 1/4로 줄어든다(상수는 UNVERIFIED).</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · expected rework</div>
+      <p class="prob-statement">In $R(s)=k\,(1-s/100)$, no-spec rework is $k=6$ passes and spec completeness is $s=75\%$. Find the <strong>expected rework $R$</strong>.</p>
+      <div class="given"><span class="chip">$k=6$ passes</span><span class="chip">$s=75\%$</span></div>
+      <div class="find"><b>Find:</b> $R\ [\text{passes}]$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="1.5" data-tol="0.02"/><span class="ans-unit">passes</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · completeness term</div>$$ 1-\frac{s}{100} = 1-\frac{75}{100} = 0.25 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · substitute</div>$$ R = k\left(1-\frac{s}{100}\right) = 6\times 0.25 = 1.5\ \text{passes} $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ R = 1.5\ \text{passes} $$</div><b>Answer:</b> filling the spec to 75% cuts expected rework to 1/4 of $k=6$ (constant is UNVERIFIED).</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 멀티 에이전트 순이득</div>
+      <p class="prob-statement">멀티 에이전트 순이득 $G=\Delta Q-\alpha(n-1)$에서 품질 이득 $\Delta Q=12$점, 에이전트당 조율 비용 $\alpha=3$점, 에이전트 수 $n=5$개이다. <strong>순이득 $G$</strong>를 구하고, 멀티가 유리한지 판정하시오.</p>
+      <div class="given"><span class="chip">$\Delta Q=12$</span><span class="chip">$\alpha=3$</span><span class="chip">$n=5$</span></div>
+      <div class="find"><b>구할 것:</b> $G$ (점)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0" data-tol="0.02"/><span class="ans-unit">점</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 조율 비용</div>$$ \alpha(n-1) = 3\times(5-1) = 12 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 순이득</div>$$ G = \Delta Q-\alpha(n-1) = 12-12 = 0 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ G = 0\ \Rightarrow\ \text{손익분기} $$</div><b>정답:</b> $G=0$은 멀티의 이득이 조율 비용에 정확히 상쇄된 손익분기점이다. $n$을 더 늘리면 $G<0$이 되어 단일이 낫다.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · multi-agent net gain</div>
+      <p class="prob-statement">In $G=\Delta Q-\alpha(n-1)$, quality gain $\Delta Q=12$ points, per-agent coordination cost $\alpha=3$ points, and agent count $n=5$. Find the <strong>net gain $G$</strong> and judge whether multi is favorable.</p>
+      <div class="given"><span class="chip">$\Delta Q=12$</span><span class="chip">$\alpha=3$</span><span class="chip">$n=5$</span></div>
+      <div class="find"><b>Find:</b> $G$ (points)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0" data-tol="0.02"/><span class="ans-unit">points</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · coordination cost</div>$$ \alpha(n-1) = 3\times(5-1) = 12 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · net gain</div>$$ G = \Delta Q-\alpha(n-1) = 12-12 = 0 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ G = 0\ \Rightarrow\ \text{break-even} $$</div><b>Answer:</b> $G=0$ is the break-even point where the multi-agent gain exactly cancels coordination cost. Adding more agents pushes $G<0$, favoring a single agent.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3-4 / 정리 ══════════ -->
+  <section class="screen" data-ch="3-4" data-chtitle="명세 주도 개발·멀티 에이전트" data-stage="정리">
+    <div class="eyebrow lang-ko">3-4 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">3-4 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>순서 강제: <strong>명세 → 수용기준(테스트) → 구현 → 반복</strong>. "완료"는 테스트 통과.</li>
+        <li>재작업 골격 <strong>$R(s)=k(1-s/100)$</strong> — 명세 완성도 $s$가 오르면 $R$이 준다(상수 UNVERIFIED).</li>
+        <li>멀티 에이전트 순이득 <strong>$G=\Delta Q-\alpha(n-1)$</strong> — $G\le0$이면 단일이 낫다.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>검증 불가능한 요구를 명세로 착각 → 반드시 <strong>테스트로 번역</strong>.</li>
+        <li>"멀티가 항상 우위"로 단정 → 태스크 의존 시 <strong>단일 우세</strong>(일반 우위 UNVERIFIED).</li>
+        <li>선형 모델의 상수·경계를 실측처럼 인용 → 모두 <strong>UNVERIFIED</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>$R(s)=k(1-s/100)$에 $s,k$ 대입 계산.</li>
+        <li>$G=\Delta Q-\alpha(n-1)$로 단일/멀티 판정 및 손익분기 $n$.</li>
+        <li>수용기준(AC)·BDD given/when/then의 역할과 명세 5성질(IEEE 830).</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>Enforce order: <strong>spec → acceptance (tests) → implement → iterate</strong>. "Done" = tests pass.</li>
+        <li>Rework skeleton <strong>$R(s)=k(1-s/100)$</strong> — higher completeness $s$ lowers $R$ (constants UNVERIFIED).</li>
+        <li>Multi-agent net gain <strong>$G=\Delta Q-\alpha(n-1)$</strong> — if $G\le0$, a single agent wins.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Mistaking an unverifiable requirement for a spec → always <strong>translate to tests</strong>.</li>
+        <li>Asserting "multi always wins" → under task dependency <strong>single wins</strong> (general advantage UNVERIFIED).</li>
+        <li>Citing the linear model's constants/thresholds as measured → all <strong>UNVERIFIED</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Plug $s,k$ into $R(s)=k(1-s/100)$.</li>
+        <li>Judge single/multi with $G=\Delta Q-\alpha(n-1)$ and find break-even $n$.</li>
+        <li>Role of acceptance criteria / BDD given/when/then and the five spec qualities (IEEE 830).</li>
+      </ul></div>
+    </div>
+  </section>
+</div></main>
+<footer><button class="nav-btn prev" id="prevBtn">← 이전</button><span class="foot-hint" id="footHint">← / → 또는 상단 단계 클릭으로 이동</span><button class="nav-btn next" id="nextBtn">다음 →</button></footer>
+
+<script>
+(function(){
+  var screens=Array.prototype.slice.call(document.querySelectorAll('.screen'));
+  var stage=document.getElementById('stage'), stepbar=document.getElementById('stepbar'), chrail=document.getElementById('chrail');
+  var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  var N=screens.length, active=0;
+  var chapters=[]; screens.forEach(function(s){var c=s.getAttribute('data-ch'); if(chapters.indexOf(c)<0)chapters.push(c);});
+  function chOf(i){return screens[i].getAttribute('data-ch');} function stOf(i){return screens[i].getAttribute('data-stage');}
+
+  function fitActive(){ var u=screens[active]; if(!u)return; u.style.transform='none'; var avail=stage.clientHeight, nat=u.offsetHeight; if(nat<=0||avail<=0)return; if(nat>avail){u.style.transformOrigin='top center'; u.style.transform='scale('+(avail/nat)+')';} else {u.style.transformOrigin='top center'; var _st=u.getAttribute('data-stage'); var _cap=(_st==='점검'||_st==='연습')?44:(avail-nat)/2; u.style.transform='translateY('+Math.min((avail-nat)/2,_cap)+'px)';} }
+
+  function buildChrail(){ chrail.innerHTML=''; chapters.forEach(function(c){ var d=document.createElement('span'); d.className='chdot'; d.textContent=c; d.addEventListener('click',function(){ for(var k=0;k<N;k++){ if(chOf(k)===c){show(k);break;} } }); chrail.appendChild(d); }); }
+  function buildStepper(){ var ch=chOf(active); var list=[]; for(var i=0;i<N;i++){ if(chOf(i)===ch) list.push(i); } stepbar.innerHTML=''; list.forEach(function(idx,k){ var el=document.createElement('div'); var cls='step'; if(idx===active)cls+=' cur'; else if(idx<active)cls+=' done'; el.className=cls; el.innerHTML='<span class="ix">'+(k+1)+'</span>'+stOf(idx); el.addEventListener('click',function(){show(idx);}); stepbar.appendChild(el); if(k<list.length-1){var ln=document.createElement('span'); ln.className='link'; el.appendChild(ln);} }); }
+
+  function render(){ for(var i=0;i<N;i++) screens[i].classList.toggle('active', i===active); var ch=chOf(active); Array.prototype.forEach.call(chrail.children,function(d){ d.classList.toggle('cur', d.textContent===ch); }); buildStepper(); prevBtn.disabled=(active===0); if(active>=N-1){ nextBtn.textContent='✓ 완료 · 목록으로'; } else { var nx=active+1; nextBtn.textContent=(chOf(nx)===ch)?('다음 · '+stOf(nx)+' →'):('다음 챕터 '+chOf(nx)+' →'); } fitActive(); }
+  function show(i){ if(i<0)i=0; if(i>N-1)i=N-1; active=i; render(); }
+
+  function toggleReveal(btn){ var scope=btn.closest('.prob')||btn.closest('.screen'); var t=scope?scope.querySelector('.revealable.solution'):null; if(!t)return; var open=t.classList.toggle('open'); btn.classList.toggle('is-open',open); var sp=btn.querySelector('span'); if(sp)sp.textContent=open?'풀이 숨기기':'풀이 보기'; fitActive(); }
+
+  document.addEventListener('click',function(e){
+    var opt=e.target.closest?e.target.closest('.opt'):null;
+    if(opt){ var wrap=opt.parentElement; Array.prototype.forEach.call(wrap.children,function(o){o.classList.remove('sel');}); opt.classList.add('sel'); return; }
+    var sub=e.target.closest?e.target.closest('.cp-submit'):null;
+    if(sub){ var cq=sub.closest('.cq')||sub.closest('.screen'); var sel=cq.querySelector('.opt.sel'); var fb=cq.querySelector('.cp-fb'); var prof=cq.querySelector('.cp-exp')||cq.querySelector('.cp-prof'); if(!sel){ if(fb){fb.textContent='먼저 보기를 선택하세요'; fb.style.color='var(--gray2)';} return; } var ok=sel.getAttribute('data-correct')==='1'; if(fb){fb.textContent=ok?'✓ 제출됨 — 정답':'제출됨 — 학급 응답에 반영'; fb.style.color='var(--accent)';} Array.prototype.forEach.call(cq.querySelectorAll('.opt'),function(o){if(o.getAttribute('data-correct')==='1')o.classList.add('correct');}); if(prof)prof.classList.add('show'); fitActive(); return; }
+    var chk=e.target.closest?e.target.closest('.pr-check'):null;
+    if(chk){ var pb=chk.closest('.prob')||chk.closest('.screen'); var input=pb.querySelector('.ans-input'); var pf=pb.querySelector('.pr-fb'); if(!input||!pf)return; var ans=parseFloat(input.getAttribute('data-answer')), tol=parseFloat(input.getAttribute('data-tol')||'0.02'); var raw=(input.value||'').replace(/[,\s]/g,''); if(raw===''){pf.textContent='먼저 답을 입력하세요'; pf.className='check-fb pr-fb no'; return;} var v=parseFloat(raw), good=!isNaN(v)&&Math.abs(v-ans)<=Math.abs(ans)*tol; pf.textContent=good?'✓ 정답입니다 — 풀이로 과정 확인':'✗ 다시 — 풀이로 과정 확인'; pf.className='check-fb pr-fb '+(good?'ok':'no'); fitActive(); return; }
+    var rb=e.target.closest?e.target.closest('.reveal-btn'):null; if(rb){ toggleReveal(rb); return; }
+  });
+  document.addEventListener('keydown',function(e){ if(e.target&&e.target.classList&&e.target.classList.contains('ans-input')){ if(e.key==='Enter'){var b=e.target.closest('.prob').querySelector('.pr-check'); if(b)b.click();} return; } if(e.key==='ArrowRight')show(active+1); else if(e.key==='ArrowLeft')show(active-1); });
+  prevBtn.addEventListener('click',function(){show(active-1);}); nextBtn.addEventListener('click',function(){ if(active>=N-1){location.href='/';} else {show(active+1);} });
+  window.addEventListener('resize',fitActive);
+
+  // ── interactive calc widgets ──
+  function _sup(n){var m={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};return String(n).split('').map(function(c){return m[c]||c;}).join('');} function fnum(x){ if(!isFinite(x))return '—'; var a=Math.abs(x); if(a!==0&&(a<0.01||a>=1e5)){ var e=Math.floor(Math.log10(a)); var mn=x/Math.pow(10,e); return (Math.round(mn*100)/100)+' × 10'+_sup(e); } return (Math.round(x*1000)/1000).toLocaleString(); }
+  function initCalcs(){ Array.prototype.forEach.call(document.querySelectorAll('.calc:not([data-init])'),function(c){ c.setAttribute('data-init','1'); var vars; try{vars=JSON.parse(c.getAttribute('data-vars')||'[]');}catch(e){vars=[];} var expr=c.getAttribute('data-expr')||'0'; var outSym=c.getAttribute('data-out')||''; var outUnit=c.getAttribute('data-out-unit')||''; var barmax=parseFloat(c.getAttribute('data-barmax')||'0'); var title=c.getAttribute('data-title')||''; var desc=c.getAttribute('data-desc')||''; var note=c.getAttribute('data-note')||'';
+    var html='<div class="calc-title">'+title+'</div>'; if(desc)html+='<div class="calc-desc">'+desc+'</div>'; html+='<div class="calc-rows"></div><div class="calc-out"><span class="calc-os">'+outSym+'</span><span>=</span><b class="calc-num">—</b><span class="calc-ou">'+outUnit+'</span></div>'; if(barmax>0)html+='<div class="calc-outbar"><div class="bar"><span class="calc-bar" style="width:0%"></span></div></div>'; if(note)html+='<div class="calc-note">'+note+'</div>'; c.innerHTML=html;
+    var rowsEl=c.querySelector('.calc-rows'); var inputs={}; var fn; try{ fn=Function.apply(null, vars.map(function(v){return v.sym;}).concat(['return ('+expr+');'])); }catch(e){ fn=function(){return NaN;}; }
+    vars.forEach(function(v){ var row=document.createElement('div'); row.className='calc-row'; row.innerHTML='<span class="calc-lab">'+(v.label||v.sym)+'</span><input type="range" min="'+v.min+'" max="'+v.max+'" step="'+(v.step||((v.max-v.min)/100))+'" value="'+v.val+'"><span class="calc-val"></span>'; rowsEl.appendChild(row); var rng=row.querySelector('input'); inputs[v.sym]={rng:rng, val:row.querySelector('.calc-val'), unit:v.unit||''}; rng.addEventListener('input',recompute); });
+    function recompute(){ var args=vars.map(function(v){return parseFloat(inputs[v.sym].rng.value);}); vars.forEach(function(v){ var o=inputs[v.sym]; o.val.textContent=fnum(parseFloat(o.rng.value))+(o.unit?(' '+o.unit):''); }); var y; try{y=fn.apply(null,args);}catch(e){y=NaN;} c.querySelector('.calc-num').textContent=fnum(y); if(barmax>0){ var w=Math.max(0,Math.min(100, y/barmax*100)); var b=c.querySelector('.calc-bar'); if(b)b.style.width=w+'%'; } }
+    recompute();
+  }); }
+
+  function renderMath(){ initCalcs(); if(window.renderMathInElement){ renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); } fitActive(); if(window.requestAnimationFrame)requestAnimationFrame(fitActive); }
+
+  function applyDeep(){ var p=new URLSearchParams(location.search), idx=0; var s=parseInt(p.get('slide'),10); if(!isNaN(s))idx=Math.min(Math.max(s,0),N-1); var u=p.get('unit'); if(u){ for(var i=0;i<N;i++){ if(chOf(i)===u){idx=i;break;} } } var rev=p.get('reveal')==='all'; show(idx); if(rev){ Array.prototype.forEach.call(screens[idx].querySelectorAll('.reveal-btn'),function(b){toggleReveal(b);}); Array.prototype.forEach.call(screens[idx].querySelectorAll('.cq'),function(cq){ var o=cq.querySelector('.opt[data-correct]'); if(o){o.classList.add('sel'); var sb=cq.querySelector('.cp-submit'); if(sb)sb.click();} }); } }
+
+  buildChrail();
+  document.addEventListener('DOMContentLoaded',function(){ applyDeep(); renderMath(); });
+  if(document.readyState!=='loading'){ applyDeep(); renderMath(); }
+  window.addEventListener('load',renderMath);
+
+  // ── language toggle (ko / en) ──
+  (function(){
+    var btn=document.getElementById('langToggle'); if(!btn)return;
+    var LABELS={ko:'EN', en:'한국어'};
+    function apply(lang){ var d=document.documentElement; d.classList.remove('lang-ko','lang-en'); d.classList.add('lang-'+lang); btn.textContent=LABELS[lang]; }
+    var lang; try{ lang=localStorage.getItem('lecture_lang'); }catch(e){ lang=null; }
+    if(lang!=='en'&&lang!=='ko') lang='ko';
+    apply(lang);
+    btn.addEventListener('click',function(){
+      lang=(lang==='ko')?'en':'ko';
+      apply(lang);
+      try{ localStorage.setItem('lecture_lang',lang); }catch(e){}
+      if(window.requestAnimationFrame) requestAnimationFrame(fitActive); else fitActive();
+    });
+  })();
+})();
+</script>
+<script>window.HTL_WEEK=3;</script>
+<script src="/htl-track.js" defer></script>
+</body>
+</html>

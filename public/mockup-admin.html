@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>교수 분석 대시보드 — 제안 목업 (MFTEL 열전달)</title>
+<style>
+  :root{
+    --accent:#c2410c; --accent-hover:#a8360a; --accent-soft:#fff3ec;
+    --ink:#18181b; --ink2:#3f3f46; --gray:#52525b; --gray2:#71717a; --gray3:#a1a1aa;
+    --line:#e4e4e7; --wash:#f4f4f5; --page:#fafafa; --white:#fff;
+    --ok:#16a34a; --okbg:#dcfce7; --bad:#dc2626; --badbg:#fee2e2; --read:#fb923c; --skip:#e7e5e4;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:var(--page);color:var(--ink);-webkit-font-smoothing:antialiased}
+  header{border-bottom:1px solid var(--line);background:var(--white);padding:18px 24px}
+  .eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--accent)}
+  h1{margin:4px 0 2px;font-size:22px;font-weight:800}
+  .sub{font-size:13px;color:var(--gray2)}
+  .badge-demo{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);border:1px solid #fcd9c4;padding:2px 8px;border-radius:999px;vertical-align:middle}
+  nav.tabs{display:flex;gap:4px;padding:0 24px;background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  nav.tabs button{appearance:none;border:none;background:none;padding:13px 14px;font-size:14px;font-weight:600;color:var(--gray2);cursor:pointer;border-bottom:2px solid transparent}
+  nav.tabs button.active{color:var(--accent);border-bottom-color:var(--accent)}
+  main{max-width:1180px;margin:0 auto;padding:22px 24px 60px}
+  .view{display:none}.view.active{display:block}
+  .grid2{display:grid;grid-template-columns:250px 1fr;gap:20px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px}
+  .card.pad{padding:16px}
+  .muted{color:var(--gray2)}
+  .roster h3,.panel h3{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--gray2);text-transform:uppercase}
+  .stu{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;border:1px solid transparent}
+  .stu:hover{background:var(--wash)}
+  .stu.sel{background:var(--accent-soft);border-color:#fcd9c4}
+  .stu .av{width:34px;height:34px;border-radius:9px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px}
+  .stu .nm{font-weight:700;font-size:14px}
+  .stu .mt{font-size:12px;color:var(--gray3)}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  @media(max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .stat .v{font-size:26px;font-weight:800;letter-spacing:-.02em}
+  .stat .l{font-size:12px;color:var(--gray2);margin-top:2px}
+  .bar{height:7px;border-radius:99px;background:var(--wash);overflow:hidden;margin-top:8px}
+  .bar>i{display:block;height:100%;border-radius:99px}
+  .sec-title{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 10px}
+  .sec-title h2{font-size:15px;font-weight:800;margin:0}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--gray2)}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .sw.ok{background:var(--ok)}.sw.bad{background:var(--bad)}.sw.read{background:var(--read)}.sw.skip{background:var(--skip)}
+  /* coverage map */
+  .cov{display:flex;flex-direction:column;gap:5px}
+  .wkrow{display:grid;grid-template-columns:96px 1fr;align-items:center;gap:10px}
+  .wklab{font-size:12px;color:var(--gray);font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chstrip{display:flex;gap:10px;flex-wrap:wrap}
+  .chgrp{display:flex;flex-direction:column;gap:3px;cursor:pointer}
+  .chgrp .cl{font-size:9px;color:var(--gray3);text-align:center;letter-spacing:.02em}
+  .chgrp .cells{display:flex;gap:3px}
+  .chgrp:hover .cl{color:var(--accent)}
+  .cell{width:13px;height:13px;border-radius:3px;background:var(--skip)}
+  .cell.ok{background:var(--ok)}.cell.bad{background:var(--bad)}.cell.read{background:var(--read)}
+  .exam-tips{background:var(--accent-soft);border:1px solid #fcd9c4;border-radius:12px;padding:14px 16px;margin-top:8px}
+  .exam-tips h4{margin:0 0 8px;font-size:13px;color:var(--accent);font-weight:800}
+  .exam-tips ul{margin:0;padding-left:18px}
+  .exam-tips li{font-size:13px;color:var(--ink2);margin:4px 0}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:6px;margin-left:6px}
+  .pill.gray{background:var(--wash);color:var(--gray)}
+  /* drill */
+  #drill{margin-top:18px}
+  .step-line{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--wash);font-size:13px}
+  .dot{width:9px;height:9px;border-radius:99px;flex:0 0 auto}
+  .dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}.dot.read{background:var(--read)}.dot.skip{background:var(--skip)}
+  .step-line .st{width:60px;color:var(--gray2);font-size:12px}
+  .step-line .qa{flex:1;color:var(--ink2)}
+  .step-line .qa b{color:var(--ink)}
+  .tagok{color:var(--ok);font-weight:700}.tagbad{color:var(--bad);font-weight:700}
+  /* chat bubbles */
+  .chatwrap{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .bub{max-width:78%;padding:9px 12px;border-radius:14px;font-size:13px;line-height:1.5;position:relative}
+  .bub.stud{align-self:flex-start;background:var(--white);border:1px solid var(--line);border-bottom-left-radius:4px}
+  .bub .meta{display:block;font-size:10px;color:var(--gray3);margin-top:4px}
+  .note{font-size:12px;color:var(--gray2);background:var(--wash);border-radius:8px;padding:8px 10px;margin:6px 0 0}
+  .chapter-tab{display:inline-flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+  .chapter-tab button{font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--white);color:var(--gray);border-radius:999px;padding:5px 11px;cursor:pointer}
+  .chapter-tab button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  /* student preview */
+  .device{max-width:420px;margin:0 auto;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--white);box-shadow:0 10px 30px rgba(0,0,0,.06)}
+  .lechead{padding:12px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--gray2);font-weight:700}
+  .lecbody{padding:20px 16px;min-height:150px;font-size:14px;line-height:1.7;color:var(--ink2)}
+  .reflect{border-top:1px solid var(--line);background:var(--wash);padding:12px}
+  .reflect .rh{font-size:12px;font-weight:700;color:var(--gray);display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .lock{font-size:10px;color:var(--accent);background:var(--accent-soft);border:1px solid #fcd9c4;border-radius:999px;padding:1px 7px;font-weight:700}
+  .reflect .in{display:flex;gap:8px}
+  .reflect input{flex:1;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:13px;outline:none;background:#fff}
+  .reflect input:focus{border-color:var(--accent)}
+  .reflect button{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:0 14px;font-weight:700;cursor:pointer}
+  .mine{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+  .mine .meta{color:#ffe4d3}
+  .callout{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:13px;line-height:1.6;color:var(--ink2)}
+  .callout b{color:var(--ink)}
+  code{background:var(--wash);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">MEG3227 · 열전달 · INSTRUCTOR ANALYTICS</div>
+  <h1>교수 분석 대시보드 <span class="badge-demo">제안 목업 · 더미 데이터</span></h1>
+  <div class="sub">학생별 단계 커버리지 · 답안 정오 · 챕터 대화 로그 — 구술 시험 준비를 위한 미커버 영역 파악</div>
+</header>
+<nav class="tabs">
+  <button data-tab="t1" class="active">① 학생별 학습 분석</button>
+  <button data-tab="t2">② 챕터 대화 (교수 전용)</button>
+  <button data-tab="t3">③ 학생 화면 미리보기</button>
+</nav>
+<main>
+  <section id="t1" class="view active">
+    <div class="grid2">
+      <aside class="card pad roster">
+        <h3>학생 (3명 · 더미)</h3>
+        <div id="roster"></div>
+      </aside>
+      <div class="panel">
+        <div class="stat-row" id="stats"></div>
+        <div class="sec-title">
+          <h2>단계 커버리지 맵 <span class="pill gray" id="covpct"></span></h2>
+          <div class="legend">
+            <span><i class="sw ok"></i>정답</span><span><i class="sw bad"></i>오답</span>
+            <span><i class="sw read"></i>열람만</span><span><i class="sw skip"></i>미방문</span>
+          </div>
+        </div>
+        <div class="muted" style="font-size:12px;margin-bottom:8px">주차 × 챕터별 8단계(개념·유도·읽을거리·그림표·실습·점검·연습·정리). 챕터 클릭 → 단계별 답안.</div>
+        <div class="cov" id="cov"></div>
+        <div class="exam-tips" id="tips"></div>
+        <div id="drill"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="t2" class="view">
+    <div class="callout">
+      <b>기능 ② 챕터 대화 (교수 전용)</b> — 각 챕터 하단에 학생이 생각·질문·막힌 점을 한 줄 남기면 <b>말풍선으로 누적</b>됩니다.
+      학생 본인 화면엔 “교수님께 전달됨”만 뜨고 <b>다른 학생·본인에게 대화는 보이지 않으며</b>, 오직 이 교수 화면에서만 학생별·챕터별로 모입니다.
+      능동학습의 <code>muddiest point</code>(가장 헷갈린 지점) 수집 패턴 — 구술 시험 질문과 강의 개선의 1차 소스.
+    </div>
+    <div class="grid2">
+      <aside class="card pad roster">
+        <h3>학생</h3><div id="roster2"></div>
+      </aside>
+      <div class="panel card pad">
+        <h3 style="margin-top:0">챕터별 대화 로그</h3>
+        <div class="chapter-tab" id="chapTabs"></div>
+        <div class="chatwrap" id="chatlog"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="t3" class="view">
+    <div class="callout">
+      <b>학생 화면</b>에서 챕터 하단 “한 줄 메모” 입력 → 엔터 → 본인 화면엔 <b>내 말풍선 + “교수님만 봅니다” 안내</b>만.
+      입력해 보세요. (이 데이터가 곧 ②탭 교수 화면에 학생별로 쌓입니다.)
+    </div>
+    <div class="device">
+      <div class="lechead">WEEK 6 · 6-2 · 집중 용량법 — 실습</div>
+      <div class="lecbody">
+        Biot 수가 0.1보다 작으면 물체 내부 온도차를 무시하고 “한 덩어리, 한 온도”로 봅니다.
+        <br><br>이 조건이 왜 성립하는지, 어디서 막히는지 아래에 한 줄로 남겨보세요.
+      </div>
+      <div class="reflect">
+        <div class="rh">💬 이 챕터 한 줄 메모 <span class="lock">🔒 교수님만 봅니다</span></div>
+        <div class="chatwrap" id="demoLog"></div>
+        <div class="in" style="margin-top:8px">
+          <input id="demoInput" placeholder="예: Bi 수 유도가 헷갈려요…" />
+          <button id="demoSend">전송</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const STEPS = ["개념","유도","읽을거리","그림·표","실습","점검","연습","정리"];
+const WEEKS = [
+  {n:1,t:"열전달 개요",ch:["1-1","1-2","1-3"]},{n:2,t:"전도의 수학",ch:["2-1","2-2"]},
+  {n:3,t:"1D 정상전도 I",ch:["3-1","3-2"]},{n:4,t:"1D 정상전도 II",ch:["4-1","4-2"]},
+  {n:5,t:"2D 정상전도",ch:["5-1","5-2"]},{n:6,t:"비정상 전도 I",ch:["6-1","6-2"]},
+  {n:7,t:"비정상 전도 II",ch:["7-1","7-2","7-3","7-4"]},{n:9,t:"대류 입문",ch:["9-1","9-2","9-3","9-4"]},
+  {n:10,t:"외부 대류",ch:["10-1","10-2","10-3","10-4"]},{n:11,t:"관내 대류",ch:["11-1","11-2","11-3","11-4"]},
+  {n:12,t:"자연 대류",ch:["12-1","12-2","12-3","12-4"]},{n:13,t:"열교환기",ch:["13-1","13-2","13-3","13-4"]},
+  {n:14,t:"복사",ch:["14-1","14-2","14-3","14-4"]},{n:15,t:"상변화",ch:["15-1","15-2","15-3","15-4"]},
+];
+// 상태 코드: 0 미방문 / 1 열람만 / 2 정답 / 3 오답
+const SAMPLE_Q = {
+  "점검":["열저항 직렬/병렬 판별","무차원 수의 물리적 의미","경계조건 유형","1항 근사 타당 조건"],
+  "연습":["ΔT_lm 계산","Nu_D 상관식 대입","Biot 수 산정","시상수 τ"]
+};
+function profile(seed, diligence){ // diligence 0~1
+  let rng=seed; const rnd=()=>{rng=(rng*1103515245+12345)&0x7fffffff;return rng/0x7fffffff;};
+  const cov={}; let visited=0,correct=0,answered=0,total=0;
+  WEEKS.forEach((w,wi)=>{
+    const weekReach = rnd() < (diligence*1.15 - wi*0.012); // 뒤 주차일수록 도달률↓
+    w.ch.forEach(ch=>{
+      const steps=[]; let chReach = weekReach && rnd() < (0.55+diligence*0.5);
+      for(let s=0;s<8;s++){
+        if(!chReach || rnd() > (0.5+diligence*0.5)) { steps.push(0); continue; }
+        visited++;
+        if(STEPS[s]==="점검"||STEPS[s]==="연습"){
+          total++;
+          const ans = rnd() < (0.35+diligence*0.6);
+          if(ans){answered++; if(rnd()<(0.4+diligence*0.55)){steps.push(2);correct++;}else steps.push(3);}
+          else steps.push(1);
+        } else steps.push(1);
+      }
+      cov[ch]=steps;
+    });
+  });
+  return {cov, visited, correct, answered, total};
+}
+const students=[
+  {id:"20231001",name:"김민준",hue:"#c2410c",min:186,dil:0.82,
+    notes:{"3-2":["임계 반경 개념이 왜 절연이 오히려 손실을 늘리는지 직관이 안 와요"],"6-2":["집중용량법에서 Bi<0.1 기준의 0.1은 어디서 나온 숫자인가요?"],"9-2":["Pr 수가 1보다 크면 속도경계층이 더 두꺼운 게 맞나요?"]}},
+  {id:"20231042",name:"이서연",hue:"#2563eb",min:97,dil:0.55,
+    notes:{"4-1":["핀 효율이랑 핀 유효도 차이가 계속 헷갈립니다"],"7-1":["Heisler 차트 읽는 법 예제 하나만 더…"]}},
+  {id:"20231088",name:"박도윤",hue:"#16a34a",min:41,dil:0.28,
+    notes:{"2-1":["아직 못 따라가고 있어요 ㅠㅠ 어디부터 봐야 할까요"]}},
+];
+students.forEach((s,i)=>Object.assign(s,profile(97+i*541,s.dil)));
+
+let sel=0, selCh=null;
+const $=(q,r=document)=>r.querySelector(q), $$=(q,r=document)=>[...r.querySelectorAll(q)];
+function av(s){return `<span class="av" style="background:${s.hue}">${s.name[0]}</span>`;}
+function pct(s){return s.visited?Math.round(100*(s.correct)/(s.total||1)):0;}
+function covRate(s){const tot=WEEKS.reduce((a,w)=>a+w.ch.length*8,0);return Math.round(100*s.visited/tot);}
+
+function renderRoster(id, cb){
+  $("#"+id).innerHTML = students.map((s,i)=>`
+    <div class="stu ${i===sel?'sel':''}" data-i="${i}">
+      ${av(s)}<div><div class="nm">${s.name}</div><div class="mt">${s.id} · 커버리지 ${covRate(s)}%</div></div>
+    </div>`).join("");
+  $$("#"+id+" .stu").forEach(el=>el.onclick=()=>{sel=+el.dataset.i;selCh=null;cb();});
+}
+function statusOf(steps){ // 챕터 요약 상태
+  if(steps.every(x=>x===0))return 'skip';
+  if(steps.includes(3))return 'bad';
+  if(steps.includes(2))return 'ok';
+  return 'read';
+}
+function renderT1(){
+  const s=students[sel];
+  renderRoster("roster",renderT1);
+  $("#stats").innerHTML=[
+    ["커버리지",covRate(s)+"%","방문 단계 / 전체", s.hue],
+    ["정답률",pct(s)+"%","채점 문항 중", "#16a34a"],
+    ["체류",s.min+"분","누적 학습 시간","#2563eb"],
+    ["미방문 챕터",WEEKS.reduce((a,w)=>a+w.ch.filter(c=>s.cov[c].every(x=>x===0)).length,0)+"개","구술 후보","#c2410c"],
+  ].map(([l,v,d,c])=>`<div class="stat"><div class="v" style="color:${c}">${v}</div><div class="l">${l} · ${d}</div><div class="bar"><i style="width:${(''+v).includes('%')?parseInt(v):Math.min(100,parseInt(v)*4)}%;background:${c}"></i></div></div>`).join("");
+  $("#covpct").textContent="방문 "+s.visited+" 단계";
+  $("#cov").innerHTML=WEEKS.map(w=>`
+    <div class="wkrow"><div class="wklab">W${w.n} ${w.t}</div>
+      <div class="chstrip">${w.ch.map(ch=>`
+        <div class="chgrp" data-ch="${ch}"><div class="cells">${s.cov[ch].map((st,si)=>`<div class="cell ${['','read','ok','bad'][st]}" title="${ch} ${STEPS[si]}"></div>`).join("")}</div><div class="cl">${ch}</div></div>`).join("")}</div>
+    </div>`).join("");
+  $$("#cov .chgrp").forEach(el=>el.onclick=()=>{selCh=el.dataset.ch;renderDrill();});
+  // 구술 시험 추천: 미방문/오답 챕터
+  const skip=[], weak=[];
+  WEEKS.forEach(w=>w.ch.forEach(ch=>{const st=statusOf(s.cov[ch]); if(st==='skip')skip.push(ch); else if(st==='bad')weak.push(ch);}));
+  $("#tips").innerHTML=`<h4>🎤 구술 시험 추천 질문 영역 — ${s.name}</h4>
+    <ul>
+      ${skip.length?`<li><b>미방문(전혀 안 본):</b> ${skip.slice(0,8).join(", ")}${skip.length>8?" …":""} → 개념 이해 자체를 확인</li>`:``}
+      ${weak.length?`<li><b>오답 발생:</b> ${weak.slice(0,8).join(", ")} → 어디서 틀렸는지 풀이 과정 질문</li>`:``}
+      ${(!skip.length&&!weak.length)?`<li>전 범위 정답 커버 — 심화/응용 질문으로 변별</li>`:``}
+    </ul>`;
+  renderDrill();
+}
+function renderDrill(){
+  const s=students[sel];
+  if(!selCh){$("#drill").innerHTML=`<div class="note">위 커버리지 맵에서 챕터를 클릭하면 그 챕터의 8단계 진행 + 실제 제출 답안이 여기 표시됩니다.</div>`;return;}
+  const steps=s.cov[selCh]; let qi=0;
+  $("#drill").innerHTML=`<div class="card pad"><div class="sec-title" style="margin:0 0 6px"><h2>${selCh} 단계별 진행 & 답안</h2>
+    <span class="muted" style="font-size:12px">${s.name}</span></div>
+    ${steps.map((st,i)=>{
+      const cls=['skip','read','ok','bad'][st];
+      let qa='';
+      if(STEPS[i]==="점검"||STEPS[i]==="연습"){
+        const q=(SAMPLE_Q[STEPS[i]]||[])[(selCh.charCodeAt(0)+i)%4];
+        if(st===2)qa=`<b>${q}</b> — 제출: “정답” <span class="tagok">✔ 정답</span>`;
+        else if(st===3)qa=`<b>${q}</b> — 제출: “오답값” <span class="tagbad">✘ 오답</span>`;
+        else if(st===1)qa=`<b>${q}</b> — <span class="muted">열람했으나 미제출</span>`;
+        else qa=`<span class="muted">미방문</span>`;
+      } else qa= st>=1?`<span class="muted">열람 완료</span>`:`<span class="muted">미방문</span>`;
+      return `<div class="step-line"><span class="dot ${cls}"></span><span class="st">${STEPS[i]}</span><span class="qa">${qa}</span></div>`;
+    }).join("")}
+    ${s.notes[selCh]?`<div style="margin-top:12px"><div class="rh" style="font-size:12px;font-weight:700;color:var(--gray)">💬 이 챕터에 남긴 메모</div><div class="chatwrap">${s.notes[selCh].map(n=>`<div class="bub stud">${n}<span class="meta">${selCh} · 교수 전용</span></div>`).join("")}</div></div>`:``}
+  </div>`;
+}
+// Tab2
+let sel2=0, selCh2=null;
+function renderT2(){
+  const s=students[sel2];
+  $("#roster2").innerHTML=students.map((s,i)=>`<div class="stu ${i===sel2?'sel':''}" data-i="${i}">${av(s)}<div><div class="nm">${s.name}</div><div class="mt">메모 ${Object.values(s.notes).flat().length}개</div></div></div>`).join("");
+  $$("#roster2 .stu").forEach(el=>el.onclick=()=>{sel2=+el.dataset.i;selCh2=null;renderT2();});
+  const chs=Object.keys(s.notes);
+  if(!selCh2)selCh2=chs[0]||null;
+  $("#chapTabs").innerHTML=chs.length?chs.map(c=>`<button class="${c===selCh2?'active':''}" data-c="${c}">${c}</button>`).join(""):`<span class="muted">남긴 메모 없음</span>`;
+  $$("#chapTabs button").forEach(b=>b.onclick=()=>{selCh2=b.dataset.c;renderT2();});
+  $("#chatlog").innerHTML=(s.notes[selCh2]||[]).map(n=>`<div class="bub stud">${n}<span class="meta">${s.name} · ${selCh2}</span></div>`).join("")||`<span class="muted">이 챕터 메모 없음</span>`;
+}
+// Tab3 demo
+const demo=["Bi 수 유도가 헷갈려요…"];
+function renderDemo(){
+  $("#demoLog").innerHTML=demo.map((m,i)=>`<div class="bub ${i%2?'stud':'mine'}">${m}<span class="meta">${i%2?'':'나 · '}교수님만 봅니다</span></div>`).join("");
+}
+$("#demoSend").onclick=()=>{const v=$("#demoInput").value.trim();if(!v)return;demo.push(v);$("#demoInput").value="";renderDemo();};
+$("#demoInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("#demoSend").click();});
+
+$$("nav.tabs button").forEach(b=>b.onclick=()=>{
+  $$("nav.tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+  $$(".view").forEach(v=>v.classList.remove("active"));
+  ({t1:"#t1",t2:"#t2",t3:"#t3"})[b.dataset.tab] && $(({t1:"#t1",t2:"#t2",t3:"#t3"})[b.dataset.tab]).classList.add("active");
+  if(b.dataset.tab==="t2")renderT2();
+});
+renderT1();renderDemo();
+</script>
+</body>
+</html>

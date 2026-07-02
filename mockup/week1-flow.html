@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.4" />
+<title>MEG3227 · 열전달 · Week 1 — 챕터 6단계 흐름 목업</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+<style>
+  :root{
+    --bg:#ffffff; --ink:#18181b; --gray:#52525b; --gray2:#71717a;
+    --hair:#e4e4e7; --hair2:#f4f4f5; --accent:#c2410c; --accent-soft:#fff3ec;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    -webkit-font-smoothing:antialiased; overflow:hidden; height:100vh;
+  }
+
+  /* ── Top bar ── */
+  header{ height:54px; display:flex; align-items:center; padding:0 28px; border-bottom:1px solid var(--hair); }
+  .brand{ font-size:13px; font-weight:700; color:var(--gray); letter-spacing:.01em; flex:1; }
+  .brand .sep{ color:var(--hair); margin:0 7px; font-weight:400; }
+  .chrail{ display:flex; align-items:center; gap:6px; }
+  .chdot{ font-size:11px; font-weight:700; color:var(--gray2); border:1px solid var(--hair); border-radius:20px; padding:3px 9px; cursor:pointer; transition:all .12s ease; background:#fff; }
+  .chdot:hover{ border-color:var(--accent); color:var(--accent); }
+  .chdot.cur{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .chdot.soon{ opacity:.4; cursor:not-allowed; }
+  .chdot.soon:hover{ border-color:var(--hair); color:var(--gray2); }
+
+  /* ── Stage stepper ── */
+  .stepbar{ height:46px; display:flex; align-items:center; justify-content:center; gap:0; border-bottom:1px solid var(--hair); padding:0 20px; }
+  .step{ display:flex; align-items:center; font-size:12.5px; font-weight:600; color:var(--gray2); cursor:pointer; white-space:nowrap; }
+  .step .ix{ width:19px; height:19px; border-radius:50%; border:1px solid var(--hair); display:inline-flex; align-items:center; justify-content:center; font-size:11px; margin-right:6px; background:#fff; transition:all .12s ease; }
+  .step.cur{ color:var(--ink); font-weight:800; }
+  .step.cur .ix{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .step.done{ color:var(--gray); }
+  .step.done .ix{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); }
+  .step.soon{ opacity:.4; cursor:not-allowed; }
+  .step .link{ width:26px; height:1px; background:var(--hair); margin:0 9px; }
+  .step:hover:not(.soon):not(.cur){ color:var(--ink); }
+
+  /* ── Stage area ── */
+  main{ height:calc(100vh - 54px - 46px - 64px); display:flex; align-items:flex-start; justify-content:center; padding:22px 28px 8px; overflow:hidden; }
+  .stage{ width:100%; max-width:1000px; height:100%; display:flex; align-items:flex-start; justify-content:center; overflow:hidden; }
+  .screen{ display:none; width:100%; }
+  .screen.active{ display:block; transform-origin:top center; will-change:transform; animation:fade .16s ease both; }
+  @keyframes fade{ from{opacity:0} to{opacity:1} }
+  @media (prefers-reduced-motion: reduce){ .screen.active{ animation:none; } }
+
+  .eyebrow{ font-size:11.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:9px; }
+  .stage-h{ font-size:27px; font-weight:800; line-height:1.22; letter-spacing:-.01em; margin-bottom:4px; }
+  .stage-h .en{ font-weight:600; color:var(--gray); font-size:18px; }
+  .lede{ font-size:15px; line-height:1.7; color:var(--gray); margin-top:13px; max-width:760px; }
+  .lede strong{ color:var(--ink); font-weight:700; }
+
+  /* concept rate-eq box */
+  .keqbox{ margin-top:22px; border-left:3px solid var(--accent); padding:2px 0 2px 18px; }
+  .keq-label{ font-size:11.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gray2); margin-bottom:12px; }
+  .keqrow{ display:flex; align-items:baseline; gap:16px; margin-bottom:12px; }
+  .keqrow:last-child{ margin-bottom:0; }
+  .keqcap{ font-size:12.5px; font-weight:600; color:var(--gray2); width:210px; flex-shrink:0; }
+  .keqline{ color:var(--ink); }
+  .keqnote{ font-size:13px; color:var(--gray2); margin-top:12px; line-height:1.6; }
+
+  /* derivation cards */
+  .deriv{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:22px; }
+  .dcard{ border:1px solid var(--hair); border-radius:12px; padding:16px 16px 18px; }
+  .dcard h4{ font-size:13.5px; font-weight:800; margin-bottom:4px; }
+  .dcard .sub{ font-size:11.5px; color:var(--gray2); font-weight:600; margin-bottom:11px; }
+  .dcard .eq{ background:var(--hair2); border-radius:8px; padding:10px 8px; text-align:center; margin-bottom:10px; }
+  .dcard p{ font-size:13px; line-height:1.6; color:var(--gray); }
+  .dcard p strong{ color:var(--ink); }
+
+  /* reading */
+  .reading{ max-width:680px; margin-top:16px; }
+  .reading p{ font-size:15.5px; line-height:1.85; color:#3f3f46; margin-bottom:14px; }
+  .reading p strong{ color:var(--ink); font-weight:700; }
+  .pullquote{ border-left:3px solid var(--accent); padding:6px 0 6px 18px; margin:18px 0; font-size:16px; line-height:1.6; color:var(--ink); font-weight:600; }
+  .readmeta{ font-size:12px; color:var(--gray2); margin-top:6px; }
+
+  /* visual: diagram + table */
+  .vizgrid{ display:grid; grid-template-columns:1.05fr .95fr; gap:34px; margin-top:18px; align-items:center; }
+  .vcap{ font-size:12px; font-weight:700; color:var(--gray2); letter-spacing:.04em; text-transform:uppercase; margin-bottom:10px; }
+  table.ktab{ width:100%; border-collapse:collapse; font-size:14px; }
+  table.ktab th{ text-align:left; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--gray2); font-weight:700; padding:7px 8px; border-bottom:1px solid var(--hair); }
+  table.ktab td{ padding:8px; border-bottom:1px solid var(--hair2); color:var(--ink); }
+  table.ktab td.k{ text-align:right; font-variant-numeric:tabular-nums; color:var(--gray); }
+  table.ktab tr:last-child td{ border-bottom:none; }
+  .bar{ height:7px; background:var(--accent-soft); border-radius:4px; overflow:hidden; }
+  .bar > span{ display:block; height:100%; background:var(--accent); border-radius:4px; }
+
+  /* concept problem + collect */
+  .panel-head{ display:flex; align-items:center; gap:9px; margin-bottom:12px; }
+  .tag{ font-size:11px; font-weight:800; color:#fff; background:var(--ink); border-radius:5px; padding:2px 8px; }
+  .panel-title{ font-size:15px; font-weight:700; }
+  .qtext{ font-size:15.5px; line-height:1.6; margin-top:6px; }
+  .opts{ display:flex; flex-direction:column; gap:9px; margin-top:14px; max-width:560px; }
+  .opt{ font-family:inherit; text-align:left; font-size:14px; color:var(--ink); background:#fff; border:1px solid var(--hair); border-radius:9px; padding:11px 14px; cursor:pointer; transition:all .12s ease; }
+  .opt:hover{ border-color:#d4d4d8; background:var(--hair2); }
+  .opt.sel{ border-color:var(--accent); background:var(--accent-soft); }
+  .opt.correct{ border-color:var(--accent); background:var(--accent-soft); font-weight:700; }
+  .submit-row{ display:flex; align-items:center; gap:12px; margin-top:14px; }
+  .btn{ font-family:inherit; font-size:13.5px; font-weight:600; border-radius:9px; padding:9px 18px; cursor:pointer; border:1px solid var(--hair); background:#fff; color:var(--ink); transition:all .12s ease; }
+  .btn:hover{ background:var(--hair2); }
+  .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn.primary:hover{ background:#a8360a; }
+  .submit-fb{ font-size:13px; font-weight:700; color:var(--accent); }
+
+  .prof{ display:none; margin-top:20px; border:1px dashed var(--hair); border-radius:12px; padding:15px 16px; background:#fcfcfc; max-width:600px; }
+  .prof.show{ display:block; animation:fade .18s ease both; }
+  .prof .ph{ display:flex; align-items:center; gap:8px; font-size:12px; font-weight:800; color:var(--gray2); letter-spacing:.04em; margin-bottom:12px; }
+  .prof .pill{ font-size:10.5px; font-weight:800; color:var(--accent); background:var(--accent-soft); border-radius:20px; padding:2px 9px; }
+  .agg{ display:flex; flex-direction:column; gap:10px; }
+  .aggrow{ display:grid; grid-template-columns:84px 1fr 44px; align-items:center; gap:10px; font-size:13px; }
+  .aggrow .lab{ color:var(--ink); font-weight:600; }
+  .aggrow .cnt{ text-align:right; color:var(--gray2); font-variant-numeric:tabular-nums; }
+  .prof .note{ font-size:11.5px; color:var(--gray2); margin-top:12px; line-height:1.5; }
+
+  /* practice (engineering) */
+  .prob-statement{ font-size:14.5px; line-height:1.65; color:var(--gray); max-width:680px; }
+  .prob-statement strong{ color:var(--ink); }
+  .given{ display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+  .chip{ font-size:13px; color:var(--gray); border:1px solid var(--hair); background:var(--hair2); border-radius:6px; padding:5px 10px; }
+  .find{ font-size:13.5px; margin-top:12px; } .find b{ color:var(--gray2); font-weight:700; }
+  .ans-row{ display:flex; align-items:center; gap:9px; margin-top:11px; flex-wrap:wrap; }
+  .ans-input{ font-family:inherit; font-size:14px; width:130px; border:1px solid var(--hair); border-radius:8px; padding:8px 11px; outline:none; }
+  .ans-input:focus{ border-color:var(--accent); }
+  .ans-unit{ font-size:13px; color:var(--gray2); }
+  .check-fb{ font-size:13px; font-weight:700; } .check-fb.ok{ color:var(--accent); } .check-fb.no{ color:var(--gray2); }
+  .reveal-btn{ margin-top:14px; font-family:inherit; font-size:13.5px; font-weight:600; color:var(--ink); background:#fff; border:1px solid var(--hair); border-radius:8px; padding:8px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:7px; transition:all .12s ease; }
+  .reveal-btn:hover{ background:var(--hair2); }
+  .reveal-btn .caret{ font-size:10px; color:var(--gray2); transition:transform .15s ease; }
+  .reveal-btn.is-open .caret{ transform:rotate(180deg); }
+  .revealable{ display:none; } .revealable.open{ display:block; animation:fade .15s ease both; }
+  .solution{ margin-top:13px; }
+  .step{ margin-bottom:8px; } .step-label{ font-size:12.5px; font-weight:700; color:var(--gray2); margin-bottom:2px; }
+  .solution .katex-display{ margin:.2em 0; text-align:left; } .keqline .katex-display{ margin:.1em 0; text-align:left; } .dcard .eq .katex-display{ margin:.1em 0; }
+  .ans-final{ margin-top:6px; border-top:1px dashed var(--hair); padding-top:10px; font-size:13px; color:var(--gray); }
+  .ans-final b{ color:var(--ink); } .ans-final .ans-eq{ color:var(--ink); margin-bottom:4px; }
+
+  /* footer */
+  footer{ height:64px; display:flex; align-items:center; justify-content:space-between; padding:0 28px; border-top:1px solid var(--hair); }
+  .nav-btn{ font-family:inherit; font-size:14px; font-weight:600; border-radius:10px; padding:10px 18px; cursor:pointer; border:1px solid var(--hair); background:#fff; color:var(--ink); transition:all .12s ease; }
+  .nav-btn:hover{ background:var(--hair2); }
+  .nav-btn.prev[disabled]{ opacity:0; pointer-events:none; }
+  .nav-btn.next{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .nav-btn.next:hover{ background:#a8360a; }
+  .foot-hint{ font-size:12px; color:var(--gray2); }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">MEG3227<span class="sep">·</span>열전달<span class="sep">·</span>Week 1</span>
+  <div class="chrail" id="chrail"></div>
+</header>
+<div class="stepbar" id="stepbar"></div>
+
+<main><div class="stage" id="stage">
+
+  <!-- ══════════ 1-1 / 개념 ══════════ -->
+  <section class="screen" data-ch="1-1" data-chtitle="열전달 개요" data-stage="개념">
+    <div class="eyebrow">1-1 · 개념 · Concept</div>
+    <h1 class="stage-h">열전달이란 무엇인가 <span class="en">· Overview</span></h1>
+    <p class="lede">
+      <strong>열역학(thermodynamics)</strong>은 평형 상태 사이에서 에너지 전달이 일어나는가(<strong>if</strong>)와 그 양(<strong>how much</strong>)을 다룹니다.
+      <strong>열전달(heat transfer)</strong>은 그 과정이 얼마나 빠르게(<strong>how fast</strong>) 일어나는지 — 전달률(rate)과 온도 분포를 다룹니다.
+      모든 열전달은 <strong>전도·대류·복사</strong> 세 모드 또는 이들의 조합으로 설명됩니다.
+    </p>
+    <div class="keqbox">
+      <div class="keq-label">세 모드의 율 방정식 (이번 챕터의 뼈대)</div>
+      <div class="keqrow"><span class="keqcap">전도 · Fourier's Law</span><span class="keqline">$ q'' = -k\,\dfrac{dT}{dx} $</span></div>
+      <div class="keqrow"><span class="keqcap">대류 · Newton's Cooling</span><span class="keqline">$ q'' = h\,(T_s - T_\infty) $</span></div>
+      <div class="keqrow"><span class="keqcap">복사 · Stefan–Boltzmann</span><span class="keqline">$ E = \varepsilon\,\sigma\,T_s^4 $</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 1-1 / 유도 ══════════ -->
+  <section class="screen" data-ch="1-1" data-chtitle="열전달 개요" data-stage="유도">
+    <div class="eyebrow">1-1 · 수식 유도 · Derivation</div>
+    <h1 class="stage-h">세 율 방정식은 어디서 오는가</h1>
+    <div class="deriv">
+      <div class="dcard">
+        <h4>전도 · Fourier</h4>
+        <div class="sub">온도구배 → 비례</div>
+        <div class="eq">$ q'' = -k\,\dfrac{dT}{dx} $</div>
+        <p>실험적으로 열유속은 <strong>온도구배에 비례</strong>. 비례상수 $k$(열전도도), 음부호는 열이 <strong>고온→저온</strong>으로 흐름을 강제.</p>
+      </div>
+      <div class="dcard">
+        <h4>대류 · Newton</h4>
+        <div class="sub">경계층을 계수로 묶음</div>
+        <div class="eq">$ q'' = h\,(T_s - T_\infty) $</div>
+        <p>표면–유체 경계층의 복잡한 전달을 <strong>대류계수 $h$</strong> 하나로 정의. $h$는 물성이 아니라 <strong>유동 조건</strong>에 의존.</p>
+      </div>
+      <div class="dcard">
+        <h4>복사 · Stefan–Boltzmann</h4>
+        <div class="sub">흑체 $T^4$ + 방사율</div>
+        <div class="eq">$ E = \varepsilon\,\sigma\,T_s^4 $</div>
+        <p>흑체 방출이 <strong>절대온도의 4제곱</strong>에 비례(실험·이론). 실제 표면은 방사율 $\varepsilon\,(0\le\varepsilon\le1)$로 보정.</p>
+      </div>
+    </div>
+    <div class="keqnote" style="margin-top:20px">핵심: 세 식 모두 <b style="color:var(--ink)">"구동력(온도차) × 전달 용이성"</b> 형태 — 이후 모든 챕터가 이 골격의 확장입니다.</div>
+  </section>
+
+  <!-- ══════════ 1-1 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="1-1" data-chtitle="열전달 개요" data-stage="읽을거리">
+    <div class="eyebrow">1-1 · 읽을거리 · Reading</div>
+    <h1 class="stage-h">왜 ‘열전달’을 따로 배우는가</h1>
+    <div class="reading">
+      <p>열역학 제1·2법칙은 두 상태 사이에 열이 <strong>흐를 수 있는지</strong>, 흐른다면 <strong>총량이 얼마인지</strong>를 알려줍니다. 그러나 “1초에 얼마나?”라는 <strong>속도</strong>는 말해주지 않습니다. 냉동실 물병이 결국 언다는 것은 열역학이지만, 30분이 걸릴지 3시간이 걸릴지는 열전달의 영역입니다.</p>
+      <p class="pullquote">열역학은 <em>가능성</em>을, 열전달은 <em>속도와 경로</em>를 답한다.</p>
+      <p>이 ‘속도’를 정량화하기 위해 1822년 Joseph Fourier는 <em>Théorie analytique de la chaleur</em>에서 전도 법칙을 세웠고, 이후 대류·복사가 더해져 오늘의 체계가 완성됩니다. 현대 공학에서 이 속도는 곧 설계 한계입니다 — 반도체 칩의 발열 제거, 원자로 정지 후의 잔열 냉각, 건물 단열과 기후 대응까지 모두 “충분히 빠르게 식힐 수 있는가”의 문제입니다.</p>
+      <p>실제 문제에서 세 모드는 거의 항상 <strong>동시에</strong> 작동합니다. 건물 외벽은 벽 내부에서 전도, 표면에서 공기로 대류, 태양으로부터 복사를 동시에 겪습니다. 그래서 이 과목은 각 모드를 따로 익힌 뒤, 마지막에 이를 <strong>하나의 에너지 균형</strong>으로 합치는 법을 배웁니다.</p>
+      <p class="readmeta">참고: Incropera et al., <em>Fundamentals of Heat and Mass Transfer</em>, Ch. 1 / Fourier (1822)</p>
+    </div>
+  </section>
+
+  <!-- ══════════ 1-1 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="1-1" data-chtitle="열전달 개요" data-stage="그림·표">
+    <div class="eyebrow">1-1 · 그림 · 그래프 · 표</div>
+    <h1 class="stage-h">한눈에 — 세 모드와 물질별 열전도도</h1>
+    <div class="vizgrid">
+      <div>
+        <div class="vcap">세 모드가 한 벽에서 동시에</div>
+        <svg viewBox="0 0 420 250" width="100%" style="max-width:420px">
+          <!-- wall -->
+          <rect x="170" y="40" width="56" height="170" fill="#f4f4f5" stroke="#d4d4d8"/>
+          <text x="198" y="228" font-size="12" fill="#71717a" text-anchor="middle">벽 (고체)</text>
+          <!-- hot / cold labels -->
+          <text x="80" y="34" font-size="12" fill="#71717a" text-anchor="middle">고온 내부</text>
+          <text x="330" y="34" font-size="12" fill="#71717a" text-anchor="middle">저온 외부 (공기)</text>
+          <!-- conduction arrow through wall -->
+          <line x1="174" y1="125" x2="222" y2="125" stroke="#c2410c" stroke-width="3" marker-end="url(#ah)"/>
+          <text x="198" y="118" font-size="11" fill="#c2410c" text-anchor="middle" font-weight="700">전도</text>
+          <!-- convection: surface to air, curved arrows -->
+          <path d="M232 95 q40 -16 70 -4" fill="none" stroke="#71717a" stroke-width="2" marker-end="url(#ag)"/>
+          <path d="M232 150 q40 16 70 4" fill="none" stroke="#71717a" stroke-width="2" marker-end="url(#ag)"/>
+          <text x="300" y="135" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">대류</text>
+          <!-- radiation: wavy from outside sun toward wall -->
+          <circle cx="372" cy="70" r="13" fill="none" stroke="#71717a" stroke-width="2"/>
+          <line x1="372" y1="52" x2="372" y2="46" stroke="#71717a" stroke-width="2"/>
+          <line x1="356" y1="62" x2="351" y2="59" stroke="#71717a" stroke-width="2"/>
+          <path d="M360 84 q-18 14 -36 10 q-18 -4 -36 12" fill="none" stroke="#71717a" stroke-width="2" stroke-dasharray="3 3" marker-end="url(#ag)"/>
+          <text x="318" y="98" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">복사</text>
+          <defs>
+            <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#c2410c"/></marker>
+            <marker id="ag" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#71717a"/></marker>
+          </defs>
+        </svg>
+      </div>
+      <div>
+        <div class="vcap">물질별 열전도도 $k$ [W/(m·K)]</div>
+        <table class="ktab">
+          <thead><tr><th>물질</th><th style="text-align:right">$k$</th><th>상대 크기</th></tr></thead>
+          <tbody>
+            <tr><td>구리</td><td class="k">401</td><td><div class="bar"><span style="width:100%"></span></div></td></tr>
+            <tr><td>알루미늄</td><td class="k">237</td><td><div class="bar"><span style="width:59%"></span></div></td></tr>
+            <tr><td>강철</td><td class="k">60</td><td><div class="bar"><span style="width:15%"></span></div></td></tr>
+            <tr><td>유리</td><td class="k">1.4</td><td><div class="bar"><span style="width:4%"></span></div></td></tr>
+            <tr><td>물</td><td class="k">0.6</td><td><div class="bar"><span style="width:2.5%"></span></div></td></tr>
+            <tr><td>공기</td><td class="k">0.026</td><td><div class="bar"><span style="width:1%"></span></div></td></tr>
+          </tbody>
+        </table>
+        <div class="keqnote" style="margin-top:12px">구리는 공기보다 약 <b style="color:var(--ink)">15,000배</b> 잘 전도 → 방열엔 금속, 단열엔 공기층.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 1-1 / 개념문제 (collect) ══════════ -->
+  <section class="screen" data-ch="1-1" data-chtitle="열전달 개요" data-stage="개념문제">
+    <div class="panel-head"><span class="tag">개념문제</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <p class="qtext">모닥불에서 <strong>떨어져 있어도</strong> 얼굴이 따뜻한 것은 주로 어떤 열전달 모드 때문입니까?</p>
+    <div class="opts">
+      <button class="opt" data-k="전도">① 전도 — 공기 분자 충돌로 열이 전달된다</button>
+      <button class="opt" data-k="대류">② 대류 — 데워진 공기가 얼굴로 흘러온다</button>
+      <button class="opt" data-k="복사" data-correct="1">③ 복사 — 전자기파가 매질 없이 직접 도달한다</button>
+    </div>
+    <div class="submit-row">
+      <button class="btn primary cp-submit">제출</button>
+      <span class="submit-fb cp-fb"></span>
+    </div>
+    <div class="prof cp-prof">
+      <div class="ph">교수용 대시보드 미리보기 <span class="pill">학급 응답 n = 42</span></div>
+      <div class="agg">
+        <div class="aggrow"><span class="lab">① 전도</span><div class="bar"><span style="width:21%"></span></div><span class="cnt">9</span></div>
+        <div class="aggrow"><span class="lab">② 대류</span><div class="bar"><span style="width:33%"></span></div><span class="cnt">14</span></div>
+        <div class="aggrow"><span class="lab">③ 복사 ✓</span><div class="bar"><span style="width:45%"></span></div><span class="cnt">19</span></div>
+      </div>
+      <div class="note">* 실제 서비스에서는 각 학생의 제출이 서버(Supabase)에 저장되어 <b style="color:var(--ink)">교수만</b> 한 곳에서 학생별·문항별로 열람합니다. (이 화면은 집계 미리보기 — 오답 절반 → “복사 vs 대류” 오개념을 수업에서 즉시 교정 가능)</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 1-1 / 연습 (engineering) ══════════ -->
+  <section class="screen" data-ch="1-1" data-chtitle="열전달 개요" data-stage="연습">
+    <div class="panel-head"><span class="tag">연습문제</span><span class="panel-title">Fourier 법칙 — 평판 벽 (공학문제)</span></div>
+    <p class="prob-statement">
+      두께 $0.5$ m, 열전도율 $k = 1.4\ \text{W/(m·K)}$인 평판 벽의 양면 온도가 $T_1 = 150$°C, $T_2 = 30$°C입니다.
+      정상상태에서 벽을 통과하는 <strong>열유속 $q''$</strong>을 구하시오.
+    </p>
+    <div class="given">
+      <span class="chip">$L=0.5$ m</span><span class="chip">$k=1.4\ \text{W/(m·K)}$</span>
+      <span class="chip">$T_1=150$°C</span><span class="chip">$T_2=30$°C</span>
+    </div>
+    <div class="find"><b>구하기 ·</b> $q''\ [\text{W/m}^2]$</div>
+    <div class="ans-row">
+      <input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="336" data-tol="0.02" data-ans-text="336 W/m²" />
+      <span class="ans-unit">$\text{W/m}^2$</span>
+      <button class="btn pr-check">확인</button>
+      <span class="check-fb pr-fb"></span>
+    </div>
+    <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+    <div class="revealable solution">
+      <div class="step"><div class="step-label">Step 1 · 온도 구배 (선형 분포)</div>$$ \frac{dT}{dx} = \frac{T_2-T_1}{L} = \frac{30-150}{0.5} = -240\ \text{K/m} $$</div>
+      <div class="step"><div class="step-label">Step 2 · Fourier 법칙 대입</div>$$ q'' = -k\frac{dT}{dx} = -(1.4)\times(-240) = 336\ \text{W/m}^2 $$</div>
+      <div class="ans-final"><div class="ans-eq">$$ q'' = 336\ \text{W/m}^2 $$</div><b>정답:</b> 양수 → 열이 고온(150°C)→저온(30°C)으로 흐름 (제2법칙 일치).</div>
+    </div>
+  </section>
+
+  <!-- ══════════ 1-2 / 개념 (다음 챕터 전환) ══════════ -->
+  <section class="screen" data-ch="1-2" data-chtitle="전도" data-stage="개념">
+    <div class="eyebrow">1-2 · 개념 · Concept</div>
+    <h1 class="stage-h">전도 <span class="en">· Conduction</span></h1>
+    <p class="lede">
+      전도는 물질 내부의 온도 기울기를 따라 <strong>매질 이동 없이</strong> 에너지가 전달되는 현상입니다.
+      금속에서는 <strong>자유 전자</strong>, 비금속에서는 <strong>격자 진동(phonon)</strong>이 에너지를 나릅니다.
+      이 챕터도 동일한 6단계(개념 → 유도 → 읽을거리 → 그림·표 → 개념문제 → 연습)로 진행됩니다.
+    </p>
+    <div class="keqbox">
+      <div class="keq-label">이번 챕터의 핵심 식</div>
+      <div class="keqrow"><span class="keqcap">Fourier 법칙 (1D)</span><span class="keqline">$ q'' = -k\,\dfrac{dT}{dx} $</span></div>
+      <div class="keqnote">$q''$ 열유속 · $k$ 열전도도 · $dT/dx$ 온도 기울기 — 다음 단계에서 평판·원통·구로 확장.</div>
+    </div>
+  </section>
+
+</div></main>
+
+<footer>
+  <button class="nav-btn prev" id="prevBtn">← 이전</button>
+  <span class="foot-hint" id="footHint">← / → 또는 상단 단계 클릭으로 이동</span>
+  <button class="nav-btn next" id="nextBtn">다음 →</button>
+</footer>
+
+<script>
+(function(){
+  var STAGES = ['개념','유도','읽을거리','그림·표','개념문제','연습'];
+  var screens = Array.prototype.slice.call(document.querySelectorAll('.screen'));
+  var stage = document.getElementById('stage');
+  var stepbar = document.getElementById('stepbar');
+  var chrail = document.getElementById('chrail');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var footHint = document.getElementById('footHint');
+  var N = screens.length;
+  var active = 0;
+
+  // chapters present (ordered, unique)
+  var chapters = [];
+  screens.forEach(function(s){ var c=s.getAttribute('data-ch'); if(chapters.indexOf(c)<0) chapters.push(c); });
+
+  function chOf(i){ return screens[i].getAttribute('data-ch'); }
+  function stOf(i){ return screens[i].getAttribute('data-stage'); }
+  function screenIndex(ch, st){ for(var i=0;i<N;i++){ if(chOf(i)===ch && stOf(i)===st) return i; } return -1; }
+
+  function fitActive(){
+    var u = screens[active]; if(!u) return;
+    u.style.transform='none';
+    var avail = stage.clientHeight, natural = u.offsetHeight;
+    if(natural<=0||avail<=0) return;
+    if(natural>avail){ u.style.transformOrigin='top center'; u.style.transform='scale('+(avail/natural)+')'; }
+    else { u.style.transformOrigin='top center'; u.style.transform='translateY('+((avail-natural)/2)+'px)'; }
+  }
+
+  function buildChrail(){
+    chrail.innerHTML='';
+    ['1-1','1-2','1-3','1-4','1-5','1-6','1-7'].forEach(function(c){
+      var present = chapters.indexOf(c)>=0;
+      var d=document.createElement('span'); d.className='chdot'+(present?'':' soon'); d.textContent=c;
+      if(present){ d.addEventListener('click', function(){ var i=screenIndex(c,'개념'); if(i<0){ for(var k=0;k<N;k++){ if(chOf(k)===c){i=k;break;} } } if(i>=0) show(i); }); }
+      chrail.appendChild(d);
+    });
+  }
+
+  function buildStepper(){
+    var ch = chOf(active), curSt = stOf(active);
+    var curPos = STAGES.indexOf(curSt);
+    stepbar.innerHTML='';
+    STAGES.forEach(function(st, k){
+      var idx = screenIndex(ch, st);
+      var el = document.createElement('div');
+      var cls='step';
+      if(st===curSt) cls+=' cur';
+      else if(idx>=0 && k<curPos) cls+=' done';
+      else if(idx<0) cls+=' soon';
+      el.className=cls;
+      el.innerHTML='<span class="ix">'+(k+1)+'</span>'+st;
+      if(idx>=0){ el.addEventListener('click', function(){ show(idx); }); }
+      stepbar.appendChild(el);
+      if(k<STAGES.length-1){ var ln=document.createElement('span'); ln.className='link'; el.appendChild(ln); }
+    });
+  }
+
+  function render(){
+    for(var i=0;i<N;i++) screens[i].classList.toggle('active', i===active);
+    // chrail current
+    var ch=chOf(active);
+    Array.prototype.forEach.call(chrail.children, function(d){ d.classList.toggle('cur', d.textContent===ch && !d.classList.contains('soon')); });
+    buildStepper();
+    prevBtn.disabled = (active===0);
+    if(active>=N-1){ nextBtn.textContent='✓ 끝'; }
+    else {
+      var nx=active+1, sameCh=(chOf(nx)===ch);
+      nextBtn.textContent = sameCh ? ('다음 · '+stOf(nx)+' →') : ('다음 챕터 '+chOf(nx)+' →');
+    }
+    fitActive();
+  }
+  function show(i){ if(i<0)i=0; if(i>N-1)i=N-1; active=i; render(); }
+
+  // reveal toggle (practice solution) — scoped to the button's screen, ID-free
+  function toggleReveal(btn){
+    var sc=btn.closest('.screen'); var t=sc?sc.querySelector('.revealable.solution'):null; if(!t) return;
+    var open=t.classList.toggle('open'); btn.classList.toggle('is-open', open);
+    var sp=btn.querySelector('span'); if(sp) sp.textContent = open?'풀이 숨기기':'풀이 보기';
+    fitActive();
+  }
+
+  // concept-problem + practice + reveal — all class-based & screen-scoped (collision-free across 7 chapters)
+  document.addEventListener('click', function(e){
+    var opt = e.target.closest ? e.target.closest('.opt') : null;
+    if(opt){ var wrap=opt.parentElement; Array.prototype.forEach.call(wrap.children,function(o){o.classList.remove('sel');}); opt.classList.add('sel'); return; }
+    var sub = e.target.closest ? e.target.closest('.cp-submit') : null;
+    if(sub){
+      var sc=sub.closest('.screen'); var sel=sc.querySelector('.opt.sel'); var fb=sc.querySelector('.cp-fb'); var prof=sc.querySelector('.cp-prof');
+      if(!sel){ if(fb){fb.textContent='먼저 보기를 선택하세요'; fb.style.color='var(--gray2)';} return; }
+      var ok=sel.getAttribute('data-correct')==='1';
+      if(fb){ fb.textContent= ok?'✓ 제출됨 — 정답':'제출됨 — 학급 응답에 반영'; fb.style.color='var(--accent)'; }
+      Array.prototype.forEach.call(sc.querySelectorAll('.opt'),function(o){ if(o.getAttribute('data-correct')==='1') o.classList.add('correct'); });
+      if(prof) prof.classList.add('show'); fitActive(); return;
+    }
+    var chk = e.target.closest ? e.target.closest('.pr-check') : null;
+    if(chk){
+      var s2=chk.closest('.screen'); var input=s2.querySelector('.ans-input'); var pf=s2.querySelector('.pr-fb');
+      if(!input||!pf) return;
+      var ans=parseFloat(input.getAttribute('data-answer')), tol=parseFloat(input.getAttribute('data-tol')||'0.02');
+      var raw=(input.value||'').replace(/[,\s]/g,'');
+      if(raw===''){ pf.textContent='먼저 답을 입력하세요'; pf.className='check-fb no'; return; }
+      var v=parseFloat(raw), good=!isNaN(v)&&Math.abs(v-ans)<=Math.abs(ans)*tol;
+      pf.textContent = good?'✓ 정답입니다 — 풀이로 과정 확인':'✗ 다시 — 풀이로 과정 확인';
+      pf.className='check-fb '+(good?'ok':'no'); fitActive(); return;
+    }
+    var rb = e.target.closest ? e.target.closest('.reveal-btn') : null;
+    if(rb){ toggleReveal(rb); return; }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.target&&e.target.classList&&e.target.classList.contains('ans-input')){ if(e.key==='Enter'){ var b=e.target.closest('.screen').querySelector('.pr-check'); if(b) b.click(); } return; }
+    if(e.key==='ArrowRight') show(active+1);
+    else if(e.key==='ArrowLeft') show(active-1);
+  });
+  prevBtn.addEventListener('click', function(){ show(active-1); });
+  nextBtn.addEventListener('click', function(){ show(active+1); });
+  window.addEventListener('resize', fitActive);
+
+  function applyDeep(){
+    var p=new URLSearchParams(location.search), idx=0;
+    var s=parseInt(p.get('slide'),10); if(!isNaN(s)) idx=Math.min(Math.max(s,0),N-1);
+    var rev=p.get('reveal')==='all';
+    show(idx);
+    if(rev){ var b=screens[idx].querySelector('.reveal-btn'); if(b) toggleReveal(b); var o=screens[idx].querySelector('.opt[data-correct]'); if(o){ o.classList.add('sel'); var sub=screens[idx].querySelector('.cp-submit'); if(sub) sub.click(); } }
+  }
+  function renderMath(){
+    if(window.renderMathInElement){ renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); }
+    fitActive(); if(window.requestAnimationFrame) requestAnimationFrame(fitActive);
+  }
+  buildChrail();
+  document.addEventListener('DOMContentLoaded', function(){ applyDeep(); renderMath(); });
+  if(document.readyState!=='loading'){ applyDeep(); renderMath(); }
+  window.addEventListener('load', renderMath);
+})();
+</script>
+</body>
+</html>

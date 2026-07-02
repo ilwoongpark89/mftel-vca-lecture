@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="ko" class="lang-ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.4" />
+<title>프롬프트 엔지니어링 심화 · Week 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<style>
+  :root{ --bg:#ffffff; --ink:#18181b; --gray:#52525b; --gray2:#71717a; --hair:#e4e4e7; --hair2:#f4f4f5; --accent:#7c3aed; --accent-soft:#f5f3ff; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{ background:var(--bg); color:var(--ink); font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; height:100vh; }
+  .eyebrow .katex, .eyebrow .katex *, .keq-label .katex, .keq-label .katex *, .vcap .katex, .vcap .katex *, .intro-eyebrow .katex, .intro-eyebrow .katex *, table.ktab th .katex, table.ktab th .katex *{ text-transform:none; }
+  .mystery .mq, .mystery .ma, .lcard p, .aggrow .lab, .vs-col .q, .vs-col p, .stat .lbl, .stat .why, .term, .rm-item .rd, .intro-sub, .lede, .qtext, .prob-statement, .callout, .outcomes li, .sumcard li{ word-break:keep-all; }
+
+  header{ height:52px; display:flex; align-items:center; padding:0 26px; border-bottom:1px solid var(--hair); }
+  .brand{ font-size:13px; font-weight:700; color:var(--gray); flex:1; } .brand .sep{ color:var(--hair); margin:0 7px; font-weight:400; }
+  .chrail{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .chdot{ font-size:11px; font-weight:700; color:var(--gray2); border:1px solid var(--hair); border-radius:20px; padding:3px 9px; cursor:pointer; transition:all .12s ease; background:#fff; }
+  .chdot:hover{ border-color:var(--accent); color:var(--accent); }
+  .chdot.cur{ background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  .stepbar{ height:44px; display:flex; align-items:center; justify-content:center; gap:0; border-bottom:1px solid var(--hair); padding:0 16px; overflow:hidden; }
+  .step{ display:flex; align-items:center; font-size:12px; font-weight:600; color:var(--gray2); cursor:pointer; white-space:nowrap; }
+  .step .ix{ width:18px; height:18px; border-radius:50%; border:1px solid var(--hair); display:inline-flex; align-items:center; justify-content:center; font-size:10.5px; margin-right:5px; background:#fff; transition:all .12s; }
+  .step.cur{ color:var(--ink); font-weight:800; } .step.cur .ix{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  .step.done{ color:var(--gray); } .step.done .ix{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); }
+  .step .link{ width:20px; height:1px; background:var(--hair); margin:0 7px; }
+  .step:hover:not(.cur){ color:var(--ink); }
+
+  main{ height:calc(100vh - 52px - 44px - 62px); display:flex; align-items:flex-start; justify-content:center; padding:20px 26px 8px; overflow:hidden; }
+  .stage{ width:100%; max-width:1020px; height:100%; display:flex; align-items:flex-start; justify-content:center; overflow:hidden; }
+  .screen{ display:none; width:100%; }
+  .screen.active{ display:block; transform-origin:top center; will-change:transform; animation:fade .16s ease both; }
+  @keyframes fade{ from{opacity:0} to{opacity:1} }
+  @media (prefers-reduced-motion: reduce){ .screen.active{ animation:none; } }
+
+  .eyebrow{ font-size:11.5px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+  .stage-h{ font-size:26px; font-weight:800; line-height:1.22; letter-spacing:-.01em; margin-bottom:2px; } .stage-h .en{ font-weight:600; color:var(--gray); font-size:17px; }
+  .lede{ font-size:15px; line-height:1.7; color:var(--gray); margin-top:13px; max-width:780px; } .lede strong{ color:var(--ink); font-weight:700; }
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:16px; align-items:start; } .two .col2{ min-width:0; }
+
+  .keqbox{ margin-top:14px; border-left:3px solid var(--accent); padding:2px 0 2px 18px; }
+  .keq-label{ font-size:11.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gray2); margin-bottom:11px; }
+  .keqrow{ display:flex; align-items:baseline; gap:14px; margin-bottom:7px; } .keqrow:last-child{ margin-bottom:0; }
+  .keqcap{ font-size:12.5px; font-weight:600; color:var(--gray2); width:200px; flex-shrink:0; } .keqline{ color:var(--ink); }
+  .keqnote{ font-size:12.5px; color:var(--gray2); margin-top:10px; line-height:1.6; }
+
+  /* key terms */
+  .terms{ margin-top:13px; display:grid; grid-template-columns:1fr 1fr; gap:6px 18px; }
+  .term{ font-size:13px; line-height:1.5; color:var(--gray); padding-left:12px; border-left:2px solid var(--hair); }
+  .term b{ color:var(--ink); font-weight:700; }
+
+  /* callouts */
+  .callout{ margin-top:16px; border-radius:10px; padding:13px 16px; font-size:13.5px; line-height:1.65; }
+  .callout .ct{ font-size:11.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .callout.key{ background:var(--accent-soft); border:1px solid #ddd6fe; } .callout.key .ct{ color:var(--accent); }
+  .callout.warn{ background:var(--hair2); border:1px solid var(--hair); } .callout.warn .ct{ color:var(--gray2); }
+  .callout.exam{ background:#fff; border:1px dashed var(--accent); } .callout.exam .ct{ color:var(--accent); }
+  .callout ul{ margin:0; padding-left:18px; } .callout li{ margin-bottom:3px; } .callout strong{ color:var(--ink); }
+
+  /* derivation */
+  .assume{ font-size:13px; color:var(--gray2); margin-top:10px; } .assume b{ color:var(--ink); }
+  .deriv{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:16px; }
+  .dcard{ border:1px solid var(--hair); border-radius:12px; padding:14px 14px 16px; }
+  .dcard h4{ font-size:13px; font-weight:800; margin-bottom:3px; } .dcard .sub{ font-size:11px; color:var(--gray2); font-weight:600; margin-bottom:10px; }
+  .dcard .eq{ background:var(--hair2); border-radius:8px; padding:9px 6px; text-align:center; margin-bottom:9px; } .dcard p{ font-size:12.5px; line-height:1.55; color:var(--gray); } .dcard p strong{ color:var(--ink); }
+  .dcard .ana{ font-size:11.5px; line-height:1.45; color:var(--accent); background:var(--accent-soft); border-radius:7px; padding:7px 9px; margin-bottom:9px; }
+  .analogy{ display:flex; gap:11px; align-items:center; margin-top:10px; background:var(--accent-soft); border:1px solid #ddd6fe; border-radius:10px; padding:9px 15px; } .analogy .ic{ font-size:20px; flex-shrink:0; } .analogy .tx{ font-size:13px; line-height:1.5; color:var(--ink); } .analogy .tx b{ color:var(--accent); font-weight:700; }
+  .steps{ margin-top:14px; } .dstep{ display:flex; gap:12px; margin-bottom:9px; align-items:baseline; }
+  .dstep .n{ flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
+  .dstep .body{ flex:1; } .dstep .body .t{ font-size:13px; color:var(--gray); line-height:1.5; } .dstep .body .t b{ color:var(--ink); }
+
+  /* reading */
+  .reading{ max-width:720px; margin-top:12px; } .reading p{ font-size:14px; line-height:1.66; color:#3f3f46; margin-bottom:8px; } .reading p strong{ color:var(--ink); font-weight:700; }
+  .pullquote{ border-left:3px solid var(--accent); padding:4px 0 4px 18px; margin:11px 0; font-size:15px; line-height:1.5; color:var(--ink); font-weight:600; }
+  .readmeta{ font-size:12px; color:var(--gray2); margin-top:4px; }
+
+  /* visual */
+  .vizgrid{ display:grid; grid-template-columns:1.05fr .95fr; gap:32px; margin-top:14px; align-items:center; }
+  .vcap{ font-size:11.5px; font-weight:700; color:var(--gray2); letter-spacing:.04em; text-transform:uppercase; margin-bottom:9px; }
+  table.ktab{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  table.ktab th{ text-align:left; font-size:11px; letter-spacing:.04em; text-transform:none; color:var(--gray2); font-weight:700; padding:6px 8px; border-bottom:1px solid var(--hair); }
+  table.ktab td{ padding:7px 8px; border-bottom:1px solid var(--hair2); color:var(--ink); } table.ktab td.k{ text-align:right; font-variant-numeric:tabular-nums; color:var(--gray); } table.ktab tr:last-child td{ border-bottom:none; }
+  .bar{ height:7px; background:var(--accent-soft); border-radius:4px; overflow:hidden; } .bar > span{ display:block; height:100%; background:var(--accent); border-radius:4px; min-width:3px; }
+
+  /* interactive calc widget */
+  .calc{ margin-top:14px; border:1px solid var(--hair); border-radius:14px; padding:18px 20px; max-width:760px; background:#fcfcfc; }
+  .calc-title{ font-size:13px; font-weight:800; color:var(--ink); margin-bottom:4px; } .calc-desc{ font-size:12.5px; color:var(--gray2); margin-bottom:14px; line-height:1.5; }
+  .calc-rows{ display:flex; flex-direction:column; gap:13px; }
+  .calc-row{ display:grid; grid-template-columns:190px 1fr 130px; align-items:center; gap:14px; }
+  .calc-lab{ font-size:13.5px; color:var(--ink); } .calc-val{ font-size:13px; color:var(--gray); font-variant-numeric:tabular-nums; text-align:right; }
+  .calc input[type=range]{ -webkit-appearance:none; appearance:none; height:4px; background:var(--hair); border-radius:4px; outline:none; }
+  .calc input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--accent); cursor:pointer; border:2px solid #fff; box-shadow:0 0 0 1px var(--accent); }
+  .calc-out{ margin-top:16px; padding-top:14px; border-top:1px solid var(--hair); font-size:18px; color:var(--ink); display:flex; align-items:baseline; gap:8px; }
+  .calc-out .calc-num{ font-size:24px; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; }
+  .calc-outbar{ margin-top:12px; } .calc-note{ font-size:12px; color:var(--gray2); margin-top:10px; line-height:1.5; }
+
+  /* concept question (cq) + practice (prob) */
+  .panel-head{ display:flex; align-items:center; gap:9px; margin-bottom:9px; }
+  .tag{ font-size:11px; font-weight:800; color:#fff; background:var(--ink); border-radius:5px; padding:2px 8px; } .panel-title{ font-size:15px; font-weight:700; }
+  .cq{ margin-bottom:12px; padding-bottom:4px; } .cq:last-child{ margin-bottom:0; }
+  .qtext{ font-size:14.5px; line-height:1.55; } .qtext .qn{ color:var(--accent); font-weight:800; margin-right:6px; }
+  .opts{ display:flex; flex-direction:column; gap:6px; margin-top:9px; max-width:620px; }
+  .opt{ font-family:inherit; text-align:left; font-size:13.5px; color:var(--ink); background:#fff; border:1px solid var(--hair); border-radius:9px; padding:8px 13px; cursor:pointer; transition:all .12s; } .opt:hover{ border-color:#d4d4d8; background:var(--hair2); } .opt.sel{ border-color:var(--accent); background:var(--accent-soft); } .opt.correct{ border-color:var(--accent); background:var(--accent-soft); font-weight:700; }
+  .submit-row{ display:flex; align-items:center; gap:12px; margin-top:9px; } .submit-fb{ font-size:12.5px; font-weight:700; color:var(--accent); }
+  .btn{ font-family:inherit; font-size:13px; font-weight:600; border-radius:9px; padding:8px 16px; cursor:pointer; border:1px solid var(--hair); background:#fff; color:var(--ink); transition:all .12s; } .btn:hover{ background:var(--hair2); } .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); } .btn.primary:hover{ background:#6d28d9; }
+  .prof{ display:none; margin-top:13px; border:1px dashed var(--hair); border-radius:11px; padding:13px 15px; background:#fcfcfc; max-width:600px; } .prof.show{ display:block; animation:fade .18s ease both; }
+  .cp-exp{ display:none; margin-top:9px; font-size:12.5px; line-height:1.55; color:var(--gray); background:var(--accent-soft); border:1px solid #ddd6fe; border-radius:10px; padding:9px 13px; max-width:660px; } .cp-exp.show{ display:block; animation:fade .18s ease both; }
+  .cp-exp .exp-h{ font-size:11px; font-weight:800; color:var(--accent); letter-spacing:.04em; margin-right:6px; } .cp-exp .ok{ color:var(--accent); font-weight:700; } .cp-exp .dim{ color:var(--gray2); } .cp-exp .agg{ display:block; margin-top:4px; font-size:11.5px; color:var(--gray2); }
+  .calc-sense{ margin-top:13px; font-size:12px; line-height:1.6; color:var(--gray); border-top:1px solid var(--hair2); padding-top:11px; max-width:760px; } .calc-sense .cs-h{ font-size:11px; font-weight:800; color:var(--accent); letter-spacing:.04em; margin-right:6px; }
+  .src{ font-size:11px; color:var(--gray2); font-weight:400; }
+  .prof .ph{ display:flex; align-items:center; gap:8px; font-size:11.5px; font-weight:800; color:var(--gray2); letter-spacing:.03em; margin-bottom:10px; } .prof .pill{ font-size:10px; font-weight:800; color:var(--accent); background:var(--accent-soft); border-radius:20px; padding:2px 9px; }
+  .agg{ display:flex; flex-direction:column; gap:8px; } .aggrow{ display:grid; grid-template-columns:112px 1fr 40px; align-items:center; gap:10px; font-size:12.5px; } .aggrow .lab{ color:var(--ink); font-weight:600; } .aggrow .cnt{ text-align:right; color:var(--gray2); font-variant-numeric:tabular-nums; }
+  .prof .note{ font-size:11px; color:var(--gray2); margin-top:10px; line-height:1.5; }
+
+  .prob{ margin-bottom:18px; }
+  .screen.active[data-stage="연습"]{ display:grid; grid-template-columns:1fr 1fr; column-gap:26px; align-content:start; }
+  .screen[data-stage="연습"] .panel-head{ grid-column:1 / -1; }
+  .screen[data-stage="연습"] .prob{ margin-bottom:0; min-width:0; } .prob:last-child{ margin-bottom:0; }
+  .prob-num{ font-size:11.5px; font-weight:800; color:var(--accent); letter-spacing:.04em; margin-bottom:5px; }
+  .prob-statement{ font-size:14px; line-height:1.6; color:var(--gray); max-width:720px; } .prob-statement strong{ color:var(--ink); }
+  .given{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; } .chip{ font-size:12.5px; color:var(--gray); border:1px solid var(--hair); background:var(--hair2); border-radius:6px; padding:4px 9px; }
+  .find{ font-size:13px; margin-top:9px; } .find b{ color:var(--gray2); font-weight:700; }
+  .ans-row{ display:flex; align-items:center; gap:9px; margin-top:10px; flex-wrap:wrap; } .ans-input{ font-family:inherit; font-size:14px; width:120px; border:1px solid var(--hair); border-radius:8px; padding:7px 11px; outline:none; } .ans-input:focus{ border-color:var(--accent); } .ans-unit{ font-size:13px; color:var(--gray2); } .check-fb{ font-size:12.5px; font-weight:700; } .check-fb.ok{ color:var(--accent); } .check-fb.no{ color:var(--gray2); }
+  .reveal-btn{ margin-top:11px; font-family:inherit; font-size:13px; font-weight:600; color:var(--ink); background:#fff; border:1px solid var(--hair); border-radius:8px; padding:7px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:7px; transition:all .12s; } .reveal-btn:hover{ background:var(--hair2); } .reveal-btn .caret{ font-size:10px; color:var(--gray2); transition:transform .15s; } .reveal-btn.is-open .caret{ transform:rotate(180deg); }
+  .revealable{ display:none; } .revealable.open{ display:block; animation:fade .15s ease both; }
+  .solution{ margin-top:11px; } .dstep2{ margin-bottom:6px; } .step-label{ font-size:12px; font-weight:700; color:var(--gray2); margin-bottom:1px; }
+  .solution .katex-display{ margin:.18em 0; } .solution .katex-display>.katex, .ans-final .katex-display>.katex, .keqline .katex-display>.katex{ text-align:left; } .dcard .eq .katex-display{ margin:.1em 0; }
+  .ans-final{ margin-top:6px; border-top:1px dashed var(--hair); padding-top:9px; font-size:12.5px; color:var(--gray); } .ans-final b{ color:var(--ink); } .ans-final .ans-eq{ color:var(--ink); margin-bottom:4px; }
+
+  /* summary */
+  .sumgrid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; }
+  .sumcard{ border:1px solid var(--hair); border-radius:12px; padding:15px 16px; } .sumcard.full{ grid-column:1 / -1; }
+  .sumcard h4{ font-size:12.5px; font-weight:800; letter-spacing:.03em; margin-bottom:9px; display:flex; align-items:center; gap:6px; } .sumcard.key h4{ color:var(--accent); }
+  .sumcard ul{ margin:0; padding-left:17px; } .sumcard li{ font-size:13px; line-height:1.6; color:var(--gray); margin-bottom:4px; } .sumcard li strong{ color:var(--ink); }
+
+  /* week intro */
+  .intro{ max-width:940px; }
+  .intro-eyebrow{ font-size:12.5px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
+  .intro-h{ font-size:38px; font-weight:800; line-height:1.18; letter-spacing:-.015em; margin-bottom:14px; } .intro-h .hl{ color:var(--accent); }
+  .intro-sub{ font-size:17px; line-height:1.65; color:var(--gray); max-width:780px; margin-bottom:26px; } .intro-sub strong{ color:var(--ink); }
+  .mystery-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .mystery{ border:1px solid var(--hair); border-radius:14px; padding:18px 18px 20px; background:#fff; }
+  .mystery .emoji{ font-size:24px; display:block; margin-bottom:10px; }
+  .mystery .mq{ font-size:14.5px; font-weight:700; color:var(--ink); line-height:1.45; margin-bottom:8px; }
+  .mystery .ma{ font-size:12.5px; line-height:1.55; color:var(--gray2); } .mystery .ma b{ color:var(--accent); font-weight:700; }
+  .intro-teaser{ margin-top:22px; border-left:3px solid var(--accent); padding:4px 0 4px 18px; font-size:16px; line-height:1.6; color:var(--ink); font-weight:600; } .intro-teaser em{ color:var(--accent); font-style:normal; }
+  .roadmap{ margin-top:6px; display:flex; flex-direction:column; gap:9px; }
+  .rm-item{ display:flex; align-items:baseline; gap:13px; }
+  .rm-item .rn{ flex-shrink:0; font-size:12px; font-weight:800; color:var(--accent); background:var(--accent-soft); border-radius:20px; padding:2px 10px; min-width:46px; text-align:center; }
+  .rm-item .rt{ font-size:14.5px; color:var(--ink); font-weight:700; } .rm-item .rd{ font-size:13px; color:var(--gray2); }
+  .outcomes{ margin-top:6px; border:1px solid var(--hair); border-radius:12px; padding:16px 18px; background:#fcfcfc; }
+  .outcomes h4{ font-size:12.5px; font-weight:800; color:var(--accent); margin-bottom:10px; letter-spacing:.03em; }
+  .outcomes ul{ margin:0; padding-left:18px; } .outcomes li{ font-size:13.5px; line-height:1.7; color:var(--gray); } .outcomes li strong{ color:var(--ink); }
+  /* intro extras */
+  .vs{ display:grid; grid-template-columns:1fr 56px 1fr; margin-top:20px; align-items:stretch; }
+  .vs-col{ border:1px solid var(--hair); border-radius:14px; padding:20px 22px; } .vs-col.b{ background:var(--accent-soft); border-color:#ddd6fe; }
+  .vs-mid{ display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--gray2); font-size:13px; }
+  .vs-col h4{ font-size:13px; font-weight:800; letter-spacing:.04em; margin-bottom:10px; color:var(--gray2); } .vs-col.b h4{ color:var(--accent); }
+  .vs-col .q{ font-size:16px; font-weight:700; color:var(--ink); line-height:1.45; margin-bottom:10px; } .vs-col p{ font-size:13.5px; line-height:1.6; color:var(--gray); } .vs-col p strong{ color:var(--ink); }
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px; }
+  .stat{ border:1px solid var(--hair); border-radius:14px; padding:17px 13px; text-align:center; }
+  .stat .big{ font-size:26px; font-weight:800; color:var(--accent); line-height:1.05; } .stat .lbl{ font-size:12.5px; color:var(--ink); margin-top:8px; line-height:1.4; font-weight:600; } .stat .lbl b{ color:var(--ink); }
+  .stat .why{ font-size:11px; color:var(--gray2); margin-top:9px; border-top:1px solid var(--hair2); padding-top:8px; line-height:1.55; }
+  .tl{ margin-top:20px; display:flex; flex-direction:column; gap:13px; max-width:760px; }
+  .tl-item{ display:flex; gap:16px; align-items:baseline; } .tl-item .yr{ flex-shrink:0; font-size:13px; font-weight:800; color:var(--accent); width:120px; } .tl-item .ev{ font-size:14px; color:var(--gray); line-height:1.5; } .tl-item .ev b{ color:var(--ink); font-weight:700; }
+  .flow{ display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:20px; }
+  .flowstep{ border:1px solid var(--hair); border-radius:9px; padding:8px 12px; font-size:13px; font-weight:700; color:var(--ink); background:#fff; } .flowstep.on{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .flow-arr{ color:var(--gray2); font-size:12px; }
+  .learn-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px; }
+  .lcard{ border:1px solid var(--hair); border-radius:14px; padding:18px; } .lcard .lh{ font-size:14px; font-weight:800; color:var(--ink); margin-bottom:7px; display:flex; align-items:center; gap:7px; } .lcard .le{ font-size:20px; } .lcard p{ font-size:13px; line-height:1.6; color:var(--gray); } .lcard p b{ color:var(--accent); }
+
+  footer{ height:62px; display:flex; align-items:center; justify-content:space-between; padding:0 26px; border-top:1px solid var(--hair); }
+  .nav-btn{ font-family:inherit; font-size:14px; font-weight:600; border-radius:10px; padding:9px 17px; cursor:pointer; border:1px solid var(--hair); background:#fff; color:var(--ink); transition:all .12s; } .nav-btn:hover{ background:var(--hair2); } .nav-btn.prev[disabled]{ opacity:0; pointer-events:none; } .nav-btn.next{ background:var(--accent); color:#fff; border-color:var(--accent); } .nav-btn.next:hover{ background:#6d28d9; }
+  .foot-hint{ font-size:12px; color:var(--gray2); }
+  html.lang-en .lang-ko{display:none!important} html.lang-ko .lang-en{display:none!important}
+  .langtog{font:700 11.5px/1 inherit;color:var(--gray2);border:1px solid var(--hair);background:#fff;border-radius:20px;padding:4px 11px;cursor:pointer;margin-left:8px;transition:all .12s} .langtog:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Week 2</span>상변화열전달<span class="sep">·</span>Week N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
+<div class="stepbar" id="stepbar"></div>
+<main><div class="stage" id="stage">
+<!-- ════════ 시작1 / 환영 ════════ -->
+<section class="screen" data-ch="시작1" data-chtitle="2주차 개요" data-stage="환영">
+  <div class="intro">
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 2주차 · 시작</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 2 · Intro</div>
+
+    <h1 class="intro-h lang-ko">왜 어떤 프롬프트는 되고<br><span class="hl">어떤 프롬프트는 안 될까 — 감이 아니라 근거로</span></h1>
+    <h1 class="intro-h lang-en">Why do some prompts work<br><span class="hl">and others fail — grounded in evidence, not intuition</span></h1>
+
+    <p class="lede lang-ko">"이렇게 쓰면 잘 되더라"는 <strong>일화(anecdote)</strong>는 재현되지 않는다. 이번 주는 커뮤니티 팁을 걷어내고, <strong>동료 심사를 거친 논문으로 검증된 기법</strong>만 다룬다. 예를 들어 사고 사슬(chain-of-thought)은 GSM8K 산술 추론에서 정확도를 $17.9\%$에서 $58.1\%$로 끌어올렸고, 자기일관성(self-consistency)은 여기서 다시 $+17.9$ 포인트를 더했다. 각 기법은 <strong>언제 이득이 나고 언제 오히려 손해인지</strong> 조건까지 함께 배운다 — 모델 규모, 과제 유형, 민감도가 그 경계를 정한다. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
+    <p class="lede lang-en">"It worked for me when I wrote it this way" is an <strong>anecdote</strong>, and anecdotes do not reproduce. This week we set aside community folklore and cover only <strong>techniques validated in peer-reviewed papers</strong>. For instance, chain-of-thought prompting lifted GSM8K arithmetic-reasoning accuracy from $17.9\%$ to $58.1\%$, and self-consistency added a further $+17.9$ points on top. For every method we also learn its <strong>conditions — when it helps and when it hurts</strong>: model scale, task type, and sensitivity define those boundaries. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
+  </div>
+</section>
+
+<!-- ════════ 시작2 / 여정 ════════ -->
+<section class="screen" data-ch="시작2" data-chtitle="2주차 지도" data-stage="여정">
+  <div class="intro">
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 2주차 지도</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 2 Roadmap</div>
+
+    <h1 class="intro-h lang-ko">이번 주, <span class="hl">네 개의 챕터</span>로 추론형 프롬프트를 파고든다</h1>
+    <h1 class="intro-h lang-en">This week: <span class="hl">four chapters</span> into reasoning-style prompting</h1>
+
+    <div class="roadmap lang-ko" style="margin-top:14px">
+      <div class="rm-item"><span class="rn">2-1</span><span><span class="rt">제로/퓨샷·민감도</span> <span class="rd">— 예시 $k$개의 효과, 예시 순서·형식에 대한 성능 민감도와 그 함정</span></span></div>
+      <div class="rm-item"><span class="rn">2-2</span><span><span class="rt">사고 사슬·자기일관성</span> <span class="rd">— "단계별로 생각하기"와 다중 표본 다수결로 정확도 $+17.9$점</span></span></div>
+      <div class="rm-item"><span class="rn">2-3</span><span><span class="rt">ReAct: 추론+행동</span> <span class="rd">— 추론(Reason)과 도구 사용(Act)을 엮어 환각을 줄이는 루프</span></span></div>
+      <div class="rm-item"><span class="rn">2-4</span><span><span class="rt">사고트리·분해·구조화</span> <span class="rd">— Tree-of-Thoughts 탐색과 문제 분해로 복잡 과제 해결</span></span></div>
+    </div>
+    <div class="roadmap lang-en" style="margin-top:14px">
+      <div class="rm-item"><span class="rn">2-1</span><span><span class="rt">Zero/Few-Shot &amp; Sensitivity</span> <span class="rd">— the effect of $k$ examples, plus performance sensitivity to example order and format</span></span></div>
+      <div class="rm-item"><span class="rn">2-2</span><span><span class="rt">CoT &amp; Self-Consistency</span> <span class="rd">— "think step by step" and majority vote over samples for $+17.9$ points</span></span></div>
+      <div class="rm-item"><span class="rn">2-3</span><span><span class="rt">ReAct: Reason + Act</span> <span class="rd">— interleaving reasoning traces with tool use to curb hallucination</span></span></div>
+      <div class="rm-item"><span class="rn">2-4</span><span><span class="rt">ToT &amp; Decomposition</span> <span class="rd">— Tree-of-Thoughts search and problem decomposition for hard tasks</span></span></div>
+    </div>
+
+    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 주가 끝나면 할 수 있게 된다</h4><ul>
+      <li>제로/퓨샷을 <strong>과제 특성과 예시 수 $k$</strong>에 맞춰 선택하고 민감도 함정을 피한다.</li>
+      <li>사고 사슬과 자기일관성을 <strong>언제 쓰고 언제 피할지</strong> 모델 규모·비용과 함께 판단한다.</li>
+      <li>ReAct 루프로 <strong>추론과 도구 호출</strong>을 엮어 검증 가능한 답을 설계한다.</li>
+      <li>사고트리·분해로 복잡 과제를 <strong>구조화된 하위 문제</strong>로 나눠 공략한다.</li>
+    </ul></div>
+    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this week you will be able to</h4><ul>
+      <li>Choose zero- vs few-shot to match <strong>task characteristics and the number of examples $k$</strong>, avoiding sensitivity pitfalls.</li>
+      <li>Decide <strong>when to use and when to avoid</strong> CoT and self-consistency, weighing model scale and cost.</li>
+      <li>Design verifiable answers by interleaving <strong>reasoning and tool calls</strong> with the ReAct loop.</li>
+      <li>Break hard tasks into <strong>structured sub-problems</strong> using Tree-of-Thoughts and decomposition.</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- ══════════ 2-1 / 개념 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="개념">
+    <div class="eyebrow lang-ko">2-1 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">2-1 · Concept</div>
+    <h1 class="stage-h lang-ko">인컨텍스트 러닝 — 가중치를 안 바꾸고 배우는 법</h1>
+    <h1 class="stage-h lang-en">In-Context Learning — Learning Without Changing Weights</h1>
+    <div class="analogy lang-ko"><span class="ic">🧑‍🏫</span><div class="tx"><b>직관</b> — 시험장에서 "이렇게 푸는 거예요"라며 <b>풀이 예시 몇 개</b>를 보여주면, 학생은 새 문제도 그 패턴을 따라 풉니다. 공부(가중치 갱신)를 다시 한 게 아니라 <b>눈앞의 예시</b>만 보고 흉내 낸 것이죠. LLM도 프롬프트 안 예시로 과제를 "파악"합니다 — 이것이 <b>인컨텍스트 러닝(ICL)</b>입니다. <span class="src">(출처: Brown et al. 2020, "Language Models are Few-Shot Learners", GPT-3)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">🧑‍🏫</span><div class="tx"><b>Intuition</b> — In an exam, if someone shows you <b>a few worked examples</b> ("solve it like this"), you tackle new items by copying that pattern. You didn't re-study (update weights) — you just imitated the <b>examples in front of you</b>. An LLM likewise "figures out" a task from examples in its prompt — this is <b>in-context learning (ICL)</b>. <span class="src">(Source: Brown et al. 2020, "Language Models are Few-Shot Learners", GPT-3)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede"><strong>제로샷(zero-shot)</strong>은 지시문만 주고 예시를 안 주는 방식, <strong>퓨샷(few-shot)</strong>은 지시문에 <strong>입력→출력 예시 $k$개</strong>를 붙이는 방식입니다. Brown et al.(2020)은 예시 개수를 늘릴수록($0\to k$) GPT-3의 과제 정확도가 대체로 올라가되 <strong>포화(saturation)</strong>한다고 보고했습니다. 예시는 파라미터를 바꾸지 않고 <strong>컨텍스트 창</strong> 안에만 존재합니다.</p>
+        <div class="keqbox">
+          <div class="keq-label">예시 개수에 따른 세 방식</div>
+          <div class="keqrow"><span class="keqcap">제로샷</span><span class="keqline">$ k = 0 $ · 지시문만</span></div>
+          <div class="keqrow"><span class="keqcap">원샷</span><span class="keqline">$ k = 1 $ · 예시 1개</span></div>
+          <div class="keqrow"><span class="keqcap">퓨샷</span><span class="keqline">$ k \gtrsim 2 $ · 예시 여러 개(보통 $\le 32$)</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>ICL</b> 프롬프트 안 예시로 과제 학습 — 가중치 갱신 없음</div>
+          <div class="term"><b>샷(shot) $k$</b> 프롬프트에 넣은 예시(demonstration) 개수</div>
+          <div class="term"><b>제로/원/퓨샷</b> $k=0$ / $k=1$ / $k\ge 2$</div>
+          <div class="term"><b>예시 순서(order)</b> 예시를 배열한 순서 — 결과에 영향 (Lu et al. 2022)</div>
+          <div class="term"><b>포화</b> $k$가 커져도 정확도 증가폭이 줄어드는 현상</div>
+          <div class="term"><b>프롬프트 민감도</b> 표현·순서·포맷 변화에 출력이 흔들리는 정도</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>ICL은 <strong>가중치를 바꾸지 않고</strong> 예시만으로 과제를 지정합니다. 그래서 <strong>예시 개수·순서·포맷</strong>이라는 "설정값"이 정확도를 크게 좌우하며, 이 민감도를 이해하는 것이 프롬프트 엔지니어링의 출발점입니다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede"><strong>Zero-shot</strong> gives only an instruction with no examples; <strong>few-shot</strong> attaches <strong>$k$ input→output examples</strong> to the instruction. Brown et al. (2020) reported that increasing the example count ($0\to k$) generally raises GPT-3's task accuracy but with <strong>saturation</strong>. The examples never change parameters — they live only inside the <strong>context window</strong>.</p>
+        <div class="keqbox">
+          <div class="keq-label">Three modes by example count</div>
+          <div class="keqrow"><span class="keqcap">Zero-shot</span><span class="keqline">$ k = 0 $ · instruction only</span></div>
+          <div class="keqrow"><span class="keqcap">One-shot</span><span class="keqline">$ k = 1 $ · one example</span></div>
+          <div class="keqrow"><span class="keqcap">Few-shot</span><span class="keqline">$ k \gtrsim 2 $ · several examples (often $\le 32$)</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>ICL</b> learn a task from prompt examples — no weight update</div>
+          <div class="term"><b>Shots $k$</b> number of demonstrations placed in the prompt</div>
+          <div class="term"><b>Zero/one/few-shot</b> $k=0$ / $k=1$ / $k\ge 2$</div>
+          <div class="term"><b>Example order</b> the arrangement of examples — affects the result (Lu et al. 2022)</div>
+          <div class="term"><b>Saturation</b> diminishing accuracy gains as $k$ grows</div>
+          <div class="term"><b>Prompt sensitivity</b> how much output swings with wording, order, or format</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>ICL specifies a task from examples <strong>without changing weights</strong>. Hence the "settings" of <strong>example count, order, and format</strong> strongly govern accuracy, and understanding this sensitivity is the starting point of prompt engineering.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-1 / 유도 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="유도">
+    <div class="eyebrow lang-ko">2-1 · 메커니즘 · Derivation</div>
+    <div class="eyebrow lang-en">2-1 · Derivation</div>
+    <h1 class="stage-h lang-ko">왜 순서만 바꿔도 결과가 달라지는가</h1>
+    <h1 class="stage-h lang-en">Why Reordering Alone Changes the Result</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> LLM은 다음 토큰을 <b>조건부 확률</b> $p(y\mid \text{prompt})$로 뽑습니다. 프롬프트는 지시문 $I$와 예시 배열 $S=(e_{\pi(1)},\dots,e_{\pi(k)})$로 이뤄지므로, 예측은 <b>순서 $\pi$에 명시적으로 의존</b>합니다: $p(y\mid I,S_\pi)$. 트랜스포머는 위치 인코딩으로 토큰 순서를 구분하기에, 순서를 바꾸면 조건 자체가 바뀝니다.</p>
+    <p class="lede lang-en"><b>Unifying view:</b> an LLM samples the next token from a <b>conditional probability</b> $p(y\mid \text{prompt})$. The prompt is an instruction $I$ plus an ordered example set $S=(e_{\pi(1)},\dots,e_{\pi(k)})$, so the prediction <b>explicitly depends on the order $\pi$</b>: $p(y\mid I,S_\pi)$. Since transformers distinguish token order via positional encodings, reordering changes the conditioning itself.</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>제로샷 예측</h4><div class="sub">$k=0$</div><div class="ana">📋 지시문만 — 모델의 사전 지식에 의존</div><div class="eq">$ p(y \mid I) $</div><p>예시가 없으므로 <strong>지시문 표현</strong>과 사전학습 분포에만 좌우됩니다. 과제 포맷을 오해하기 쉬움.</p></div>
+      <div class="dcard"><h4>퓨샷 예측</h4><div class="sub">$k\ge 1$</div><div class="ana">🧩 예시로 포맷·라벨 공간을 "지정"</div><div class="eq">$ p(y \mid I, e_1,\dots,e_k) $</div><p>예시가 출력 <strong>포맷과 라벨 집합</strong>을 좁혀 정확도를 높입니다. 좋은 예시일수록 조건이 선명.</p></div>
+      <div class="dcard"><h4>순서 민감도</h4><div class="sub">순열 $\pi$</div><div class="ana">🔀 같은 예시, 다른 배열 → 다른 조건</div><div class="eq">$ p(y\mid I,S_\pi)\ne p(y\mid I,S_{\pi'}) $</div><p>Lu et al.(2022)은 <strong>순서만 바꿔도</strong> 정확도가 크게 요동침을 보였습니다 — 특히 예시가 적을 때.</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>Zero-shot prediction</h4><div class="sub">$k=0$</div><div class="ana">📋 Instruction only — relies on the model's prior</div><div class="eq">$ p(y \mid I) $</div><p>With no examples, it hinges on the <strong>instruction wording</strong> and pretraining distribution. Easy to misread the task format.</p></div>
+      <div class="dcard"><h4>Few-shot prediction</h4><div class="sub">$k\ge 1$</div><div class="ana">🧩 Examples "pin down" format & label space</div><div class="eq">$ p(y \mid I, e_1,\dots,e_k) $</div><p>Examples narrow the output <strong>format and label set</strong>, raising accuracy. Sharper conditioning with better examples.</p></div>
+      <div class="dcard"><h4>Order sensitivity</h4><div class="sub">permutation $\pi$</div><div class="ana">🔀 Same examples, different order → different conditioning</div><div class="eq">$ p(y\mid I,S_\pi)\ne p(y\mid I,S_{\pi'}) $</div><p>Lu et al. (2022) showed accuracy swings wildly under <strong>reordering alone</strong> — especially when $k$ is small.</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · 순서 민감도는 무작위가 아니라 구조적</div>같은 예시 집합이라도 순열 $\pi$에 따라 정확도가 <strong>수십 %p까지 벌어질 수 있다</strong>고 보고됩니다(Lu et al. 2022, 대표적 사례 — 데이터·모델별 상이, UNVERIFIED 구체값). 원인은 위치 인코딩·최근성(recency) 편향 등으로, 좋은 프롬프트는 <strong>순서를 고정·검증</strong>해야 재현 가능합니다.</div>
+    <div class="callout warn lang-en"><div class="ct">Caution · order sensitivity is structural, not random</div>For the same example set, accuracy can differ by <strong>tens of percentage points</strong> across permutations $\pi$ (Lu et al. 2022, representative; exact numbers vary by data/model — UNVERIFIED specifics). Causes include positional encoding and recency bias, so a good prompt must <strong>fix and validate the order</strong> to be reproducible.</div>
+  </section>
+
+  <!-- ══════════ 2-1 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">2-1 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">2-1 · Reading</div>
+    <h1 class="stage-h lang-ko">GPT-3와 "순서의 저주"</h1>
+    <h1 class="stage-h lang-en">GPT-3 and the "Curse of Ordering"</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p>2020년 <strong>Brown et al.</strong>은 1,750억 파라미터 GPT-3가 <strong>미세조정 없이</strong> 프롬프트 안 예시만으로 번역·QA·산술 등을 수행함을 보였습니다. 예시 개수를 0→1→다수로 늘리면 성능이 대체로 향상되지만, 개수가 커질수록 이득은 <strong>포화</strong>합니다.</p>
+        <p class="pullquote">모델은 예시를 <em>보고</em> 과제를 "파악"할 뿐, 다시 <em>공부</em>하지 않는다.</p>
+        <p>2022년 <strong>Lu, Bartolo, Moore, Riedel, Stenetorp</strong>은 "Fantastically Ordered Prompts…"에서 <strong>예시 순서(order)만 바꿔도</strong> 정확도가 크게 흔들림을 실증하고, 정답 라벨 분포의 엔트로피를 활용해 <strong>좋은 순서를 고르는 방법(probing)</strong>을 제안했습니다. 핵심 교훈: 퓨샷 성능은 예시 <strong>선택뿐 아니라 배열</strong>에도 달려 있다.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>ICL은 <strong>가중치 갱신 없이</strong> 프롬프트만으로 과제를 지정한다.</li><li>$k$↑ → 정확도↑ 이지만 <strong>포화</strong>한다(무한정 오르지 않음).</li><li>예시 <strong>순서</strong>는 우연이 아니라 결과를 바꾸는 실제 변수다(Lu 2022).</li></ul></div>
+        <p class="readmeta">참고: Brown et al.(2020) <em>NeurIPS</em> / Lu et al.(2022) <em>ACL</em> "Fantastically Ordered Prompts and Where to Find Them"</p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p>In 2020, <strong>Brown et al.</strong> showed that the 175-billion-parameter GPT-3 performs translation, QA, arithmetic and more from prompt examples alone, <strong>without fine-tuning</strong>. Raising the example count 0→1→many generally improves performance, but the gains <strong>saturate</strong> as the count grows.</p>
+        <p class="pullquote">The model only <em>looks at</em> examples to "figure out" the task — it does not <em>re-study</em>.</p>
+        <p>In 2022, <strong>Lu, Bartolo, Moore, Riedel, Stenetorp</strong>, in "Fantastically Ordered Prompts…", demonstrated that <strong>changing example order alone</strong> makes accuracy swing sharply, and proposed a way to <strong>pick good orderings (probing)</strong> using the entropy of predicted label distributions. Key lesson: few-shot performance depends not only on example <strong>selection</strong> but also on their <strong>arrangement</strong>.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>ICL specifies a task from the prompt alone, <strong>with no weight update</strong>.</li><li>$k$↑ → accuracy↑, but it <strong>saturates</strong> (does not rise forever).</li><li>Example <strong>order</strong> is a real variable that changes the result, not chance (Lu 2022).</li></ul></div>
+        <p class="readmeta">Refs: Brown et al. (2020) <em>NeurIPS</em> / Lu et al. (2022) <em>ACL</em> "Fantastically Ordered Prompts and Where to Find Them"</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-1 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="그림·표">
+    <div class="eyebrow lang-ko">2-1 · 그림 · 그래프 · 표</div>
+    <div class="eyebrow lang-en">2-1 · Figure · Graph · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — 예시 개수와 정확도 포화</h1>
+    <h1 class="stage-h lang-en">At a Glance — Example Count and Accuracy Saturation</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">퓨샷 포화 곡선 (정확도 vs 예시 개수 $k$)</div>
+        <svg viewBox="0 0 480 285" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar21ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<line x1="52" y1="248" x2="452" y2="248" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21ko)"/>
+<line x1="52" y1="248" x2="52" y2="24" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21ko)"/>
+<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">예시 개수 $k$ (0 → 5)</text>
+<text x="20" y="135" font-size="11.5" fill="#52525b" text-anchor="middle" transform="rotate(-90 20 135)">기대 정확도</text>
+<line x1="52" y1="70" x2="452" y2="70" stroke="#d4d4d8" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="440" y="64" font-size="9.5" fill="#a1a1aa" text-anchor="end">cap (포화 상한)</text>
+<path d="M62 210 Q120 120 180 96 T300 80 T440 74" fill="none" stroke="#c2410c" stroke-width="2.75" stroke-linecap="round"/>
+<circle cx="62" cy="210" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="62" y="228" font-size="10" fill="#71717a" text-anchor="middle">k=0</text>
+<circle cx="120" cy="145" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="120" y="163" font-size="10" fill="#71717a" text-anchor="middle">k=1</text>
+<circle cx="180" cy="96" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="180" y="114" font-size="10" fill="#71717a" text-anchor="middle">k=2</text>
+<circle cx="300" cy="80" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="300" y="98" font-size="10" fill="#71717a" text-anchor="middle">k=3</text>
+<circle cx="440" cy="74" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="432" y="92" font-size="10" fill="#71717a" text-anchor="middle">k=5</text>
+<text x="150" y="196" font-size="10.5" fill="#c2410c" text-anchor="middle" font-weight="700">급상승</text>
+<text x="360" y="66" font-size="10.5" fill="#71717a" text-anchor="middle">포화</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">제로/원/퓨샷 비교 (개념 요약)</div>
+        <table class="ktab"><thead><tr><th>방식</th><th>$k$</th><th style="text-align:right">특징</th></tr></thead><tbody>
+          <tr><td>제로샷</td><td class="k">0</td><td>지시문만, 민감↑</td></tr>
+          <tr><td>원샷</td><td class="k">1</td><td>포맷 지정, 큰 향상</td></tr>
+          <tr><td>퓨샷</td><td class="k">2~5</td><td>정확↑, 순서 영향</td></tr>
+          <tr><td>다수 퓨샷</td><td class="k">&gt; 5</td><td>포화, 토큰 비용↑</td></tr>
+        </tbody></table>
+        <div class="keqnote">곡선은 정성적 개념도(포화 형태): 초기 $k$에서 급상승 후 상한(cap)에 수렴. 구체 정확도 값은 과제·모델별 상이 — 그래프 수치는 예시(UNVERIFIED). (출처: 정성적 경향 = Brown et al. 2020)</div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">Few-shot saturation curve (accuracy vs example count $k$)</div>
+        <svg viewBox="0 0 480 285" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar21en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<line x1="52" y1="248" x2="452" y2="248" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21en)"/>
+<line x1="52" y1="248" x2="52" y2="24" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21en)"/>
+<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">example count $k$ (0 → 5)</text>
+<text x="20" y="135" font-size="11.5" fill="#52525b" text-anchor="middle" transform="rotate(-90 20 135)">expected accuracy</text>
+<line x1="52" y1="70" x2="452" y2="70" stroke="#d4d4d8" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="440" y="64" font-size="9.5" fill="#a1a1aa" text-anchor="end">cap (saturation)</text>
+<path d="M62 210 Q120 120 180 96 T300 80 T440 74" fill="none" stroke="#c2410c" stroke-width="2.75" stroke-linecap="round"/>
+<circle cx="62" cy="210" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="62" y="228" font-size="10" fill="#71717a" text-anchor="middle">k=0</text>
+<circle cx="120" cy="145" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="120" y="163" font-size="10" fill="#71717a" text-anchor="middle">k=1</text>
+<circle cx="180" cy="96" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="180" y="114" font-size="10" fill="#71717a" text-anchor="middle">k=2</text>
+<circle cx="300" cy="80" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="300" y="98" font-size="10" fill="#71717a" text-anchor="middle">k=3</text>
+<circle cx="440" cy="74" r="4.5" fill="#fff" stroke="#c2410c" stroke-width="2.5"/>
+<text x="432" y="92" font-size="10" fill="#71717a" text-anchor="middle">k=5</text>
+<text x="150" y="196" font-size="10.5" fill="#c2410c" text-anchor="middle" font-weight="700">steep rise</text>
+<text x="360" y="66" font-size="10.5" fill="#71717a" text-anchor="middle">saturation</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Zero/one/few-shot comparison (conceptual)</div>
+        <table class="ktab"><thead><tr><th>Mode</th><th>$k$</th><th style="text-align:right">Feature</th></tr></thead><tbody>
+          <tr><td>Zero-shot</td><td class="k">0</td><td>instruction only, high sensitivity</td></tr>
+          <tr><td>One-shot</td><td class="k">1</td><td>pins format, large gain</td></tr>
+          <tr><td>Few-shot</td><td class="k">2~5</td><td>higher accuracy, order matters</td></tr>
+          <tr><td>Many-shot</td><td class="k">&gt; 5</td><td>saturates, token cost↑</td></tr>
+        </tbody></table>
+        <div class="keqnote">The curve is a qualitative concept diagram (saturating shape): steep rise at small $k$, then convergence to a cap. Exact accuracy values vary by task/model — plotted numbers are illustrative (UNVERIFIED). (Source: qualitative trend = Brown et al. 2020)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-1 / 실습 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="실습">
+    <div class="eyebrow lang-ko">2-1 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">2-1 · Interactive</div>
+    <h1 class="stage-h lang-ko">포화 곡선 직접 조절하기 — 예시 개수 $n$의 효과</h1>
+    <h1 class="stage-h lang-en">Tune the Saturation Curve — Effect of Example Count $n$</h1>
+    <p class="lede lang-ko">퓨샷의 정성적 포화 거동을 단순 모델로 표현해 봅니다: $\text{acc}=\text{base}+(\text{cap}-\text{base})\,(1-e^{-n/2})$. 슬라이더로 <strong>예시 개수 $n$</strong>, 제로샷 기준 <strong>base</strong>, 포화 상한 <strong>cap</strong>을 바꾸며 초기 급상승과 포화를 확인하세요. (이 곡선은 개념 모델 — 실제 정확도 아님, UNVERIFIED)</p>
+    <p class="lede lang-en">Model the qualitative saturation of few-shot with a simple curve: $\text{acc}=\text{base}+(\text{cap}-\text{base})\,(1-e^{-n/2})$. Use the sliders for <strong>example count $n$</strong>, the zero-shot <strong>base</strong>, and the saturation <strong>cap</strong> to see the steep rise and the plateau. (Conceptual model — not real accuracy, UNVERIFIED.)</p>
+    <div class="calc lang-ko"
+      data-title="퓨샷 포화 모델 $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$"
+      data-desc="n = 예시 개수, base = 제로샷 정확도(k=0), cap = 포화 상한. 기본값 n=2, base=0.35, cap=0.85 → acc≈0.665. n을 키우면 급상승 후 cap에 수렴합니다."
+      data-vars='[{"sym":"n","label":"$n$ · 예시 개수","min":0,"max":10,"val":2,"step":1,"unit":"개"},{"sym":"base","label":"$\\text{base}$ · 제로샷 정확도","min":0.1,"max":0.6,"val":0.35,"step":0.05,"unit":""},{"sym":"cap","label":"$\\text{cap}$ · 포화 상한","min":0.6,"max":0.98,"val":0.85,"step":0.01,"unit":""}]'
+      data-expr="base+(cap-base)*(1-Math.exp(-n/2))"
+      data-out="$\text{acc}$" data-out-unit=""
+      data-barmax="1"
+      data-note="n을 0→2로 올리면 acc가 base(0.35)에서 약 0.665로 급상승 — 초기 예시의 효과가 가장 큽니다. n≥6부터는 거의 cap에 붙어 포화."></div>
+    <div class="calc lang-en"
+      data-title="Few-shot saturation model $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$"
+      data-desc="n = example count, base = zero-shot accuracy (k=0), cap = saturation ceiling. Default n=2, base=0.35, cap=0.85 → acc≈0.665. Increasing n rises steeply then converges to cap."
+      data-vars='[{"sym":"n","label":"$n$ · example count","min":0,"max":10,"val":2,"step":1,"unit":"ex"},{"sym":"base","label":"$\\text{base}$ · zero-shot accuracy","min":0.1,"max":0.6,"val":0.35,"step":0.05,"unit":""},{"sym":"cap","label":"$\\text{cap}$ · saturation ceiling","min":0.6,"max":0.98,"val":0.85,"step":0.01,"unit":""}]'
+      data-expr="base+(cap-base)*(1-Math.exp(-n/2))"
+      data-out="$\text{acc}$" data-out-unit=""
+      data-barmax="1"
+      data-note="Raising n from 0→2 lifts acc from base (0.35) to about 0.665 — early examples have the biggest effect. From n≥6 it nearly sticks to cap (saturated)."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 정확도(0~1) 감: 제로샷 base $\approx 0.3\!\sim\!0.5$(과제 난이도별) · 한두 예시가 가장 큰 이득 · cap 근처는 개당 이득 미미하지만 <strong>토큰 비용은 선형 증가</strong>. 그래서 실무에서는 "정확도/토큰" 균형점에서 $k$를 멈추는 것이 관건. 이 모델은 포화의 <em>모양</em>만 담을 뿐 실제 수치가 아님. <span class="src">(출처: 포화 경향 = Brown et al. 2020; 수식은 교육용 근사, UNVERIFIED)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — feel for accuracy (0~1): zero-shot base $\approx 0.3\!\sim\!0.5$ (task-dependent) · the first one or two examples give the biggest gain · near cap each extra example adds little while <strong>token cost grows linearly</strong>. In practice the trick is stopping $k$ at the "accuracy/token" sweet spot. This model captures only the <em>shape</em> of saturation, not real numbers. <span class="src">(Source: saturation trend = Brown et al. 2020; the formula is an educational approximation, UNVERIFIED)</span></div>
+  </section>
+
+  <!-- ══════════ 2-1 / 점검 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>같은 예시 집합을 <strong>순서만 바꿔도</strong> 결과가 달라지는 근본 이유는?</p>
+      <div class="opts">
+        <button class="opt">① 순서를 바꾸면 모델 가중치가 재학습되기 때문</button>
+        <button class="opt" data-correct="1">② 예측이 순서에 의존하는 조건부 확률 $p(y\mid I,S_\pi)$이고, 트랜스포머가 위치를 구분하기 때문</button>
+        <button class="opt">③ 순서는 무관하며 결과 차이는 순전히 난수 때문</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ICL은 가중치를 바꾸지 않고, 예측 $p(y\mid I,S_\pi)$는 예시 배열 $S_\pi$에 명시적으로 조건화된다. 위치 인코딩·최근성 편향 때문에 순열 $\pi$가 바뀌면 조건 자체가 바뀐다(Lu et al. 2022). <span class="dim">오답 ①·③: ①ICL은 재학습이 없고, ③순서는 구조적으로 영향을 주는 실제 변수다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>Why does <strong>reordering the same example set</strong> change the result?</p>
+      <div class="opts">
+        <button class="opt">① reordering re-trains the model's weights</button>
+        <button class="opt" data-correct="1">② the prediction is an order-dependent conditional $p(y\mid I,S_\pi)$ and transformers distinguish positions</button>
+        <button class="opt">③ order is irrelevant; the difference is purely random noise</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ICL does not change weights; the prediction $p(y\mid I,S_\pi)$ is explicitly conditioned on the ordered set $S_\pi$. Because of positional encodings and recency bias, changing the permutation $\pi$ changes the conditioning itself (Lu et al. 2022). <span class="dim">Wrong ①·③: ① ICL has no re-training; ③ order is a real, structural variable.</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>예시 개수 $k$를 계속 늘릴 때의 전형적 정확도 거동은?</p>
+      <div class="opts">
+        <button class="opt">① $k$에 정비례해 무한정 선형 증가</button>
+        <button class="opt" data-correct="1">② 초기에 급상승 후 상한(cap)에 수렴하는 포화</button>
+        <button class="opt">③ $k$가 커질수록 항상 정확도가 감소</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — Brown et al.(2020)은 $0\to k$로 예시를 늘리면 성능이 대체로 오르되 이득이 <strong>포화</strong>함을 보고했다. 초기 한두 예시의 이득이 가장 크고, 이후엔 토큰 비용만 늘어난다. <span class="dim">오답 ①·③: ①무한 선형 증가가 아니며, ③일반적으로 감소가 아니라 포화한다(순서·품질이 나쁘면 정체·저하도 가능).</span> <span class="agg">학급 n=41 · ① 8 · ② 29 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>As example count $k$ keeps increasing, the typical accuracy behavior is:</p>
+      <div class="opts">
+        <button class="opt">① linear, unbounded increase proportional to $k$</button>
+        <button class="opt" data-correct="1">② steep early rise, then saturation converging to a cap</button>
+        <button class="opt">③ accuracy always decreases as $k$ grows</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — Brown et al. (2020) reported that increasing examples $0\to k$ generally improves performance but the gains <strong>saturate</strong>. The first one or two examples give the biggest lift; beyond that, token cost grows while gains taper. <span class="dim">Wrong ①·③: ① it is not unbounded-linear; ③ it saturates rather than always decreasing (though bad order/quality can stall or hurt it).</span> <span class="agg">class n=41 · ① 8 · ② 29 · ③ 4</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-1 / 연습 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Calculation · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 순서 조합 수</div>
+      <p class="prob-statement">서로 다른 퓨샷 예시가 <strong>$k=4$개</strong> 있다. 이 예시들을 배열하는 서로 다른 <strong>순서(순열)의 총 개수</strong>는 몇 가지인가? (Lu et al. 2022이 이 많은 순서 중 좋은 것을 고르는 문제를 다룸)</p>
+      <div class="given"><span class="chip">$k=4$</span><span class="chip">서로 다른 예시</span></div>
+      <div class="find"><b>구할 것:</b> 순열 수 $k!$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="24" data-tol="0.001"/><span class="ans-unit">가지</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 순열 정의</div>$$ \#\text{orders} = k! = 4! $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 계산</div>$$ 4! = 4\times 3\times 2\times 1 = 24 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ k! = 24\ \text{가지} $$</div><b>정답:</b> 예시 4개만으로도 24개의 순서가 생기고, 그중 성능은 크게 갈린다 — 순서 탐색이 필요한 이유.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · number of orderings</div>
+      <p class="prob-statement">You have <strong>$k=4$ distinct</strong> few-shot examples. How many <strong>distinct orderings (permutations)</strong> of these examples are there? (Lu et al. 2022 study how to pick a good one among these many orders.)</p>
+      <div class="given"><span class="chip">$k=4$</span><span class="chip">distinct examples</span></div>
+      <div class="find"><b>Find:</b> number of permutations $k!$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="24" data-tol="0.001"/><span class="ans-unit">orders</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · permutation definition</div>$$ \#\text{orders} = k! = 4! $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · compute</div>$$ 4! = 4\times 3\times 2\times 1 = 24 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ k! = 24\ \text{orders} $$</div><b>Answer:</b> just 4 examples already yield 24 orders whose performance can differ widely — hence the need for order search.</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 포화 모델 계산</div>
+      <p class="prob-statement">포화 모델 $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$에서 $\text{base}=0.3$, $\text{cap}=0.9$이다. <strong>$n=2$</strong>개의 예시를 넣었을 때 기대 정확도 $\text{acc}$를 소수 셋째 자리까지 구하시오. ($e^{-1}\approx 0.368$)</p>
+      <div class="given"><span class="chip">$\text{base}=0.3$</span><span class="chip">$\text{cap}=0.9$</span><span class="chip">$n=2$</span><span class="chip">$e^{-1}\approx 0.368$</span></div>
+      <div class="find"><b>구할 것:</b> $\text{acc}$ (소수 3자리)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.679" data-tol="0.01"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 지수항</div>$$ 1-e^{-n/2}=1-e^{-1}\approx 1-0.368 = 0.632 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 대입</div>$$ \text{acc}=0.3+(0.9-0.3)(0.632)=0.3+0.6\times 0.632 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{acc}=0.3+0.379 \approx 0.679 $$</div><b>정답:</b> 예시 2개만으로 base 0.3 → 약 0.679로 급상승. 초기 예시의 이득이 크다는 포화 거동을 재확인.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · saturation model</div>
+      <p class="prob-statement">In the saturation model $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$ with $\text{base}=0.3$, $\text{cap}=0.9$, compute the expected accuracy $\text{acc}$ for <strong>$n=2$</strong> examples, to three decimals. ($e^{-1}\approx 0.368$)</p>
+      <div class="given"><span class="chip">$\text{base}=0.3$</span><span class="chip">$\text{cap}=0.9$</span><span class="chip">$n=2$</span><span class="chip">$e^{-1}\approx 0.368$</span></div>
+      <div class="find"><b>Find:</b> $\text{acc}$ (3 decimals)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.679" data-tol="0.01"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · exponential term</div>$$ 1-e^{-n/2}=1-e^{-1}\approx 1-0.368 = 0.632 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · substitute</div>$$ \text{acc}=0.3+(0.9-0.3)(0.632)=0.3+0.6\times 0.632 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{acc}=0.3+0.379 \approx 0.679 $$</div><b>Answer:</b> just 2 examples lift base 0.3 → about 0.679 — confirming the strong early gain of the saturating curve.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-1 / 정리 ══════════ -->
+  <section class="screen" data-ch="2-1" data-chtitle="제로/퓨샷과 프롬프트 민감도" data-stage="정리">
+    <div class="eyebrow lang-ko">2-1 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">2-1 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>ICL = <strong>가중치 갱신 없이</strong> 프롬프트 예시로 과제 지정(Brown et al. 2020).</li>
+        <li>제로/원/퓨샷: $k=0$ / $k=1$ / $k\ge 2$. $k$↑ → 정확도↑ 이나 <strong>포화</strong>.</li>
+        <li>예측 $p(y\mid I,S_\pi)$는 <strong>예시 순서 $\pi$에 의존</strong> — 순서 민감도(Lu et al. 2022).</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>퓨샷을 "미세조정"으로 착각 → <strong>가중치는 안 바뀐다</strong>.</li>
+        <li>예시 개수만 신경 쓰고 <strong>순서·포맷</strong>을 무시.</li>
+        <li>$k$를 무한정 늘리면 계속 오른다고 오해 → <strong>포화 + 토큰 비용</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>제로/원/퓨샷 정의와 $k$ 값 구분.</li>
+        <li>순서 민감도의 원인($p(y\mid I,S_\pi)$·위치 인코딩·최근성)과 $k!$ 조합 수.</li>
+        <li>포화 모델 $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$ 계산.</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>ICL = specifying a task from prompt examples <strong>without weight update</strong> (Brown et al. 2020).</li>
+        <li>Zero/one/few-shot: $k=0$ / $k=1$ / $k\ge 2$; $k$↑ → accuracy↑ but <strong>saturates</strong>.</li>
+        <li>The prediction $p(y\mid I,S_\pi)$ <strong>depends on order $\pi$</strong> — order sensitivity (Lu et al. 2022).</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Mistaking few-shot for "fine-tuning" → <strong>weights do not change</strong>.</li>
+        <li>Caring only about example count while ignoring <strong>order and format</strong>.</li>
+        <li>Assuming more $k$ always helps → <strong>saturation + token cost</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Definitions of zero/one/few-shot and their $k$ values.</li>
+        <li>Cause of order sensitivity ($p(y\mid I,S_\pi)$, positional encoding, recency) and the $k!$ count.</li>
+        <li>Computing the saturation model $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$.</li>
+      </ul></div>
+    </div>
+  </section>
+
+<!-- ══════════ 2-2 / 개념 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="개념">
+    <div class="eyebrow lang-ko">2-2 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">2-2 · Concept</div>
+    <h1 class="stage-h lang-ko">사고 사슬 — 답을 말하기 전에 "생각"을 뱉게 하기</h1>
+    <h1 class="stage-h lang-en">Chain-of-Thought — Making the Model "Think Aloud" Before Answering</h1>
+    <div class="analogy lang-ko"><span class="ic">🧮</span><div class="tx"><b>직관</b> — 암산으로 곧장 답을 부르라고 하면 헷갈리는 문제도, "풀이를 종이에 적어가며 하라"고 하면 정확해집니다. LLM도 똑같습니다. 최종 토큰 하나에 모든 계산을 압축시키는 대신, <b>중간 추론 단계를 토큰으로 먼저 생성</b>하게 하면 다단계 문제의 정확도가 오릅니다. 이 "생각의 흔적"이 <b>사고 사슬(Chain-of-Thought)</b>입니다. <span class="src">(출처: Wei et al. 2022, "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models", NeurIPS)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">🧮</span><div class="tx"><b>Intuition</b> — Asked to shout a mental-math answer, we stumble on hard problems; told to "write out the steps on paper," we get them right. LLMs are the same. Instead of compressing all computation into one final token, letting the model <b>emit intermediate reasoning steps as tokens first</b> raises accuracy on multi-step tasks. That trail of thought is the <b>Chain-of-Thought (CoT)</b>. <span class="src">(Source: Wei et al. 2022, "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models", NeurIPS)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede"><strong>사고 사슬 프롬프팅</strong>은 모델이 최종 답 $y$ 전에 <strong>중간 추론 $r$</strong>을 먼저 생성하도록 유도하는 기법입니다. 표준 프롬프팅이 $x\!\to\! y$를 직접 요구한다면, CoT는 <strong>$x\!\to\! r\!\to\! y$</strong>로 경로를 늘립니다. Wei et al.(2022)은 소수의 예시에 <strong>풀이 과정까지 함께 넣는(few-shot CoT)</strong> 방식으로 산술·상식·기호 추론에서 큰 향상을 보였고, Kojima et al.(2022)은 예시 없이 <strong>"Let's think step by step"</strong> 한 문장만으로도(zero-shot CoT) 유도됨을 보였습니다.</p>
+        <div class="keqbox">
+          <div class="keq-label">두 방식의 골격</div>
+          <div class="keqrow"><span class="keqcap">표준</span><span class="keqline">$ \text{prompt}:\ x \Rightarrow \text{model}:\ y $</span></div>
+          <div class="keqrow"><span class="keqcap">few-shot CoT</span><span class="keqline">$ (x_i, r_i, y_i)_{i=1}^{k},\ x \Rightarrow r, y $</span></div>
+          <div class="keqrow"><span class="keqcap">zero-shot CoT</span><span class="keqline">$ x + \text{"단계적으로 생각"} \Rightarrow r, y $</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>추론 흔적 $r$</b> 최종 답 전에 생성되는 중간 단계 토큰 열</div>
+          <div class="term"><b>few-shot CoT</b> 예시에 풀이 과정을 포함해 유도 (Wei 2022)</div>
+          <div class="term"><b>zero-shot CoT</b> "Let's think step by step" 트리거 (Kojima 2022)</div>
+          <div class="term"><b>창발성 emergent</b> 일정 규모 이상 모델에서만 이득이 나타남</div>
+          <div class="term"><b>자기 일관성</b> 여러 추론 샘플을 다수결 (Wang 2022)</div>
+          <div class="term"><b>다단계 문제</b> 산술(GSM8K)·상식·기호 추론 등</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>CoT의 이득은 <strong>모델 규모에 의존(창발적)</strong>합니다. Wei et al.(2022)은 작은 모델에서는 CoT가 <strong>오히려 성능을 떨어뜨릴 수 있고</strong>, 대략 <strong>$\sim\!100\text{B}$ 파라미터급</strong>에서야 큰 이득이 나타난다고 보고했습니다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede"><strong>Chain-of-thought prompting</strong> induces the model to generate <strong>intermediate reasoning $r$</strong> before the final answer $y$. Where standard prompting demands $x\!\to\! y$ directly, CoT lengthens the path to <strong>$x\!\to\! r\!\to\! y$</strong>. Wei et al. (2022) showed large gains on arithmetic, commonsense, and symbolic reasoning by putting <strong>worked solutions into the few exemplars (few-shot CoT)</strong>; Kojima et al. (2022) showed it can be triggered with no exemplars at all by the single line <strong>"Let's think step by step"</strong> (zero-shot CoT).</p>
+        <div class="keqbox">
+          <div class="keq-label">Skeleton of the two methods</div>
+          <div class="keqrow"><span class="keqcap">Standard</span><span class="keqline">$ \text{prompt}:\ x \Rightarrow \text{model}:\ y $</span></div>
+          <div class="keqrow"><span class="keqcap">few-shot CoT</span><span class="keqline">$ (x_i, r_i, y_i)_{i=1}^{k},\ x \Rightarrow r, y $</span></div>
+          <div class="keqrow"><span class="keqcap">zero-shot CoT</span><span class="keqline">$ x + \text{"think step by step"} \Rightarrow r, y $</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>Reasoning trace $r$</b> intermediate step tokens before the final answer</div>
+          <div class="term"><b>few-shot CoT</b> exemplars include worked reasoning (Wei 2022)</div>
+          <div class="term"><b>zero-shot CoT</b> "Let's think step by step" trigger (Kojima 2022)</div>
+          <div class="term"><b>emergent</b> the benefit appears only above a scale threshold</div>
+          <div class="term"><b>self-consistency</b> majority vote over many reasoning samples (Wang 2022)</div>
+          <div class="term"><b>multi-step task</b> arithmetic (GSM8K), commonsense, symbolic, etc.</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>CoT's benefit is <strong>scale-dependent (emergent)</strong>. Wei et al. (2022) reported that in small models CoT can <strong>even hurt performance</strong>, and that large gains appear only around <strong>$\sim\!100\text{B}$-parameter</strong> models.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-2 / 유도 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="유도">
+    <div class="eyebrow lang-ko">2-2 · 원리 · Derivation</div>
+    <div class="eyebrow lang-en">2-2 · Derivation</div>
+    <h1 class="stage-h lang-ko">왜 다수결이 이기는가 — 자기 일관성의 확률 논리</h1>
+    <h1 class="stage-h lang-en">Why Voting Wins — the Probability Logic of Self-Consistency</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> 한 번의 CoT는 하나의 추론 경로만 따라가 <b>우연한 실수 한 번</b>에 답 전체가 어긋납니다. 자기 일관성(Wang et al. 2022)은 <b>온도 $T\!>\!0$로 여러 경로를 샘플링</b>한 뒤 <b>가장 많이 나온 최종 답</b>을 채택합니다. 서로 다른 풀이가 같은 답으로 <b>수렴</b>하면 그 답이 옳을 가능성이 높다는 직관입니다.</p>
+    <p class="lede lang-en"><b>Unifying view:</b> a single CoT follows one reasoning path, so <b>one chance slip</b> derails the whole answer. Self-consistency (Wang et al. 2022) <b>samples many paths at temperature $T\!>\!0$</b> and takes the <b>most frequent final answer</b>. The intuition: if diverse derivations <b>converge</b> on the same answer, that answer is more likely correct.</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>1단계 · 여러 경로 샘플링</h4><div class="sub">$T>0$ 필요</div><div class="ana">🎲 온도를 올려 다양한 풀이를 뽑는다</div><div class="eq">$ (r^{(j)}, y^{(j)}) \sim p_\theta(\cdot\mid x),\ j=1..N $</div><p>탐욕적 디코딩($T\!=\!0$)은 매번 같은 경로만 내므로 <strong>다양성이 필수</strong>. 온도/샘플링으로 $N$개 독립 경로를 얻습니다.</p></div>
+      <div class="dcard"><h4>2단계 · 답만 추출·집계</h4><div class="sub">경로는 버리고 답만</div><div class="ana">🗳️ 서로 다른 풀이가 같은 결론에 표를 던진다</div><div class="eq">$ \hat{y} = \arg\max_{y}\ \textstyle\sum_{j=1}^{N}\mathbb{1}[\,y^{(j)}=y\,] $</div><p>추론 흔적은 무시하고 <strong>최종 답의 최빈값(다수결)</strong>을 취합니다(marginalize over reasoning paths).</p></div>
+      <div class="dcard"><h4>3단계 · 왜 이득인가</h4><div class="sub">이항 다수결</div><div class="ana">📈 개별 정확도 $p>0.5$면 표가 모일수록 유리</div><div class="eq">$ P_{\text{correct}}=\!\!\sum_{k>N/2}\!\binom{N}{k}p^k(1-p)^{N-k} $</div><p>각 경로가 독립이고 개별 정답률 $p>0.5$면, 다수결 정답률은 $N$이 커질수록 <strong>1로 수렴</strong>(약한 콩도르세 배심원 정리).</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>Step 1 · sample many paths</h4><div class="sub">needs $T>0$</div><div class="ana">🎲 raise temperature to draw diverse solutions</div><div class="eq">$ (r^{(j)}, y^{(j)}) \sim p_\theta(\cdot\mid x),\ j=1..N $</div><p>Greedy decoding ($T\!=\!0$) returns the same path each time, so <strong>diversity is essential</strong>. Temperature/sampling yields $N$ independent paths.</p></div>
+      <div class="dcard"><h4>Step 2 · extract & tally answers</h4><div class="sub">discard paths, keep answers</div><div class="ana">🗳️ different derivations vote for the same conclusion</div><div class="eq">$ \hat{y} = \arg\max_{y}\ \textstyle\sum_{j=1}^{N}\mathbb{1}[\,y^{(j)}=y\,] $</div><p>Ignore the reasoning traces and take the <strong>mode (majority vote) of the final answers</strong> (marginalize over reasoning paths).</p></div>
+      <div class="dcard"><h4>Step 3 · why it helps</h4><div class="sub">binomial majority</div><div class="ana">📈 if per-path accuracy $p>0.5$, more votes helps</div><div class="eq">$ P_{\text{correct}}=\!\!\sum_{k>N/2}\!\binom{N}{k}p^k(1-p)^{N-k} $</div><p>If paths are independent with per-path accuracy $p>0.5$, the majority-vote accuracy <strong>converges to 1</strong> as $N$ grows (weak Condorcet jury theorem).</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · 가정과 한계</div>수렴 보장은 <strong>경로가 독립이고 $p>0.5$</strong>일 때만 성립합니다. 실제 LLM 경로는 <strong>상관</strong>되어 있어(같은 편향을 공유) 이득이 이론치보다 작고, $p<0.5$면 다수결은 <strong>틀린 답으로 수렴</strong>합니다. 또한 $N$을 키우면 <strong>추론 비용이 $N$배</strong>로 늡니다.</div>
+    <div class="callout warn lang-en"><div class="ct">Caution · assumptions & limits</div>Convergence holds only if paths are <strong>independent and $p>0.5$</strong>. Real LLM paths are <strong>correlated</strong> (they share biases), so gains fall short of the ideal, and if $p<0.5$ the majority vote <strong>converges to the wrong answer</strong>. Also, increasing $N$ multiplies <strong>inference cost by $N\times$</strong>.</div>
+  </section>
+
+  <!-- ══════════ 2-2 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">2-2 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">2-2 · Reading</div>
+    <h1 class="stage-h lang-ko">세 편의 논문 — CoT, zero-shot, 자기 일관성</h1>
+    <h1 class="stage-h lang-en">Three Papers — CoT, Zero-shot, Self-Consistency</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p><strong>Wei et al.(2022)</strong>는 few-shot 예시에 풀이 과정을 함께 넣는 것만으로 GSM8K 같은 산술 벤치마크에서 큰 향상을 얻었고, 이 이득이 <strong>모델 규모가 커질 때 창발적으로</strong> 나타남을 보였습니다. <strong>Kojima et al.(2022)</strong>는 여기서 한 걸음 더 나가 예시 없이 <strong>"Let's think step by step"</strong> 한 문장만 덧붙여도 zero-shot 추론이 유도됨을 발견했습니다("Large Language Models are Zero-Shot Reasoners", NeurIPS).</p>
+        <p class="pullquote">한 번 잘 생각한 것보다, 여러 번 생각해 <em>합의</em>한 것이 더 옳다.</p>
+        <p><strong>Wang et al.(2022)</strong>의 자기 일관성(self-consistency)은 탐욕적 CoT 하나를 뽑는 대신 <strong>여러 경로를 샘플링해 다수결</strong>하는 디코딩 전략입니다. 저자들은 산술·상식 추론 여러 벤치마크에서 단일 CoT 대비 일관된 향상을 보고했으며, 핵심 조건은 <strong>온도 $T\!>\!0$로 다양성을 확보</strong>하는 것입니다("Self-Consistency Improves Chain of Thought Reasoning in Language Models", ICLR 2023).</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>CoT 이득은 <strong>규모 의존(창발)</strong> — 작은 모델엔 효과가 작거나 역효과.</li><li>zero-shot CoT의 트리거는 <strong>"Let's think step by step"</strong>.</li><li>자기 일관성은 <strong>다수결 디코딩</strong>이며 $T>0$가 필수.</li></ul></div>
+        <p class="readmeta">참고: Wei et al. (2022) NeurIPS / Kojima et al. (2022) NeurIPS / Wang et al. (2022, ICLR 2023). 벤치마크 상승폭 수치는 원문 참조 — 여기서는 UNVERIFIED로 표기하지 않고 인용만 함.</p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p><strong>Wei et al. (2022)</strong> obtained large gains on arithmetic benchmarks like GSM8K simply by inserting worked reasoning into the few-shot exemplars, and showed the benefit appears <strong>emergently as model scale grows</strong>. <strong>Kojima et al. (2022)</strong> went further, discovering that appending the single line <strong>"Let's think step by step"</strong> — with no exemplars — elicits zero-shot reasoning ("Large Language Models are Zero-Shot Reasoners", NeurIPS).</p>
+        <p class="pullquote">A <em>consensus</em> reached by thinking many times beats one careful thought.</p>
+        <p><strong>Wang et al. (2022)</strong> self-consistency is a decoding strategy that, instead of taking one greedy CoT, <strong>samples multiple paths and takes a majority vote</strong>. The authors reported consistent gains over single CoT across arithmetic and commonsense benchmarks; the key requirement is <strong>securing diversity via temperature $T\!>\!0$</strong> ("Self-Consistency Improves Chain of Thought Reasoning in Language Models", ICLR 2023).</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>CoT's benefit is <strong>scale-dependent (emergent)</strong> — small models gain little or worse.</li><li>The zero-shot CoT trigger is <strong>"Let's think step by step"</strong>.</li><li>Self-consistency is <strong>majority-vote decoding</strong> and requires $T>0$.</li></ul></div>
+        <p class="readmeta">Refs: Wei et al. (2022) NeurIPS / Kojima et al. (2022) NeurIPS / Wang et al. (2022, ICLR 2023). Exact benchmark deltas are in the originals and are only cited here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-2 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="그림·표">
+    <div class="eyebrow lang-ko">2-2 · 그림 · 표</div>
+    <div class="eyebrow lang-en">2-2 · Figure · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — 여러 추론 경로가 다수결로 모인다</h1>
+    <h1 class="stage-h lang-en">At a Glance — Many Reasoning Paths Vote to One Answer</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">자기 일관성 도해 (샘플 $N$ → 다수결 $\hat{y}$)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar22ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="18" y="128" width="70" height="44" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="53" y="147" font-size="11.5" fill="#52525b" text-anchor="middle">질문 $x$</text>
+<text x="53" y="163" font-size="10" fill="#71717a" text-anchor="middle">$T>0$ 샘플</text>
+<line x1="88" y1="150" x2="118" y2="60" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22ko)"/>
+<line x1="88" y1="150" x2="118" y2="110" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22ko)"/>
+<line x1="88" y1="150" x2="118" y2="192" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22ko)"/>
+<line x1="88" y1="150" x2="118" y2="244" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22ko)"/>
+<rect x="122" y="42" width="150" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+<text x="197" y="63" font-size="10.5" fill="#1e40af" text-anchor="middle">경로 1 · 풀이 → 답 42</text>
+<rect x="122" y="94" width="150" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+<text x="197" y="115" font-size="10.5" fill="#1e40af" text-anchor="middle">경로 2 · 풀이 → 답 42</text>
+<rect x="122" y="176" width="150" height="34" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+<text x="197" y="197" font-size="10.5" fill="#991b1b" text-anchor="middle">경로 3 · 풀이 → 답 27</text>
+<rect x="122" y="228" width="150" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+<text x="197" y="249" font-size="10.5" fill="#1e40af" text-anchor="middle">경로 4 · 풀이 → 답 42</text>
+<line x1="272" y1="59" x2="330" y2="135" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22ko)"/>
+<line x1="272" y1="111" x2="330" y2="142" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22ko)"/>
+<line x1="272" y1="193" x2="330" y2="156" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22ko)"/>
+<line x1="272" y1="245" x2="330" y2="164" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22ko)"/>
+<rect x="334" y="122" width="126" height="56" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+<text x="397" y="145" font-size="11" fill="#065f46" text-anchor="middle" font-weight="700">다수결 $\hat{y}$</text>
+<text x="397" y="164" font-size="14" fill="#065f46" text-anchor="middle" font-weight="700">= 42 (3표)</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">기법 비교</div>
+        <table class="ktab"><thead><tr><th>기법</th><th>경로 수</th><th style="text-align:right">핵심 조건</th></tr></thead><tbody>
+          <tr><td>표준 프롬프트</td><td class="k">0 (직답)</td><td>중간 추론 없음</td></tr>
+          <tr><td>few-shot CoT</td><td class="k">1</td><td>예시에 풀이 포함</td></tr>
+          <tr><td>zero-shot CoT</td><td class="k">1</td><td>"단계적으로 생각" 트리거</td></tr>
+          <tr><td>자기 일관성</td><td class="k">$N\ (>1)$</td><td>$T>0$ 다양성 + 다수결</td></tr>
+        </tbody></table>
+        <div class="keqnote">개별 정답률 $p>0.5$, 경로 독립 가정 시 다수결 정답률은 $N$ 증가에 따라 $1$로 수렴. 실제 경로는 상관되어 이득은 이론치보다 작음. 비용은 $N$배. (출처: Wang et al. 2022; 콩도르세 배심원 정리)</div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">Self-consistency diagram ($N$ samples → vote $\hat{y}$)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar22en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="18" y="128" width="70" height="44" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
+<text x="53" y="147" font-size="11.5" fill="#52525b" text-anchor="middle">query $x$</text>
+<text x="53" y="163" font-size="10" fill="#71717a" text-anchor="middle">$T>0$ sample</text>
+<line x1="88" y1="150" x2="118" y2="60" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22en)"/>
+<line x1="88" y1="150" x2="118" y2="110" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22en)"/>
+<line x1="88" y1="150" x2="118" y2="192" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22en)"/>
+<line x1="88" y1="150" x2="118" y2="244" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22en)"/>
+<rect x="122" y="42" width="150" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+<text x="197" y="63" font-size="10.5" fill="#1e40af" text-anchor="middle">path 1 · reason → 42</text>
+<rect x="122" y="94" width="150" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+<text x="197" y="115" font-size="10.5" fill="#1e40af" text-anchor="middle">path 2 · reason → 42</text>
+<rect x="122" y="176" width="150" height="34" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+<text x="197" y="197" font-size="10.5" fill="#991b1b" text-anchor="middle">path 3 · reason → 27</text>
+<rect x="122" y="228" width="150" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+<text x="197" y="249" font-size="10.5" fill="#1e40af" text-anchor="middle">path 4 · reason → 42</text>
+<line x1="272" y1="59" x2="330" y2="135" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22en)"/>
+<line x1="272" y1="111" x2="330" y2="142" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22en)"/>
+<line x1="272" y1="193" x2="330" y2="156" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22en)"/>
+<line x1="272" y1="245" x2="330" y2="164" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22en)"/>
+<rect x="334" y="122" width="126" height="56" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+<text x="397" y="145" font-size="11" fill="#065f46" text-anchor="middle" font-weight="700">vote $\hat{y}$</text>
+<text x="397" y="164" font-size="14" fill="#065f46" text-anchor="middle" font-weight="700">= 42 (3 votes)</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Technique comparison</div>
+        <table class="ktab"><thead><tr><th>Technique</th><th># paths</th><th style="text-align:right">Key condition</th></tr></thead><tbody>
+          <tr><td>Standard prompt</td><td class="k">0 (direct)</td><td>no intermediate reasoning</td></tr>
+          <tr><td>few-shot CoT</td><td class="k">1</td><td>exemplars include reasoning</td></tr>
+          <tr><td>zero-shot CoT</td><td class="k">1</td><td>"think step by step" trigger</td></tr>
+          <tr><td>self-consistency</td><td class="k">$N\ (>1)$</td><td>$T>0$ diversity + majority vote</td></tr>
+        </tbody></table>
+        <div class="keqnote">With per-path accuracy $p>0.5$ and independent paths, majority-vote accuracy converges to $1$ as $N$ grows. Real paths are correlated, so gains fall short; cost is $N\times$. (Source: Wang et al. 2022; Condorcet jury theorem)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-2 / 실습 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="실습">
+    <div class="eyebrow lang-ko">2-2 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">2-2 · Interactive</div>
+    <h1 class="stage-h lang-ko">다수결의 힘 — 샘플 수 $N$과 개별 정답률 $p$</h1>
+    <h1 class="stage-h lang-en">The Power of Voting — Sample Count $N$ and Per-path Accuracy $p$</h1>
+    <p class="lede lang-ko">이항 다수결 확률을 직접 계산해 봅니다. 각 추론 경로가 독립이고 개별 정답률이 $p$일 때, $N$개 경로 중 <strong>과반이 정답</strong>일 확률(즉 다수결이 맞을 확률)을 슬라이더로 확인하세요. $p>0.5$면 $N$이 커질수록 1에 가까워지지만, $p<0.5$면 오히려 <strong>0으로 떨어집니다</strong>.</p>
+    <p class="lede lang-en">Compute the binomial majority probability yourself. Assuming independent paths each with per-path accuracy $p$, use the sliders to see the probability that <strong>a majority of $N$ paths are correct</strong> (i.e. the vote is right). For $p>0.5$ it approaches 1 as $N$ grows; for $p<0.5$ it <strong>drops toward 0</strong> instead.</p>
+    <div class="calc lang-ko"
+      data-title="다수결 정답 확률 $P=\sum_{k>N/2}\binom{N}{k}p^k(1-p)^{N-k}$"
+      data-desc="N = 추론 경로(샘플) 수, p = 개별 경로 정답률. 기본값 N=5, p=0.6 → P≈0.68 (단일 경로 0.60보다 향상). p<0.5면 N이 커질수록 오히려 감소."
+      data-vars='[{"sym":"N","label":"$N$ · 샘플 경로 수","min":1,"max":21,"val":5,"step":2,"unit":"개"},{"sym":"p","label":"$p$ · 개별 정답률","min":0.1,"max":0.9,"val":0.6,"step":0.05,"unit":""}]'
+      data-expr="(function(){function C(n,k){let r=1;for(let i=1;i<=k;i++)r=r*(n-k+i)/i;return r;}let s=0;for(let k=Math.floor(N/2)+1;k<=N;k++)s+=C(N,k)*Math.pow(p,k)*Math.pow(1-p,N-k);return s;})()"
+      data-out="$P_{\text{correct}}$" data-out-unit=""
+      data-barmax="1"
+      data-note="p=0.6에서 N을 1→5→21로 늘리면 P가 0.60→0.68→0.83으로 올라갑니다 — 다수결의 이득. 단, p=0.4로 낮추면 N이 커질수록 P는 오히려 0에 가까워집니다."></div>
+    <div class="calc lang-en"
+      data-title="Majority-correct probability $P=\sum_{k>N/2}\binom{N}{k}p^k(1-p)^{N-k}$"
+      data-desc="N = number of reasoning paths (samples), p = per-path accuracy. Default N=5, p=0.6 → P≈0.68 (better than single-path 0.60). If p<0.5 it decreases as N grows."
+      data-vars='[{"sym":"N","label":"$N$ · sample paths","min":1,"max":21,"val":5,"step":2,"unit":""},{"sym":"p","label":"$p$ · per-path accuracy","min":0.1,"max":0.9,"val":0.6,"step":0.05,"unit":""}]'
+      data-expr="(function(){function C(n,k){let r=1;for(let i=1;i<=k;i++)r=r*(n-k+i)/i;return r;}let s=0;for(let k=Math.floor(N/2)+1;k<=N;k++)s+=C(N,k)*Math.pow(p,k)*Math.pow(1-p,N-k);return s;})()"
+      data-out="$P_{\text{correct}}$" data-out-unit=""
+      data-barmax="1"
+      data-note="At p=0.6, raising N from 1→5→21 lifts P from 0.60→0.68→0.83 — the voting benefit. But at p=0.4, larger N pushes P toward 0."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 자기 일관성은 <strong>개별 경로가 이미 절반 이상 맞을 때만</strong>($p>0.5$) 이득입니다. 이 계산은 <strong>경로 독립</strong>이라는 이상적 가정을 씁니다 — 실제 LLM은 경로가 상관되어(같은 편향 공유) 실제 이득이 이 곡선보다 <strong>작습니다</strong>. 또 $N$을 키우면 정답률은 오르지만 <strong>추론 비용도 $N$배</strong>로 늘어 실무에선 $N\!\approx\!5\!\sim\!40$의 절충을 씁니다(대표값, 과제 의존). <span class="src">(출처: Wang et al. 2022; 다수결 확률 = 이항분포 상측 누적)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — self-consistency helps <strong>only when each path is already better than a coin flip</strong> ($p>0.5$). This computation assumes the ideal case of <strong>independent paths</strong> — real LLM paths are correlated (shared biases), so actual gains are <strong>smaller</strong> than this curve. Raising $N$ improves accuracy but also multiplies <strong>inference cost by $N\times$</strong>, so practitioners pick $N\!\approx\!5\!\sim\!40$ (representative, task-dependent). <span class="src">(Source: Wang et al. 2022; majority probability = upper-tail of the binomial)</span></div>
+  </section>
+
+  <!-- ══════════ 2-2 / 점검 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>자기 일관성(Wang et al. 2022)이 다수결로 이득을 보려면 <strong>디코딩</strong>은 어떠해야 합니까?</p>
+      <div class="opts">
+        <button class="opt">① 탐욕적 디코딩($T=0$)으로 매번 같은 경로를 뽑는다</button>
+        <button class="opt" data-correct="1">② 온도 $T>0$로 서로 다른 여러 경로를 샘플링한다</button>
+        <button class="opt">③ 경로를 1개만 뽑고 길이를 최대로 늘린다</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 다수결이 의미를 가지려면 서로 다른 추론 경로가 필요하므로 <strong>온도 $T>0$로 다양성</strong>을 확보해야 한다. <span class="dim">오답 ①·③: ①$T=0$은 항상 같은 경로만 내 다수결이 무의미하고, ③경로가 1개면 투표 자체가 성립하지 않는다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>For self-consistency (Wang et al. 2022) to benefit from voting, how must <strong>decoding</strong> be done?</p>
+      <div class="opts">
+        <button class="opt">① greedy decoding ($T=0$), drawing the same path each time</button>
+        <button class="opt" data-correct="1">② sample several distinct paths at temperature $T>0$</button>
+        <button class="opt">③ draw only one path and maximize its length</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — voting is meaningful only with distinct reasoning paths, so <strong>diversity via $T>0$</strong> is required. <span class="dim">Wrong ①·③: ① $T=0$ always yields the same path, making the vote pointless; ③ with only one path there is no vote at all.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>Wei et al.(2022)에 따르면 사고 사슬(CoT)의 이득은 <strong>모델 규모</strong>와 어떤 관계입니까?</p>
+      <div class="opts">
+        <button class="opt">① 모델 크기와 무관하게 항상 동일하게 향상된다</button>
+        <button class="opt">② 작은 모델에서 가장 크고 큰 모델에서 사라진다</button>
+        <button class="opt" data-correct="1">③ 창발적 — 작은 모델엔 효과가 작거나 역효과, 대형 모델에서 큰 이득</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ③</b> — CoT 이득은 <strong>창발적(emergent)</strong>이어서 대략 $\sim\!100\text{B}$급 이상에서 크게 나타나고, 작은 모델에서는 미미하거나 오히려 성능을 떨어뜨릴 수 있다. <span class="dim">오답 ①·②: ①규모 무관이 아니라 규모에 의존하며, ②관계가 정반대다(작은 모델에서 이득이 크지 않다).</span> <span class="agg">학급 n=41 · ① 5 · ② 7 · ③ 29</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>Per Wei et al. (2022), how does chain-of-thought (CoT) benefit relate to <strong>model scale</strong>?</p>
+      <div class="opts">
+        <button class="opt">① identical improvement regardless of model size</button>
+        <button class="opt">② largest in small models, vanishing in large ones</button>
+        <button class="opt" data-correct="1">③ emergent — small models gain little or worse, large models gain much</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ③</b> — CoT's benefit is <strong>emergent</strong>, appearing strongly around $\sim\!100\text{B}$-scale and above, while in small models it is negligible or can even hurt. <span class="dim">Wrong ①·②: ① it is scale-dependent, not scale-independent; ② the relationship is the opposite (small models do not gain the most).</span> <span class="agg">class n=41 · ① 5 · ② 7 · ③ 29</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-2 / 연습 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">확률 계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Probability calc · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 다수결 집계</div>
+      <p class="prob-statement">자기 일관성으로 한 질문에 대해 $N=5$개 추론 경로를 샘플링했더니 최종 답이 각각 <strong>42, 42, 27, 42, 15</strong>로 나왔다. 다수결 결과 $\hat{y}$가 받은 <strong>표 수</strong>는 몇 표인가?</p>
+      <div class="given"><span class="chip">$N=5$</span><span class="chip">답: 42, 42, 27, 42, 15</span></div>
+      <div class="find"><b>구할 것:</b> $\hat{y}$의 득표 수</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="3" data-tol="0.01"/><span class="ans-unit">표</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 답별 집계</div>$$ 42\!:3,\quad 27\!:1,\quad 15\!:1 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 최빈값(다수결)</div>$$ \hat{y}=\arg\max_y \#\{j: y^{(j)}=y\}=42 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \hat{y}=42\ (\text{3표}) $$</div><b>정답:</b> 서로 다른 풀이가 42로 <strong>수렴</strong> → 다수결 답 42, 득표 3표.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · vote tally</div>
+      <p class="prob-statement">Using self-consistency, $N=5$ reasoning paths were sampled for one question, giving final answers <strong>42, 42, 27, 42, 15</strong>. How many <strong>votes</strong> does the majority result $\hat{y}$ receive?</p>
+      <div class="given"><span class="chip">$N=5$</span><span class="chip">answers: 42, 42, 27, 42, 15</span></div>
+      <div class="find"><b>Find:</b> vote count of $\hat{y}$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="3" data-tol="0.01"/><span class="ans-unit">votes</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · tally per answer</div>$$ 42\!:3,\quad 27\!:1,\quad 15\!:1 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · mode (majority)</div>$$ \hat{y}=\arg\max_y \#\{j: y^{(j)}=y\}=42 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \hat{y}=42\ (\text{3 votes}) $$</div><b>Answer:</b> different derivations <strong>converge</strong> on 42 → majority answer 42, with 3 votes.</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 이항 다수결 확률</div>
+      <p class="prob-statement">각 추론 경로가 독립이고 개별 정답률 $p=0.6$이다. $N=3$개 경로를 다수결할 때, <strong>다수결이 정답</strong>일 확률 $P$를 구하시오(과반 = 2개 이상 정답). 소수 둘째 자리까지.</p>
+      <div class="given"><span class="chip">$p=0.6$</span><span class="chip">$N=3$</span><span class="chip">과반 $\Rightarrow k\ge 2$</span></div>
+      <div class="find"><b>구할 것:</b> $P=P(k\ge 2)$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.648" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 이항 상측 누적</div>$$ P=\binom{3}{2}p^2(1-p)+\binom{3}{3}p^3 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 대입 ($p=0.6$)</div>$$ =3(0.36)(0.4)+0.216=0.432+0.216 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P=0.648 $$</div><b>정답:</b> 단일 경로 $0.60 \to$ 3-경로 다수결 $0.65$ — 다수결이 개별보다 향상($p>0.5$).</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · binomial majority probability</div>
+      <p class="prob-statement">Each reasoning path is independent with per-path accuracy $p=0.6$. For a majority vote over $N=3$ paths, find the probability $P$ that the <strong>vote is correct</strong> (majority = at least 2 correct). To two decimals.</p>
+      <div class="given"><span class="chip">$p=0.6$</span><span class="chip">$N=3$</span><span class="chip">majority $\Rightarrow k\ge 2$</span></div>
+      <div class="find"><b>Find:</b> $P=P(k\ge 2)$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.648" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · upper-tail binomial</div>$$ P=\binom{3}{2}p^2(1-p)+\binom{3}{3}p^3 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · substitute ($p=0.6$)</div>$$ =3(0.36)(0.4)+0.216=0.432+0.216 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P=0.648 $$</div><b>Answer:</b> single path $0.60 \to$ 3-path vote $0.65$ — voting beats the individual ($p>0.5$).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-2 / 정리 ══════════ -->
+  <section class="screen" data-ch="2-2" data-chtitle="사고 사슬과 자기 일관성" data-stage="정리">
+    <div class="eyebrow lang-ko">2-2 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">2-2 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>CoT: 답 전에 <strong>중간 추론 $r$</strong>을 생성 → 다단계 정확도↑ (Wei et al. 2022).</li>
+        <li>zero-shot CoT: <strong>"Let's think step by step"</strong> 한 문장 (Kojima et al. 2022).</li>
+        <li>자기 일관성: $T>0$ 여러 경로 샘플 → <strong>다수결 $\hat{y}$</strong> (Wang et al. 2022).</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>자기 일관성을 $T=0$로 → 경로가 모두 같아 <strong>다수결 무의미</strong>.</li>
+        <li>CoT가 <strong>작은 모델에도</strong> 항상 이득이라 착각(창발성 간과).</li>
+        <li>$p<0.5$에서 다수결이 정답을 높인다고 오해 → <strong>오답으로 수렴</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>세 논문의 기여 구분: Wei(few-shot CoT)·Kojima(zero-shot)·Wang(자기 일관성).</li>
+        <li>이항 다수결 확률 $P=\sum_{k>N/2}\binom{N}{k}p^k(1-p)^{N-k}$ 계산.</li>
+        <li>$p>0.5$·경로 독립 가정, 실제는 상관 → 이득 축소 + 비용 $N$배.</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>CoT: generate <strong>intermediate reasoning $r$</strong> before the answer → higher multi-step accuracy (Wei et al. 2022).</li>
+        <li>zero-shot CoT: the single line <strong>"Let's think step by step"</strong> (Kojima et al. 2022).</li>
+        <li>Self-consistency: sample paths at $T>0$ → <strong>majority vote $\hat{y}$</strong> (Wang et al. 2022).</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Running self-consistency at $T=0$ → identical paths make the <strong>vote meaningless</strong>.</li>
+        <li>Assuming CoT always helps <strong>even small models</strong> (ignoring emergence).</li>
+        <li>Thinking voting helps when $p<0.5$ → it <strong>converges to the wrong answer</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Distinguish the three papers: Wei (few-shot CoT), Kojima (zero-shot), Wang (self-consistency).</li>
+        <li>Compute binomial majority probability $P=\sum_{k>N/2}\binom{N}{k}p^k(1-p)^{N-k}$.</li>
+        <li>$p>0.5$ & path-independence assumptions; reality is correlated → smaller gains + $N\times$ cost.</li>
+      </ul></div>
+    </div>
+  </section>
+
+<!-- ══════════ 2-3 / 개념 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="개념">
+    <div class="eyebrow lang-ko">2-3 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">2-3 · Concept</div>
+    <h1 class="stage-h lang-ko">ReAct — 생각하고, 행동하고, 관찰하기</h1>
+    <h1 class="stage-h lang-en">ReAct — Think, Act, Observe</h1>
+    <div class="analogy lang-ko"><span class="ic">🔍</span><div class="tx"><b>직관</b> — 낯선 문제를 푸는 연구자는 머릿속으로만 답을 상상하지 않는다. <b>생각(Thought)</b>으로 다음 단계를 정하고, <b>행동(Action)</b>으로 검색·계산 도구를 두드리고, <b>관찰(Observation)</b>로 돌아온 결과를 보고 다시 생각한다. LLM도 이 <b>생각→행동→관찰</b> 루프를 돌면 머릿속(파라미터)에 없는 <b>최신 정보</b>를 끌어오고 <b>환각</b>을 줄일 수 있다. <span class="src">(출처: Yao et al. 2022, "ReAct: Synergizing Reasoning and Acting in Language Models", ICLR 2023)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">🔍</span><div class="tx"><b>Intuition</b> — a researcher facing an unfamiliar problem does not just imagine the answer in their head. They set the next step with a <b>Thought</b>, poke a search or calculator tool with an <b>Action</b>, look at the returned <b>Observation</b>, and think again. When an LLM runs this <b>Thought→Action→Observation</b> loop it can pull <b>fresh information</b> that is not in its parameters and reduce <b>hallucination</b>. <span class="src">(Source: Yao et al. 2022, "ReAct: Synergizing Reasoning and Acting in Language Models", ICLR 2023)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede"><strong>ReAct</strong>는 <strong>추론(Reasoning)</strong>과 <strong>행동(Acting)</strong>을 한 프롬프트 안에서 <strong>번갈아</strong> 생성하는 패턴입니다. 모델은 각 스텝에서 <strong>Thought</strong>(다음에 무엇을 할지 언어로 추론)를 쓰고, 이어서 <strong>Action</strong>(외부 도구 호출: 검색·계산기·코드 실행 등)을 발행하며, 도구가 돌려준 <strong>Observation</strong>을 받아 다음 Thought로 이어갑니다. 이 세 요소가 <strong>충분한 정보가 모일 때까지</strong> 반복되고, 마지막에 최종 답(Answer)을 냅니다.</p>
+        <div class="keqbox">
+          <div class="keq-label">한 스텝의 세 요소</div>
+          <div class="keqrow"><span class="keqcap">Thought $t_i$</span><span class="keqline">$\text{다음 행동을 정하는 언어 추론}$</span></div>
+          <div class="keqrow"><span class="keqcap">Action $a_i$</span><span class="keqline">$\text{도구 호출 (검색 · 계산 · 코드)}$</span></div>
+          <div class="keqrow"><span class="keqcap">Observation $o_i$</span><span class="keqline">$\text{도구가 돌려준 결과}$</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>Thought</b> 모델이 스스로에게 쓰는 추론 문장 — 다음 Action의 근거</div>
+          <div class="term"><b>Action</b> 정형화된 도구 호출 (예: <code>Search[query]</code>, <code>Calc[expr]</code>)</div>
+          <div class="term"><b>Observation</b> 도구 반환값 — 프롬프트에 다시 삽입되는 근거</div>
+          <div class="term"><b>Tool / function calling</b> 외부 API·함수로 모델 능력을 확장</div>
+          <div class="term"><b>Trajectory (궤적)</b> Thought·Action·Observation의 누적 시퀀스</div>
+          <div class="term"><b>Grounding (접지)</b> 관찰된 사실에 답을 묶어 환각을 줄임</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>순수 CoT는 <strong>머릿속만으로</strong> 추론해 사실을 지어낼 수 있습니다. ReAct는 <strong>도구 관찰로 추론을 접지</strong>하여, 최신·검증 가능한 정보를 근거로 답합니다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede"><strong>ReAct</strong> is a pattern that <strong>interleaves reasoning and acting</strong> within one prompt. At each step the model writes a <strong>Thought</strong> (reasoning in language about what to do next), issues an <strong>Action</strong> (an external tool call: search, calculator, code execution, etc.), and receives an <strong>Observation</strong> returned by the tool, which feeds the next Thought. These three elements repeat <strong>until enough information is gathered</strong>, and the model emits a final Answer.</p>
+        <div class="keqbox">
+          <div class="keq-label">Three elements of one step</div>
+          <div class="keqrow"><span class="keqcap">Thought $t_i$</span><span class="keqline">$\text{language reasoning to pick the next act}$</span></div>
+          <div class="keqrow"><span class="keqcap">Action $a_i$</span><span class="keqline">$\text{tool call (search / calc / code)}$</span></div>
+          <div class="keqrow"><span class="keqcap">Observation $o_i$</span><span class="keqline">$\text{result returned by the tool}$</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>Thought</b> a reasoning sentence the model writes to itself — the basis for the next Action</div>
+          <div class="term"><b>Action</b> a structured tool call (e.g. <code>Search[query]</code>, <code>Calc[expr]</code>)</div>
+          <div class="term"><b>Observation</b> the tool's return value — reinserted into the prompt as evidence</div>
+          <div class="term"><b>Tool / function calling</b> extending model ability via external APIs/functions</div>
+          <div class="term"><b>Trajectory</b> the accumulated sequence of Thought·Action·Observation</div>
+          <div class="term"><b>Grounding</b> tying the answer to observed facts to cut hallucination</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>Pure CoT reasons <strong>only in the model's head</strong> and can fabricate facts. ReAct <strong>grounds reasoning in tool observations</strong>, answering from fresh, verifiable evidence.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-3 / 유도 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="유도">
+    <div class="eyebrow lang-ko">2-3 · 메커니즘 · Mechanism</div>
+    <div class="eyebrow lang-en">2-3 · Mechanism</div>
+    <h1 class="stage-h lang-ko">루프는 왜 환각을 줄이는가 — 단계별 접지</h1>
+    <h1 class="stage-h lang-en">Why the Loop Cuts Hallucination — Step-by-Step Grounding</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> LLM은 다음 토큰을 예측할 때 <b>주어진 문맥</b>에만 조건화됩니다. 순수 추론은 문맥에 근거가 없으면 그럴듯한 거짓을 채우지만($p(\text{답}\mid \text{질문})$), ReAct는 매 스텝 <b>Observation을 문맥에 추가</b>해 조건부 분포를 사실 쪽으로 좁힙니다($p(\text{답}\mid \text{질문}, o_1, o_2, \dots)$).</p>
+    <p class="lede lang-en"><b>Unifying view:</b> an LLM predicts the next token conditioned only on the <b>given context</b>. Pure reasoning fills plausible falsehoods when the context lacks evidence ($p(\text{answer}\mid \text{question})$), whereas ReAct <b>appends each Observation to the context</b>, narrowing the conditional distribution toward facts ($p(\text{answer}\mid \text{question}, o_1, o_2, \dots)$).</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>Step 1 · 생각(Thought)</h4><div class="sub">$t_i \sim \text{LLM}(\text{context}_{i})$</div><div class="ana">🧭 지도 보기 — 무엇을 알아야 하는지 정한다</div><div class="eq">$ \text{context}_i = [\,q, t_1, a_1, o_1, \dots, o_{i-1}\,] $</div><p>모델은 지금까지의 궤적을 보고 <strong>다음에 필요한 정보</strong>를 언어로 추론합니다.</p></div>
+      <div class="dcard"><h4>Step 2 · 행동(Action)</h4><div class="sub">$a_i = \text{parse}(t_i)$</div><div class="ana">🔧 도구 두드리기 — 검색·계산기·코드 실행</div><div class="eq">$ o_i = \text{Tool}(a_i) $</div><p>Action을 정형 문자열로 발행 → 외부 도구가 실행되어 <strong>실제 결과 $o_i$</strong>를 반환합니다.</p></div>
+      <div class="dcard"><h4>Step 3 · 관찰→반복</h4><div class="sub">$\text{context}_{i+1}=\text{context}_i \oplus (a_i, o_i)$</div><div class="ana">🔁 되먹임 — 사실을 문맥에 넣고 다시 생각</div><div class="eq">$ p(\hat y \mid q, o_{1:n}) \gg p(\hat y \mid q) $</div><p>관찰을 문맥에 이어 붙여 <strong>조건부 분포가 사실에 접지</strong>됩니다. 충분하면 최종 답 $\hat y$.</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>Step 1 · Thought</h4><div class="sub">$t_i \sim \text{LLM}(\text{context}_{i})$</div><div class="ana">🧭 Read the map — decide what must be known</div><div class="eq">$ \text{context}_i = [\,q, t_1, a_1, o_1, \dots, o_{i-1}\,] $</div><p>Looking at the trajectory so far, the model reasons in language about <strong>the next needed information</strong>.</p></div>
+      <div class="dcard"><h4>Step 2 · Action</h4><div class="sub">$a_i = \text{parse}(t_i)$</div><div class="ana">🔧 Poke the tool — search / calculator / code run</div><div class="eq">$ o_i = \text{Tool}(a_i) $</div><p>The Action is emitted as a structured string → an external tool runs and returns the <strong>real result $o_i$</strong>.</p></div>
+      <div class="dcard"><h4>Step 3 · Observe→repeat</h4><div class="sub">$\text{context}_{i+1}=\text{context}_i \oplus (a_i, o_i)$</div><div class="ana">🔁 Feedback — put the fact in context, think again</div><div class="eq">$ p(\hat y \mid q, o_{1:n}) \gg p(\hat y \mid q) $</div><p>Appending the observation <strong>grounds the conditional distribution in fact</strong>. When enough, emit the final answer $\hat y$.</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · 루프는 공짜가 아니다</div>스텝마다 이전 궤적 전체가 문맥에 쌓여 <strong>토큰·지연·비용이 선형 증가</strong>합니다. 도구 오류나 잘못된 Observation이 들어오면 <strong>오류가 누적·전파</strong>될 수 있어, 최대 스텝 수 제한·오류 처리·중단 조건이 필요합니다.</div>
+    <div class="callout warn lang-en"><div class="ct">Caution · the loop is not free</div>Each step stacks the whole prior trajectory into the context, so <strong>tokens, latency, and cost grow roughly linearly</strong>. A tool error or a wrong Observation can <strong>accumulate and propagate</strong>, so you need a max-step cap, error handling, and stopping conditions.</div>
+  </section>
+
+  <!-- ══════════ 2-3 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">2-3 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">2-3 · Reading</div>
+    <h1 class="stage-h lang-ko">Yao et al. 2022 — 추론과 행동의 시너지</h1>
+    <h1 class="stage-h lang-en">Yao et al. 2022 — the Synergy of Reasoning and Acting</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p>2022년 <strong>Shunyu Yao</strong> 등(Princeton·Google)은 순수 추론(CoT)과 순수 행동(도구만 호출)을 <strong>결합</strong>하면 서로의 약점을 메운다는 것을 보였습니다. CoT만 쓰면 <strong>사실 근거가 없어 환각</strong>이 생기고, 행동만 쓰면 <strong>무엇을 왜 하는지 계획이 없어</strong> 헤맵니다. ReAct는 둘을 번갈아 써서 <strong>추론이 행동을 안내하고, 행동이 추론을 접지</strong>합니다.</p>
+        <p class="pullquote">추론은 행동을 안내하고, 행동은 추론에 사실을 공급한다.</p>
+        <p>지식 집약 과제(HotpotQA, FEVER)에서는 위키 검색 도구를, 상호작용 과제(ALFWorld, WebShop)에서는 환경 행동을 Action으로 사용했습니다. 논문은 ReAct가 순수 CoT 대비 <strong>사실 오류(환각)를 줄이고 해석 가능한 궤적</strong>을 남긴다고 보고합니다. 구체적 성능 수치는 과제·모델·설정에 크게 의존하므로 <strong>절대치는 UNVERIFIED</strong>로 두고, 각자 자신의 도구·데이터로 재현·측정하는 것이 원칙입니다.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>ReAct = <strong>CoT(추론) + Act(도구)</strong>의 교차 생성.</li><li>Observation을 문맥에 넣는 <strong>접지</strong>가 환각 감소의 핵심.</li><li>궤적이 남아 <strong>해석·디버깅</strong>이 쉽다.</li><li>성능 향상 폭은 <strong>과제 의존</strong> — 절대치 맹신 금지.</li></ul></div>
+        <p class="readmeta">참고: Yao, Zhao, Yu, Du, Shafran, Narasimhan, Cao (2022) <em>ReAct</em>, arXiv:2210.03629 · ICLR 2023</p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p>In 2022, <strong>Shunyu Yao</strong> et al. (Princeton·Google) showed that <strong>combining</strong> pure reasoning (CoT) with pure acting (tool calls only) covers each other's weaknesses. CoT alone can <strong>hallucinate for lack of factual grounding</strong>; acting alone <strong>wanders without a plan</strong> of what to do and why. ReAct alternates the two so that <strong>reasoning guides acting and acting grounds reasoning</strong>.</p>
+        <p class="pullquote">Reasoning guides action; action feeds facts back into reasoning.</p>
+        <p>For knowledge-intensive tasks (HotpotQA, FEVER) they used a Wikipedia search tool as the Action; for interactive tasks (ALFWorld, WebShop), environment actions. The paper reports that ReAct reduces <strong>factual errors (hallucination) and leaves an interpretable trajectory</strong> versus pure CoT. Concrete performance numbers depend heavily on task, model, and setup, so treat <strong>absolute values as UNVERIFIED</strong> and reproduce/measure with your own tools and data.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>ReAct = interleaved generation of <strong>CoT (reason) + Act (tools)</strong>.</li><li><strong>Grounding</strong> by inserting Observations into context is the key to less hallucination.</li><li>The trajectory persists, easing <strong>interpretation & debugging</strong>.</li><li>Gains are <strong>task-dependent</strong> — do not trust absolute numbers blindly.</li></ul></div>
+        <p class="readmeta">Refs: Yao, Zhao, Yu, Du, Shafran, Narasimhan, Cao (2022) <em>ReAct</em>, arXiv:2210.03629 · ICLR 2023</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-3 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="그림·표">
+    <div class="eyebrow lang-ko">2-3 · 그림 · 트레이스 · 표</div>
+    <div class="eyebrow lang-en">2-3 · Figure · Trace · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — ReAct 루프와 트레이스 예시</h1>
+    <h1 class="stage-h lang-en">At a Glance — the ReAct Loop and a Trace</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">ReAct 루프 (Thought→Action→Observation→…)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="arw23ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="176" y="18" width="128" height="34" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+<text x="240" y="40" font-size="12" fill="#3730a3" text-anchor="middle" font-weight="700">질문 $q$</text>
+<rect x="60" y="94" width="150" height="40" rx="9" fill="#ecfeff" stroke="#0891b2" stroke-width="1.8"/>
+<text x="135" y="119" font-size="12.5" fill="#155e75" text-anchor="middle" font-weight="700">🧭 Thought $t_i$</text>
+<rect x="270" y="94" width="150" height="40" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.8"/>
+<text x="345" y="119" font-size="12.5" fill="#92400e" text-anchor="middle" font-weight="700">🔧 Action $a_i$</text>
+<rect x="270" y="196" width="150" height="40" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
+<text x="345" y="221" font-size="12.5" fill="#166534" text-anchor="middle" font-weight="700">👁 Observation $o_i$</text>
+<rect x="60" y="196" width="150" height="40" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+<text x="135" y="221" font-size="12" fill="#991b1b" text-anchor="middle" font-weight="700">✅ Answer $\hat y$</text>
+<line x1="220" y1="52" x2="150" y2="90" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23ko)"/>
+<line x1="210" y1="114" x2="266" y2="114" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23ko)"/>
+<line x1="345" y1="134" x2="345" y2="192" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23ko)"/>
+<path d="M270 216 Q170 250 135 138" fill="none" stroke="#71717a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arw23ko)"/>
+<text x="188" y="256" font-size="10" fill="#52525b" text-anchor="middle">루프 반복 (정보 부족 시)</text>
+<line x1="135" y1="134" x2="135" y2="192" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#arw23ko)"/>
+<text x="106" y="168" font-size="9.5" fill="#991b1b" text-anchor="middle">충분하면</text>
+<text x="240" y="288" font-size="10" fill="#71717a" text-anchor="middle">Observation을 문맥에 이어붙여 다음 Thought로</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">트레이스 예시 — "노벨상 물리학자의 소속 대학?"</div>
+        <table class="ktab"><thead><tr><th>스텝</th><th>요소</th><th style="text-align:right">내용(요약)</th></tr></thead><tbody>
+          <tr><td>1</td><td class="k">Thought</td><td>수상자 이름부터 검색 필요</td></tr>
+          <tr><td>1</td><td class="k">Action</td><td><code>Search["2023 노벨물리 수상자"]</code></td></tr>
+          <tr><td>1</td><td class="k">Observation</td><td>이름 반환</td></tr>
+          <tr><td>2</td><td class="k">Thought</td><td>이제 소속 대학 조회</td></tr>
+          <tr><td>2</td><td class="k">Action</td><td><code>Search["…의 소속"]</code></td></tr>
+          <tr><td>2</td><td class="k">Observation</td><td>대학명 반환</td></tr>
+          <tr><td>3</td><td class="k">Answer</td><td>관찰에 근거해 최종 답</td></tr>
+        </tbody></table>
+        <div class="keqnote">트레이스는 예시(도식)입니다. 실제 도구·검색 결과·스텝 수는 구현에 따라 달라지며 성능 수치는 <strong>UNVERIFIED</strong>. (출처: Yao et al. 2022 도식 각색)</div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">ReAct loop (Thought→Action→Observation→…)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="arw23en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
+</defs>
+<rect x="176" y="18" width="128" height="34" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+<text x="240" y="40" font-size="12" fill="#3730a3" text-anchor="middle" font-weight="700">question $q$</text>
+<rect x="60" y="94" width="150" height="40" rx="9" fill="#ecfeff" stroke="#0891b2" stroke-width="1.8"/>
+<text x="135" y="119" font-size="12.5" fill="#155e75" text-anchor="middle" font-weight="700">🧭 Thought $t_i$</text>
+<rect x="270" y="94" width="150" height="40" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.8"/>
+<text x="345" y="119" font-size="12.5" fill="#92400e" text-anchor="middle" font-weight="700">🔧 Action $a_i$</text>
+<rect x="270" y="196" width="150" height="40" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
+<text x="345" y="221" font-size="12.5" fill="#166534" text-anchor="middle" font-weight="700">👁 Observation $o_i$</text>
+<rect x="60" y="196" width="150" height="40" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+<text x="135" y="221" font-size="12" fill="#991b1b" text-anchor="middle" font-weight="700">✅ Answer $\hat y$</text>
+<line x1="220" y1="52" x2="150" y2="90" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23en)"/>
+<line x1="210" y1="114" x2="266" y2="114" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23en)"/>
+<line x1="345" y1="134" x2="345" y2="192" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23en)"/>
+<path d="M270 216 Q170 250 135 138" fill="none" stroke="#71717a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arw23en)"/>
+<text x="188" y="256" font-size="10" fill="#52525b" text-anchor="middle">repeat (if info insufficient)</text>
+<line x1="135" y1="134" x2="135" y2="192" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#arw23en)"/>
+<text x="106" y="168" font-size="9.5" fill="#991b1b" text-anchor="middle">if enough</text>
+<text x="240" y="288" font-size="10" fill="#71717a" text-anchor="middle">append Observation to context, feed next Thought</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Trace — "which university is the physics laureate at?"</div>
+        <table class="ktab"><thead><tr><th>Step</th><th>Element</th><th style="text-align:right">Content (summary)</th></tr></thead><tbody>
+          <tr><td>1</td><td class="k">Thought</td><td>need the laureate's name first</td></tr>
+          <tr><td>1</td><td class="k">Action</td><td><code>Search["2023 physics Nobel"]</code></td></tr>
+          <tr><td>1</td><td class="k">Observation</td><td>name returned</td></tr>
+          <tr><td>2</td><td class="k">Thought</td><td>now look up affiliation</td></tr>
+          <tr><td>2</td><td class="k">Action</td><td><code>Search["…'s affiliation"]</code></td></tr>
+          <tr><td>2</td><td class="k">Observation</td><td>university returned</td></tr>
+          <tr><td>3</td><td class="k">Answer</td><td>final answer grounded in observations</td></tr>
+        </tbody></table>
+        <div class="keqnote">The trace is illustrative. Real tools, results, and step counts vary by implementation; performance figures are <strong>UNVERIFIED</strong>. (Source: adapted from Yao et al. 2022)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-3 / 실습 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="실습">
+    <div class="eyebrow lang-ko">2-3 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">2-3 · Interactive</div>
+    <h1 class="stage-h lang-ko">루프 스텝 수 vs 과제 성공률 — 직접 조절해보기</h1>
+    <h1 class="stage-h lang-en">Loop Steps vs Task Success — Try It</h1>
+    <p class="lede lang-ko">간단한 모델로 직관을 확인해봅니다. 각 스텝이 유용한 관찰을 <strong>확률 $p$</strong>로 성공시키고 최대 <strong>$n$ 스텝</strong>을 돈다면, 하나 이상 성공해 답에 도달할 확률은 <strong>$P = 1-(1-p)^{n}$</strong>입니다. 도구를 끄면($p$가 매우 작으면) 스텝을 늘려도 성공률이 잘 안 오릅니다. <span class="src">(개념 도식 — 실제 성능 수치는 UNVERIFIED)</span></p>
+    <p class="lede lang-en">Check the intuition with a toy model. If each step yields a useful observation with <strong>probability $p$</strong> and you run up to <strong>$n$ steps</strong>, the chance of at least one success reaching the answer is <strong>$P = 1-(1-p)^{n}$</strong>. Turn tools off (very small $p$) and adding steps barely helps. <span class="src">(Illustrative — real performance numbers are UNVERIFIED)</span></p>
+    <div class="calc lang-ko"
+      data-title="성공 확률 $P = 1-(1-p)^{n}$"
+      data-desc="p = 스텝당 유용한 관찰 확률(도구 성능·on/off 대리), n = 최대 루프 스텝. 기본값 p=0.4, n=3 → P≈0.784. p를 0.05로 낮추면(도구 off) n=3에서도 P≈0.14로 급락."
+      data-vars='[{"sym":"p","label":"$p$ · 스텝당 관찰 성공확률","min":0.02,"max":0.9,"val":0.4,"step":0.02,"unit":""},{"sym":"n","label":"$n$ · 최대 루프 스텝","min":1,"max":10,"val":3,"step":1,"unit":"스텝"}]'
+      data-expr="1-(1-p)**n"
+      data-out="$P$" data-out-unit=""
+      data-barmax="1"
+      data-note="도구가 강할수록(p↑) 적은 스텝으로 성공. 도구를 끄면(p↓) 스텝을 늘려도 한계 — 관찰 없는 반복은 환각만 쌓입니다."></div>
+    <div class="calc lang-en"
+      data-title="Success probability $P = 1-(1-p)^{n}$"
+      data-desc="p = per-step probability of a useful observation (proxy for tool quality / on-off), n = max loop steps. Default p=0.4, n=3 → P≈0.784. Drop p to 0.05 (tools off) and even n=3 gives only P≈0.14."
+      data-vars='[{"sym":"p","label":"$p$ · per-step observation success","min":0.02,"max":0.9,"val":0.4,"step":0.02,"unit":""},{"sym":"n","label":"$n$ · max loop steps","min":1,"max":10,"val":3,"step":1,"unit":"steps"}]'
+      data-expr="1-(1-p)**n"
+      data-out="$P$" data-out-unit=""
+      data-barmax="1"
+      data-note="Stronger tools (higher p) succeed in fewer steps. With tools off (low p) more steps hit a ceiling — looping without observations only piles up hallucination."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 성공률 $P$ 감: $p=0.4,\ n=1$이면 $P=0.4$, $n=3$이면 $\approx 0.78$, $n=6$이면 $\approx 0.95$ — 스텝을 늘릴수록 <strong>수확 체감</strong>. 반대로 $p=0.05$(도구 off 유사)면 $n=10$이라도 $P\approx 0.40$에 그칩니다. 실전 함의: <strong>좋은 도구 하나가 스텝 수보다 낫다</strong>. 단 스텝마다 토큰·비용·오류 전파가 붙으므로 최대 스텝 상한을 둡니다. <span class="src">(개념 모델 — 실제 과제 성공률은 도구·데이터 의존, UNVERIFIED)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — feel for $P$: with $p=0.4$, $n=1$ gives $P=0.4$, $n=3$ gives $\approx 0.78$, $n=6$ gives $\approx 0.95$ — <strong>diminishing returns</strong> as steps grow. Conversely $p=0.05$ (tools-off-like) caps at $P\approx 0.40$ even at $n=10$. Practical takeaway: <strong>one good tool beats many steps</strong>. But each step adds tokens, cost, and error propagation, so cap the max steps. <span class="src">(Toy model — real task success depends on tools/data, UNVERIFIED)</span></div>
+  </section>
+
+  <!-- ══════════ 2-3 / 점검 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>ReAct의 한 스텝을 이루는 세 요소를 <strong>순서대로</strong> 고르면?</p>
+      <div class="opts">
+        <button class="opt">① Action → Thought → Answer</button>
+        <button class="opt" data-correct="1">② Thought → Action → Observation</button>
+        <button class="opt">③ Observation → Answer → Thought</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ReAct는 <strong>Thought</strong>(다음 할 일 추론)→<strong>Action</strong>(도구 호출)→<strong>Observation</strong>(도구 결과)을 한 스텝으로 반복한다(Yao et al. 2022). <span class="dim">오답 ①·③: Answer는 루프가 충분히 돈 뒤 마지막에만 나오며, 순서가 뒤바뀌면 접지 되먹임이 성립하지 않는다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>Pick the three elements of one ReAct step <strong>in order</strong>.</p>
+      <div class="opts">
+        <button class="opt">① Action → Thought → Answer</button>
+        <button class="opt" data-correct="1">② Thought → Action → Observation</button>
+        <button class="opt">③ Observation → Answer → Thought</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ReAct repeats <strong>Thought</strong> (reason about next step) → <strong>Action</strong> (tool call) → <strong>Observation</strong> (tool result) as one step (Yao et al. 2022). <span class="dim">Wrong ①·③: the Answer comes only at the end after enough looping, and reordering breaks the grounding feedback.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>순수 CoT 대비 ReAct가 <strong>환각을 줄이는 근본 이유</strong>는?</p>
+      <div class="opts">
+        <button class="opt">① 더 큰 모델을 쓰기 때문</button>
+        <button class="opt" data-correct="1">② 도구 Observation을 문맥에 넣어 추론을 사실에 접지하기 때문</button>
+        <button class="opt">③ 온도(temperature)를 0으로 두기 때문</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ReAct는 매 스텝 실제 도구 결과 $o_i$를 문맥에 추가해 $p(\hat y\mid q, o_{1:n})$처럼 <strong>사실에 조건화</strong>한다. 근거가 문맥에 있으므로 지어낼 여지가 줄어든다. <span class="dim">오답 ①·③: 모델 크기나 온도 설정도 영향은 있지만, ReAct의 핵심 메커니즘은 <strong>관찰 기반 접지</strong>이지 이들 하이퍼파라미터가 아니다.</span> <span class="agg">학급 n=41 · ① 5 · ② 30 · ③ 6</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>What is the <strong>fundamental reason</strong> ReAct reduces hallucination versus pure CoT?</p>
+      <div class="opts">
+        <button class="opt">① because it uses a larger model</button>
+        <button class="opt" data-correct="1">② because tool Observations enter the context, grounding reasoning in facts</button>
+        <button class="opt">③ because temperature is set to 0</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ReAct appends real tool results $o_i$ to the context each step, conditioning on facts as in $p(\hat y\mid q, o_{1:n})$. With evidence in context, there is less room to fabricate. <span class="dim">Wrong ①·③: model size and temperature matter too, but ReAct's core mechanism is <strong>observation-based grounding</strong>, not those hyperparameters.</span> <span class="agg">class n=41 · ① 5 · ② 30 · ③ 6</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-3 / 연습 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Calc · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 루프 성공 확률</div>
+      <p class="prob-statement">각 ReAct 스텝이 유용한 관찰을 낼 확률이 $p=0.5$이고 최대 $n=3$ 스텝을 돈다. 하나 이상 성공해 답에 도달할 확률 <strong>$P=1-(1-p)^{n}$</strong>을 구하시오.</p>
+      <div class="given"><span class="chip">$p=0.5$</span><span class="chip">$n=3$</span></div>
+      <div class="find"><b>구할 것:</b> $P$ (소수)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.875" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 실패 확률</div>$$ (1-p)^{n} = (1-0.5)^{3} = 0.5^{3} = 0.125 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 성공 확률</div>$$ P = 1 - 0.125 = 0.875 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P = 0.875 $$</div><b>정답:</b> 스텝당 50% 도구라도 3번 돌면 약 88% — 되먹임 루프의 힘.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · loop success probability</div>
+      <p class="prob-statement">Each ReAct step yields a useful observation with probability $p=0.5$, running up to $n=3$ steps. Find the probability of at least one success reaching the answer, <strong>$P=1-(1-p)^{n}$</strong>.</p>
+      <div class="given"><span class="chip">$p=0.5$</span><span class="chip">$n=3$</span></div>
+      <div class="find"><b>Find:</b> $P$ (decimal)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.875" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · failure probability</div>$$ (1-p)^{n} = (1-0.5)^{3} = 0.5^{3} = 0.125 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · success probability</div>$$ P = 1 - 0.125 = 0.875 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ P = 0.875 $$</div><b>Answer:</b> even a 50%-per-step tool reaches ~88% over 3 steps — the power of the feedback loop.</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 도구 on/off 비교</div>
+      <p class="prob-statement">도구 <strong>on</strong>이면 $p=0.6$, 도구 <strong>off</strong>이면 $p=0.1$로 스텝 성공 확률이 바뀐다. 둘 다 $n=2$ 스텝을 돌 때, 성공 확률의 <strong>차이 $\Delta P = P_{on} - P_{off}$</strong>를 소수로 구하시오. ($P=1-(1-p)^{n}$)</p>
+      <div class="given"><span class="chip">$p_{on}=0.6$</span><span class="chip">$p_{off}=0.1$</span><span class="chip">$n=2$</span></div>
+      <div class="find"><b>구할 것:</b> $\Delta P$ (소수)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.65" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 도구 on</div>$$ P_{on} = 1-(1-0.6)^{2} = 1-0.16 = 0.84 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 도구 off</div>$$ P_{off} = 1-(1-0.1)^{2} = 1-0.81 = 0.19 $$</div>
+        <div class="dstep2"><div class="step-label">Step 3 · 차이</div>$$ \Delta P = 0.84 - 0.19 = 0.65 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \Delta P = 0.65 $$</div><b>정답:</b> 도구를 켜는 것만으로 성공률이 0.65 뛴다 — ReAct의 접지 효과.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · tools on/off comparison</div>
+      <p class="prob-statement">With tools <strong>on</strong>, $p=0.6$; with tools <strong>off</strong>, $p=0.1$. Running $n=2$ steps in both, find the <strong>difference $\Delta P = P_{on} - P_{off}$</strong> as a decimal. ($P=1-(1-p)^{n}$)</p>
+      <div class="given"><span class="chip">$p_{on}=0.6$</span><span class="chip">$p_{off}=0.1$</span><span class="chip">$n=2$</span></div>
+      <div class="find"><b>Find:</b> $\Delta P$ (decimal)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.65" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · tools on</div>$$ P_{on} = 1-(1-0.6)^{2} = 1-0.16 = 0.84 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · tools off</div>$$ P_{off} = 1-(1-0.1)^{2} = 1-0.81 = 0.19 $$</div>
+        <div class="dstep2"><div class="step-label">Step 3 · difference</div>$$ \Delta P = 0.84 - 0.19 = 0.65 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \Delta P = 0.65 $$</div><b>Answer:</b> just turning tools on lifts success by 0.65 — ReAct's grounding effect.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-3 / 정리 ══════════ -->
+  <section class="screen" data-ch="2-3" data-chtitle="ReAct: 추론+행동" data-stage="정리">
+    <div class="eyebrow lang-ko">2-3 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">2-3 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>ReAct = <strong>Thought→Action→Observation</strong> 루프 반복 후 최종 Answer.</li>
+        <li>Action은 <strong>도구 호출</strong>(검색·계산기·코드), 곧 function calling / tool use.</li>
+        <li>Observation을 문맥에 넣는 <strong>접지</strong>가 최신 정보 확보·<strong>환각 감소</strong>의 핵심.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>Answer를 루프 <strong>중간</strong>에 조기 확정 → 관찰 충분할 때까지 반복.</li>
+        <li>스텝만 늘리면 좋아진다는 착각 → <strong>수확 체감</strong> + 비용·오류 누적.</li>
+        <li>도구 오류·잘못된 Observation을 무비판 수용 → <strong>오류 전파</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>세 요소의 <strong>순서와 역할</strong> 구분 (Thought/Action/Observation).</li>
+        <li>ReAct = <strong>CoT + Act</strong>의 시너지, 접지가 환각을 줄이는 이유(Yao et al. 2022).</li>
+        <li>$P=1-(1-p)^{n}$ 계산 및 도구 on/off 비교 — 절대 성능치는 <strong>UNVERIFIED</strong>.</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>ReAct = repeat the <strong>Thought→Action→Observation</strong> loop, then a final Answer.</li>
+        <li>Action is a <strong>tool call</strong> (search, calculator, code) — i.e. function calling / tool use.</li>
+        <li>Inserting Observations for <strong>grounding</strong> is the key to fresh info and <strong>less hallucination</strong>.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Committing the Answer <strong>mid-loop</strong> → repeat until observations suffice.</li>
+        <li>Assuming more steps always help → <strong>diminishing returns</strong> plus cost/error buildup.</li>
+        <li>Accepting tool errors / wrong Observations uncritically → <strong>error propagation</strong>.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Distinguish the <strong>order and role</strong> of the three elements (Thought/Action/Observation).</li>
+        <li>ReAct = synergy of <strong>CoT + Act</strong>; why grounding cuts hallucination (Yao et al. 2022).</li>
+        <li>Compute $P=1-(1-p)^{n}$ and compare tools on/off — absolute performance is <strong>UNVERIFIED</strong>.</li>
+      </ul></div>
+    </div>
+  </section>
+
+<!-- ══════════ 2-4 / 개념 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="개념">
+    <div class="eyebrow lang-ko">2-4 · 개념 · Concept</div>
+    <div class="eyebrow lang-en">2-4 · Concept</div>
+    <h1 class="stage-h lang-ko">사고를 사슬에서 트리로 — 탐색과 백트래킹</h1>
+    <h1 class="stage-h lang-en">From Chain to Tree of Thought — Search and Backtracking</h1>
+    <div class="analogy lang-ko"><span class="ic">🌳</span><div class="tx"><b>직관</b> — 미로를 풀 때 한 길만 끝까지 가는 사람(<b>사슬</b>, Chain-of-Thought)은 막다른 길에서 그냥 실패한다. 반면 갈림길마다 여러 갈래를 <b>탐색</b>하고, 막히면 되돌아와(<b>백트래킹</b>) 다른 길을 시도하는 사람은 더 자주 출구를 찾는다 — 대신 걸음 수(비용)가 는다. 언어모델의 추론도 하나의 사슬이 아니라 <b>여러 부분 해를 가지처럼 펼쳐 평가·선택</b>할 수 있다. <span class="src">(출처: Yao et al. 2023, <i>Tree of Thoughts</i>, NeurIPS; Wei et al. 2022, <i>Chain-of-Thought</i>)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">🌳</span><div class="tx"><b>Intuition</b> — Solving a maze, a person who commits to one path to the end (a <b>chain</b>, Chain-of-Thought) simply fails at a dead end. A person who <b>explores</b> several branches at each fork and, when stuck, <b>backtracks</b> to try another, finds the exit more often — at the cost of more steps. An LLM's reasoning likewise need not be a single chain: it can <b>fan partial solutions out as branches, evaluate them, and select</b>. <span class="src">(Source: Yao et al. 2023, <i>Tree of Thoughts</i>, NeurIPS; Wei et al. 2022, <i>Chain-of-Thought</i>)</span></div></div>
+    <div class="two lang-ko">
+      <div class="col2">
+        <p class="lede"><strong>Tree of Thought(ToT)</strong>는 문제를 <strong>사고 단계(thought step)</strong>의 트리로 본다. 각 노드는 부분 해(partial solution), 각 간선은 다음 사고로의 확장이다. <strong>분기폭 $b$</strong>(한 노드에서 뻗는 후보 수)와 <strong>깊이 $d$</strong>(사고 단계 수)를 정하면 — 탐색 공간이 넓어져 어려운 문제에서 정답률은 오르지만, 평가해야 할 <strong>노드 수가 $b^d$로 폭증</strong>한다(비용↑). 핵심은 <strong>탐색(넓힘)</strong>과 <strong>백트래킹(되돌림)</strong>을 명시적으로 프롬프트 구조에 넣는 것이다.</p>
+        <div class="keqbox">
+          <div class="keq-label">세 가지 추론 골격</div>
+          <div class="keqrow"><span class="keqcap">직접 답 (IO)</span><span class="keqline">$ \text{prompt} \rightarrow \text{answer} $</span></div>
+          <div class="keqrow"><span class="keqcap">사슬 (CoT)</span><span class="keqline">$ s_1 \rightarrow s_2 \rightarrow \cdots \rightarrow s_d $</span></div>
+          <div class="keqrow"><span class="keqcap">트리 (ToT)</span><span class="keqline">$ b \text{ 분기} \times d \text{ 깊이} = b^d \text{ 노드} $</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">핵심 용어</div>
+        <div class="terms">
+          <div class="term"><b>사고 단계 $s_i$</b> 부분 해를 진전시키는 한 번의 추론 조각(노드)</div>
+          <div class="term"><b>분기폭 $b$</b> 한 노드에서 생성하는 후보 수 (넓힘)</div>
+          <div class="term"><b>깊이 $d$</b> 최종 해까지의 사고 단계 수</div>
+          <div class="term"><b>백트래킹</b> 막힌 가지를 버리고 이전 노드로 되돌아감</div>
+          <div class="term"><b>상태 평가(value)</b> 각 노드의 유망도를 LLM/휴리스틱으로 점수화</div>
+          <div class="term"><b>탐색 정책</b> BFS/DFS 등으로 유망 노드부터 확장</div>
+        </div>
+        <div class="callout key"><div class="ct">핵심</div>CoT가 <strong>한 줄기 사슬</strong>이라면 ToT는 <strong>가지치기·평가·백트래킹</strong>이 가능한 트리다. 대가는 <strong>탐색 노드 수 $b^d$의 지수 증가</strong> — 정답률과 비용의 맞바꿈이다.</div>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2">
+        <p class="lede"><strong>Tree of Thought (ToT)</strong> casts a problem as a tree of <strong>thought steps</strong>. Each node is a partial solution; each edge extends toward the next thought. Choosing a <strong>branching factor $b$</strong> (candidates per node) and a <strong>depth $d$</strong> (number of thought steps) widens the search space, raising accuracy on hard problems — but the <strong>number of nodes to evaluate explodes as $b^d$</strong> (cost↑). The essence is to put <strong>exploration (widening)</strong> and <strong>backtracking (reverting)</strong> explicitly into the prompt structure.</p>
+        <div class="keqbox">
+          <div class="keq-label">Three reasoning skeletons</div>
+          <div class="keqrow"><span class="keqcap">Direct (IO)</span><span class="keqline">$ \text{prompt} \rightarrow \text{answer} $</span></div>
+          <div class="keqrow"><span class="keqcap">Chain (CoT)</span><span class="keqline">$ s_1 \rightarrow s_2 \rightarrow \cdots \rightarrow s_d $</span></div>
+          <div class="keqrow"><span class="keqcap">Tree (ToT)</span><span class="keqline">$ b \text{ branch} \times d \text{ depth} = b^d \text{ nodes} $</span></div>
+        </div>
+      </div>
+      <div class="col2">
+        <div class="keq-label">Key terms</div>
+        <div class="terms">
+          <div class="term"><b>Thought step $s_i$</b> one reasoning fragment advancing a partial solution (a node)</div>
+          <div class="term"><b>Branching factor $b$</b> candidates generated per node (widening)</div>
+          <div class="term"><b>Depth $d$</b> number of thought steps to a final solution</div>
+          <div class="term"><b>Backtracking</b> abandon a stuck branch, return to a prior node</div>
+          <div class="term"><b>State value</b> score each node's promise via LLM/heuristic</div>
+          <div class="term"><b>Search policy</b> expand promising nodes first (BFS/DFS)</div>
+        </div>
+        <div class="callout key"><div class="ct">Key</div>If CoT is a <strong>single chain</strong>, ToT is a tree that supports <strong>branching, evaluation, and backtracking</strong>. The price is an <strong>exponential $b^d$ node count</strong> — a trade between accuracy and cost.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-4 / 유도 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="유도">
+    <div class="eyebrow lang-ko">2-4 · 메커니즘 유도 · Derivation</div>
+    <div class="eyebrow lang-en">2-4 · Derivation</div>
+    <h1 class="stage-h lang-ko">왜 $b^d$인가 — 그리고 왜 분해가 답인가</h1>
+    <h1 class="stage-h lang-en">Why $b^d$ — and Why Decomposition Helps</h1>
+    <p class="lede lang-ko"><b>공통 관점:</b> ToT의 비용은 트리에서 <b>평가·확장해야 할 노드 수</b>로 결정된다. 깊이 $d$의 완전 $b$-진 트리에서 리프(가능한 완결 사고 경로) 수는 $b^d$이며, 전체 노드 수는 $\sum_{i=0}^{d} b^i = \frac{b^{d+1}-1}{b-1}$로 여전히 $O(b^d)$이다. 이 지수 폭발을 다스리는 두 지렛대가 <b>분해(least-to-most)</b>와 <b>구조화 출력</b>이다.</p>
+    <p class="lede lang-en"><b>Unifying view:</b> ToT cost is set by the <b>number of nodes to evaluate and expand</b>. In a full $b$-ary tree of depth $d$, the number of leaves (complete reasoning paths) is $b^d$, and the total node count is $\sum_{i=0}^{d} b^i = \frac{b^{d+1}-1}{b-1}$, still $O(b^d)$. Two levers tame this explosion: <b>decomposition (least-to-most)</b> and <b>structured output</b>.</p>
+    <div class="deriv lang-ko">
+      <div class="dcard"><h4>① 분기 = 곱셈</h4><div class="sub">넓힘의 대가</div><div class="ana">🌱 한 노드가 $b$갈래 → 다음 층은 $b\times$</div><div class="eq">$ N_{\text{leaf}} = b^{d} $</div><p>매 깊이마다 후보가 $b$배씩 곱해져 <strong>리프 수가 지수적</strong>으로 증가. $b{=}3, d{=}4$면 $81$개 경로.</p></div>
+      <div class="dcard"><h4>② 백트래킹 = 가지치기</h4><div class="sub">평가로 잘라내기</div><div class="ana">✂️ 낮은 value 노드는 확장 안 함</div><div class="eq">$ N_{\text{eval}} \ll b^{d} $</div><p>상태 평가로 <strong>유망 노드만</strong> 확장(beam $k$)하면 실제 평가 비용은 $b^d$보다 훨씬 작아짐. 넓힘과 잘라냄의 균형.</p></div>
+      <div class="dcard"><h4>③ 분해 = 깊이 압축</h4><div class="sub">least-to-most</div><div class="ana">🪜 큰 문제를 작은 하위문제 사슬로</div><div class="eq">$ b^{d} \rightarrow \textstyle\sum_j b_j^{\,d_j} $</div><p>Zhou 2022의 <strong>least-to-most</strong>: 문제를 쉬운 하위문제로 나눠 순차 해결 → 각 단계의 $b,d$가 작아져 <strong>곱이 합으로</strong> 완화.</p></div>
+    </div>
+    <div class="deriv lang-en">
+      <div class="dcard"><h4>① Branching = multiply</h4><div class="sub">cost of widening</div><div class="ana">🌱 one node → $b$ ways → next layer $\times b$</div><div class="eq">$ N_{\text{leaf}} = b^{d} $</div><p>Candidates multiply by $b$ at each depth, so the <strong>leaf count grows exponentially</strong>. With $b{=}3, d{=}4$ that is $81$ paths.</p></div>
+      <div class="dcard"><h4>② Backtracking = pruning</h4><div class="sub">cut by evaluation</div><div class="ana">✂️ don't expand low-value nodes</div><div class="eq">$ N_{\text{eval}} \ll b^{d} $</div><p>Keeping only <strong>promising nodes</strong> (beam $k$) via state value makes real cost far below $b^d$ — the balance of widening and cutting.</p></div>
+      <div class="dcard"><h4>③ Decomposition = depth cut</h4><div class="sub">least-to-most</div><div class="ana">🪜 big problem → chain of small subproblems</div><div class="eq">$ b^{d} \rightarrow \textstyle\sum_j b_j^{\,d_j} $</div><p>Zhou 2022's <strong>least-to-most</strong>: split into easy subproblems solved in sequence → smaller $b,d$ per stage turns a <strong>product into a sum</strong>.</p></div>
+    </div>
+    <div class="callout warn lang-ko"><div class="ct">주의 · 넓다고 항상 좋은 건 아니다</div>분기폭 $b$와 깊이 $d$를 무작정 키우면 비용이 $b^d$로 폭주하고, <strong>평가 신호가 부정확</strong>하면 잘못된 가지를 확장해 오히려 성능이 나빠질 수 있다. 넓힘은 <strong>신뢰할 수 있는 상태 평가</strong>가 있을 때만 이득이다.</div>
+    <div class="callout warn lang-en"><div class="ct">Caution · wider is not always better</div>Blindly raising $b$ and $d$ makes cost blow up as $b^d$; if the <strong>evaluation signal is noisy</strong>, you expand wrong branches and performance can drop. Widening pays off only with a <strong>trustworthy state value</strong>.</div>
+  </section>
+
+  <!-- ══════════ 2-4 / 읽을거리 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="읽을거리">
+    <div class="eyebrow lang-ko">2-4 · 읽을거리 · Reading</div>
+    <div class="eyebrow lang-en">2-4 · Reading</div>
+    <h1 class="stage-h lang-ko">ToT·least-to-most·구조화 출력의 계보</h1>
+    <h1 class="stage-h lang-en">Lineage of ToT, Least-to-Most, and Structured Output</h1>
+    <div class="two lang-ko">
+      <div class="col2 reading">
+        <p><strong>Yao et al.(2023)</strong>의 <em>Tree of Thoughts</em>는 Game of 24, 창의적 글쓰기, 미니 크로스워드처럼 <strong>탐색이 필요한 과제</strong>에서 CoT를 크게 앞섰다고 보고한다. 저자들은 GPT-4로 Game of 24에서 CoT가 낮은 성공률에 그친 반면 ToT는 훨씬 높은 성공률을 보였다고 서술한다(<strong>구체 수치는 논문 원문 확인 권장 · UNVERIFIED</strong>).</p>
+        <p class="pullquote">"먼저 여러 후보를 생성하고, 평가하고, 유망한 가지만 확장하라."</p>
+        <p><strong>Zhou et al.(2022)</strong>의 <em>Least-to-Most Prompting</em>은 문제를 쉬운 하위문제로 <strong>먼저 분해</strong>한 뒤 순차적으로 풀어 일반화(어려운 조합 과제)에서 CoT보다 나은 결과를 보였다. 한편 <strong>구조화 출력</strong>은 모델이 자유 텍스트 대신 <strong>JSON schema</strong>를 따르게 강제(제약 디코딩·함수 호출)해 후속 파이프라인이 파싱 실패 없이 값을 소비하게 한다.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>ToT = <strong>생성 → 평가 → 확장/백트래킹</strong>의 반복.</li><li>least-to-most = <strong>분해 우선</strong> → 하위문제 순차 해결.</li><li>구조화 출력 = <strong>스키마 강제</strong>로 파이프라인 신뢰성 확보.</li></ul></div>
+        <p class="readmeta">참고: Yao et al.(2023) <em>Tree of Thoughts</em>, NeurIPS · Zhou et al.(2022) <em>Least-to-Most Prompting</em>, ICLR 2023 · Wei et al.(2022) <em>Chain-of-Thought</em>, NeurIPS</p>
+      </div>
+    </div>
+    <div class="two lang-en">
+      <div class="col2 reading">
+        <p><strong>Yao et al. (2023)</strong>, <em>Tree of Thoughts</em>, reports large gains over CoT on <strong>search-heavy tasks</strong> such as Game of 24, creative writing, and mini crosswords. The authors describe that with GPT-4, CoT achieved a low success rate on Game of 24 while ToT reached a much higher one (<strong>consult the paper for exact numbers · UNVERIFIED</strong>).</p>
+        <p class="pullquote">"First generate several candidates, evaluate them, and expand only the promising branches."</p>
+        <p><strong>Zhou et al. (2022)</strong>, <em>Least-to-Most Prompting</em>, first <strong>decomposes</strong> a problem into easier subproblems and solves them in sequence, beating CoT on generalization (hard compositional tasks). Meanwhile, <strong>structured output</strong> forces the model to follow a <strong>JSON schema</strong> (constrained decoding / function calling) so downstream pipelines consume values without parse failures.</p>
+      </div>
+      <div class="col2">
+        <div class="callout key"><div class="ct">Must know</div><ul><li>ToT = the loop of <strong>generate → evaluate → expand/backtrack</strong>.</li><li>Least-to-most = <strong>decompose first</strong> → solve subproblems in sequence.</li><li>Structured output = <strong>enforce a schema</strong> for pipeline reliability.</li></ul></div>
+        <p class="readmeta">Refs: Yao et al. (2023) <em>Tree of Thoughts</em>, NeurIPS · Zhou et al. (2022) <em>Least-to-Most Prompting</em>, ICLR 2023 · Wei et al. (2022) <em>Chain-of-Thought</em>, NeurIPS</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-4 / 그림·표 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="그림·표">
+    <div class="eyebrow lang-ko">2-4 · 그림 · 스키마 · 표</div>
+    <div class="eyebrow lang-en">2-4 · Figure · Schema · Table</div>
+    <h1 class="stage-h lang-ko">한눈에 — 분기 탐색 트리와 JSON 스키마</h1>
+    <h1 class="stage-h lang-en">At a Glance — Branching Search Tree and JSON Schema</h1>
+    <div class="vizgrid lang-ko">
+      <div>
+        <div class="vcap">분기 탐색 트리 ($b=2$, $d=3$ · ✂ = 백트래킹)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar24ko" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#94a3b8"/></marker>
+</defs>
+<!-- edges d0->d1 -->
+<line x1="240" y1="42" x2="140" y2="112" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24ko)"/>
+<line x1="240" y1="42" x2="340" y2="112" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24ko)"/>
+<!-- edges d1->d2 (left) -->
+<line x1="140" y1="128" x2="80" y2="192" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="4 3"/>
+<line x1="140" y1="128" x2="200" y2="192" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24ko)"/>
+<!-- edges d1->d2 (right, pruned) -->
+<line x1="340" y1="128" x2="290" y2="192" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24ko)"/>
+<line x1="340" y1="128" x2="400" y2="192" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24ko)"/>
+<!-- edges d2->d3 (winner) -->
+<line x1="200" y1="208" x2="200" y2="256" stroke="#16a34a" stroke-width="2.2" marker-end="url(#ar24ko)"/>
+<!-- root -->
+<circle cx="240" cy="34" r="15" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="240" y="38" font-size="10.5" fill="#4f46e5" text-anchor="middle" font-weight="700">$s_0$</text>
+<!-- depth1 -->
+<circle cx="140" cy="120" r="14" fill="#fff" stroke="#4f46e5" stroke-width="1.8"/>
+<text x="140" y="124" font-size="9.5" fill="#4f46e5" text-anchor="middle">.7</text>
+<circle cx="340" cy="120" r="14" fill="#fff" stroke="#4f46e5" stroke-width="1.8"/>
+<text x="340" y="124" font-size="9.5" fill="#4f46e5" text-anchor="middle">.4</text>
+<!-- depth2 -->
+<circle cx="80" cy="200" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="80" y="204" font-size="10" fill="#dc2626" text-anchor="middle">✂</text>
+<circle cx="200" cy="200" r="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="200" y="204" font-size="9.5" fill="#16a34a" text-anchor="middle">.9</text>
+<circle cx="290" cy="200" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="290" y="204" font-size="10" fill="#dc2626" text-anchor="middle">✂</text>
+<circle cx="400" cy="200" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="400" y="204" font-size="10" fill="#dc2626" text-anchor="middle">✂</text>
+<!-- depth3 winner -->
+<circle cx="200" cy="270" r="14" fill="#16a34a" stroke="#166534" stroke-width="2"/>
+<text x="200" y="274" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="700">✓</text>
+<text x="118" y="118" font-size="9" fill="#94a3b8" text-anchor="end">value</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">구조화 출력 JSON 스키마 (예시)</div>
+        <table class="ktab"><thead><tr><th>필드</th><th>타입</th><th style="text-align:right">제약</th></tr></thead><tbody>
+          <tr><td>steps</td><td class="k">array</td><td>사고 단계 목록</td></tr>
+          <tr><td>steps[].value</td><td class="k">number</td><td>$0\!\le\! v \!\le\! 1$</td></tr>
+          <tr><td>chosen_path</td><td class="k">array&lt;int&gt;</td><td>선택된 노드 인덱스</td></tr>
+          <tr><td>answer</td><td class="k">string</td><td>required</td></tr>
+          <tr><td>confidence</td><td class="k">enum</td><td>low·mid·high</td></tr>
+        </tbody></table>
+        <div class="keqnote">스키마 강제(제약 디코딩·함수 호출)로 후속 코드가 <strong>파싱 실패 없이</strong> 값을 소비 → 파이프라인 신뢰성↑. 트리 $b=2,d=3$의 리프 수는 $2^3=8$. (출처: Yao et al. 2023; 구조화 출력 = OpenAI/Anthropic 함수 호출·JSON mode 문서)</div>
+      </div>
+    </div>
+    <div class="vizgrid lang-en">
+      <div>
+        <div class="vcap">Branching search tree ($b=2$, $d=3$ · ✂ = backtrack)</div>
+        <svg viewBox="0 0 480 300" width="100%" style="max-width:440px">
+<defs>
+<marker id="ar24en" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#94a3b8"/></marker>
+</defs>
+<line x1="240" y1="42" x2="140" y2="112" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24en)"/>
+<line x1="240" y1="42" x2="340" y2="112" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24en)"/>
+<line x1="140" y1="128" x2="80" y2="192" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="4 3"/>
+<line x1="140" y1="128" x2="200" y2="192" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24en)"/>
+<line x1="340" y1="128" x2="290" y2="192" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24en)"/>
+<line x1="340" y1="128" x2="400" y2="192" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24en)"/>
+<line x1="200" y1="208" x2="200" y2="256" stroke="#16a34a" stroke-width="2.2" marker-end="url(#ar24en)"/>
+<circle cx="240" cy="34" r="15" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="240" y="38" font-size="10.5" fill="#4f46e5" text-anchor="middle" font-weight="700">$s_0$</text>
+<circle cx="140" cy="120" r="14" fill="#fff" stroke="#4f46e5" stroke-width="1.8"/>
+<text x="140" y="124" font-size="9.5" fill="#4f46e5" text-anchor="middle">.7</text>
+<circle cx="340" cy="120" r="14" fill="#fff" stroke="#4f46e5" stroke-width="1.8"/>
+<text x="340" y="124" font-size="9.5" fill="#4f46e5" text-anchor="middle">.4</text>
+<circle cx="80" cy="200" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="80" y="204" font-size="10" fill="#dc2626" text-anchor="middle">✂</text>
+<circle cx="200" cy="200" r="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="200" y="204" font-size="9.5" fill="#16a34a" text-anchor="middle">.9</text>
+<circle cx="290" cy="200" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="290" y="204" font-size="10" fill="#dc2626" text-anchor="middle">✂</text>
+<circle cx="400" cy="200" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="400" y="204" font-size="10" fill="#dc2626" text-anchor="middle">✂</text>
+<circle cx="200" cy="270" r="14" fill="#16a34a" stroke="#166534" stroke-width="2"/>
+<text x="200" y="274" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="700">✓</text>
+<text x="118" y="118" font-size="9" fill="#94a3b8" text-anchor="end">value</text>
+</svg>
+      </div>
+      <div>
+        <div class="vcap">Structured-output JSON schema (example)</div>
+        <table class="ktab"><thead><tr><th>Field</th><th>Type</th><th style="text-align:right">Constraint</th></tr></thead><tbody>
+          <tr><td>steps</td><td class="k">array</td><td>list of thought steps</td></tr>
+          <tr><td>steps[].value</td><td class="k">number</td><td>$0\!\le\! v \!\le\! 1$</td></tr>
+          <tr><td>chosen_path</td><td class="k">array&lt;int&gt;</td><td>selected node indices</td></tr>
+          <tr><td>answer</td><td class="k">string</td><td>required</td></tr>
+          <tr><td>confidence</td><td class="k">enum</td><td>low·mid·high</td></tr>
+        </tbody></table>
+        <div class="keqnote">Enforcing the schema (constrained decoding / function calling) lets downstream code consume values <strong>without parse failures</strong> → higher pipeline reliability. A tree with $b=2,d=3$ has $2^3=8$ leaves. (Source: Yao et al. 2023; structured output = OpenAI/Anthropic function-calling / JSON-mode docs)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-4 / 실습 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="실습">
+    <div class="eyebrow lang-ko">2-4 · 실습 · Interactive</div>
+    <div class="eyebrow lang-en">2-4 · Interactive</div>
+    <h1 class="stage-h lang-ko">탐색 노드 수 $b^d$ — 직접 조절해보기</h1>
+    <h1 class="stage-h lang-en">Search Node Count $b^d$ — Try It</h1>
+    <p class="lede lang-ko">Tree of Thought의 비용 감각을 잡아봅시다. <strong>분기폭 $b$</strong>와 <strong>깊이 $d$</strong>를 바꾸면 완전 트리의 리프(가능한 완결 사고 경로) 수가 $b^d$로 어떻게 폭증하는지 확인하세요. 넓힘과 깊힘이 <strong>곱셈적으로</strong> 비용을 키운다는 사실을 몸으로 느끼는 것이 목표입니다.</p>
+    <p class="lede lang-en">Build a feel for Tree-of-Thought cost. Vary the <strong>branching factor $b$</strong> and <strong>depth $d$</strong> to watch the number of leaves (complete reasoning paths) of a full tree explode as $b^d$. The goal is to sense that widening and deepening raise cost <strong>multiplicatively</strong>.</p>
+    <div class="calc lang-ko"
+      data-title="탐색 노드 수 $N = b^{d}$"
+      data-desc="b = 분기폭(한 노드에서 뻗는 후보 수), d = 깊이(사고 단계 수). 기본값 b=3, d=4 → N=81개 경로. b 또는 d를 조금만 올려도 N이 급증합니다."
+      data-vars='[{"sym":"b","label":"$b$ · 분기폭","min":1,"max":6,"val":3,"step":1,"unit":"갈래"},{"sym":"d","label":"$d$ · 깊이","min":1,"max":8,"val":4,"step":1,"unit":"단계"}]'
+      data-expr="Math.pow(b,d)"
+      data-out="$N$" data-out-unit="개 경로"
+      data-barmax="4096"
+      data-note="b를 3→6으로 2배 키우면(d=4 고정) N은 81→1296으로 약 16배가 됩니다 — 넓힘의 지수적 대가."></div>
+    <div class="calc lang-en"
+      data-title="Search node count $N = b^{d}$"
+      data-desc="b = branching factor (candidates per node), d = depth (thought steps). Default b=3, d=4 → N=81 paths. Even small increases in b or d blow N up."
+      data-vars='[{"sym":"b","label":"$b$ · branching","min":1,"max":6,"val":3,"step":1,"unit":"ways"},{"sym":"d","label":"$d$ · depth","min":1,"max":8,"val":4,"step":1,"unit":"steps"}]'
+      data-expr="Math.pow(b,d)"
+      data-out="$N$" data-out-unit="paths"
+      data-barmax="4096"
+      data-note="Doubling b from 3→6 (with d=4 fixed) grows N from 81→1296, about 16× — the exponential cost of widening."></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">엔지니어링 감각</b> — 경로 수 $N$ 감: 사슬(CoT)은 $b{=}1$이라 항상 $N{=}1$(단일 경로) · 얕은 트리 $b{=}2,d{=}3$은 $N{=}8$(가벼운 탐색) · $b{=}3,d{=}4$는 $N{=}81$(중간) · $b{=}4,d{=}5$는 $N{=}1024$(비쌈). LLM 호출 비용은 대략 노드 수에 비례하므로, 실전에서는 상태 평가로 <strong>beam $k$</strong>만 남겨 $b^d$를 잘라낸다. <span class="src">(출처: Yao et al. 2023, ToT의 BFS/DFS + value 평가)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — feel for path count $N$: a chain (CoT) has $b{=}1$, so always $N{=}1$ (single path) · shallow tree $b{=}2,d{=}3$ gives $N{=}8$ (light search) · $b{=}3,d{=}4$ gives $N{=}81$ (moderate) · $b{=}4,d{=}5$ gives $N{=}1024$ (expensive). Since LLM cost roughly scales with node count, in practice state values keep only <strong>beam $k$</strong>, pruning $b^d$. <span class="src">(Source: Yao et al. 2023, ToT with BFS/DFS + value evaluation)</span></div>
+  </section>
+
+  <!-- ══════════ 2-4 / 점검 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="점검">
+    <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
+    <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q1.</span>Chain-of-Thought(CoT)와 비교했을 때 <strong>Tree of Thought(ToT)</strong>가 추가로 가지는 핵심 능력은?</p>
+      <div class="opts">
+        <button class="opt">① 더 짧은 프롬프트로 항상 더 저렴하게 답한다</button>
+        <button class="opt" data-correct="1">② 여러 후보를 분기·평가하고 막히면 백트래킹한다</button>
+        <button class="opt">③ 추론 없이 곧바로 최종 답만 출력한다</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ToT는 단일 사슬 대신 <strong>분기 탐색 + 상태 평가 + 백트래킹</strong>을 명시적으로 수행한다(Yao et al. 2023). <span class="dim">오답 ①·③: ①탐색 노드가 $b^d$로 늘어 오히려 더 비싸고, ③추론 단계 없이 답만 내는 것은 직접 답(IO) 방식이다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q1.</span>Compared with Chain-of-Thought (CoT), what key extra capability does <strong>Tree of Thought (ToT)</strong> add?</p>
+      <div class="opts">
+        <button class="opt">① it always answers more cheaply with a shorter prompt</button>
+        <button class="opt" data-correct="1">② it branches and evaluates candidates and backtracks when stuck</button>
+        <button class="opt">③ it outputs the final answer directly without reasoning</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ToT explicitly performs <strong>branching search + state evaluation + backtracking</strong> instead of a single chain (Yao et al. 2023). <span class="dim">Wrong ①·③: ① search nodes grow as $b^d$, so it is usually more expensive; ③ emitting an answer with no reasoning is the direct (IO) method.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-ko">
+      <p class="qtext"><span class="qn">Q2.</span>모델 출력에 <strong>JSON schema를 강제</strong>하는 주된 목적은?</p>
+      <div class="opts">
+        <button class="opt">① 모델의 추론 정확도 자체를 항상 높이기 위해</button>
+        <button class="opt" data-correct="1">② 후속 파이프라인이 파싱 실패 없이 값을 소비하도록 신뢰성을 높이기 위해</button>
+        <button class="opt">③ 토큰 수를 줄여 무조건 비용을 낮추기 위해</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 구조화 출력(제약 디코딩·함수 호출)은 자유 텍스트의 파싱 불확실성을 없애 <strong>파이프라인 신뢰성</strong>을 확보한다. <span class="dim">오답 ①·③: ①스키마는 형식을 고정할 뿐 추론 정확도를 항상 올리지는 않고, ③스키마 필드가 오히려 토큰을 더 쓸 수도 있어 비용 절감이 목적은 아니다.</span> <span class="agg">학급 n=41 · ① 8 · ② 29 · ③ 4</span></div>
+    </div>
+    <div class="cq lang-en">
+      <p class="qtext"><span class="qn">Q2.</span>What is the main purpose of <strong>enforcing a JSON schema</strong> on model output?</p>
+      <div class="opts">
+        <button class="opt">① to always raise the model's reasoning accuracy itself</button>
+        <button class="opt" data-correct="1">② to raise reliability so downstream pipelines consume values without parse failures</button>
+        <button class="opt">③ to cut tokens and unconditionally lower cost</button>
+      </div>
+      <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — structured output (constrained decoding / function calling) removes the parse uncertainty of free text, securing <strong>pipeline reliability</strong>. <span class="dim">Wrong ①·③: ① a schema fixes format but does not always improve reasoning accuracy; ③ schema fields may even add tokens, so cost reduction is not the aim.</span> <span class="agg">class n=41 · ① 8 · ② 29 · ③ 4</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-4 / 연습 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="연습">
+    <div class="panel-head lang-ko"><span class="tag">연습문제</span><span class="panel-title">탐색 비용 계산 · 자동 채점</span></div>
+    <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Search-cost calc · auto-graded</span></div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 1 · 기본 · 리프 노드 수 $b^d$</div>
+      <p class="prob-statement">한 노드에서 <strong>분기폭 $b=3$</strong>으로 후보를 생성하고, 깊이 <strong>$d=4$</strong>까지 완전히 펼친 Tree of Thought가 있다. 가능한 <strong>완결 사고 경로(리프) 수 $N$</strong>을 구하시오.</p>
+      <div class="given"><span class="chip">$b=3$</span><span class="chip">$d=4$</span></div>
+      <div class="find"><b>구할 것:</b> $N=b^{d}$ (개 경로)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="81" data-tol="0.001"/><span class="ans-unit">개 경로</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 공식</div>$$ N = b^{d} $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 대입</div>$$ N = 3^{4} = 81 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ N = 81\ \text{개 경로} $$</div><b>정답:</b> 분기·깊이가 곱셈적으로 작동 — $b,d$가 조금만 커져도 $N$이 급증한다.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 1 · Basic · leaf count $b^d$</div>
+      <p class="prob-statement">A Tree of Thought generates candidates with <strong>branching factor $b=3$</strong> at each node and is fully expanded to depth <strong>$d=4$</strong>. Find the number of possible <strong>complete reasoning paths (leaves) $N$</strong>.</p>
+      <div class="given"><span class="chip">$b=3$</span><span class="chip">$d=4$</span></div>
+      <div class="find"><b>Find:</b> $N=b^{d}$ (paths)</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="81" data-tol="0.001"/><span class="ans-unit">paths</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · formula</div>$$ N = b^{d} $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · substitute</div>$$ N = 3^{4} = 81 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ N = 81\ \text{paths} $$</div><b>Answer:</b> branching and depth act multiplicatively — small increases in $b,d$ blow $N$ up.</div>
+      </div>
+    </div>
+    <div class="prob lang-ko">
+      <div class="prob-num">연습 2 · 응용 · 분기폭이 비용에 미치는 배수</div>
+      <p class="prob-statement">깊이 <strong>$d=4$</strong>를 고정한 채 분기폭을 <strong>$b=2$에서 $b=4$로</strong> 늘렸다. 리프 경로 수가 몇 <strong>배</strong>로 늘어나는지 구하시오. (배수 $= 4^4 / 2^4$)</p>
+      <div class="given"><span class="chip">$d=4$ 고정</span><span class="chip">$b:\ 2 \rightarrow 4$</span></div>
+      <div class="find"><b>구할 것:</b> 배수 $= \dfrac{4^{4}}{2^{4}}$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="16" data-tol="0.001"/><span class="ans-unit">배</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · 각 경우 계산</div>$$ 4^{4}=256,\qquad 2^{4}=16 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 배수</div>$$ \frac{4^{4}}{2^{4}}=\left(\frac{4}{2}\right)^{4}=2^{4}=16 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{배수} = 16 $$</div><b>정답:</b> 분기폭 2배 × 깊이 4 → $2^4=16$배 — 넓힘의 지수적 대가. 그래서 beam·평가로 잘라낸다.</div>
+      </div>
+    </div>
+    <div class="prob lang-en">
+      <div class="prob-num">Practice 2 · Applied · cost multiplier from branching</div>
+      <p class="prob-statement">Holding depth <strong>$d=4$</strong> fixed, the branching factor is increased <strong>from $b=2$ to $b=4$</strong>. Find by what <strong>factor</strong> the number of leaf paths grows. (factor $= 4^4 / 2^4$)</p>
+      <div class="given"><span class="chip">$d=4$ fixed</span><span class="chip">$b:\ 2 \rightarrow 4$</span></div>
+      <div class="find"><b>Find:</b> factor $= \dfrac{4^{4}}{2^{4}}$</div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="16" data-tol="0.001"/><span class="ans-unit">×</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
+      <div class="revealable solution">
+        <div class="dstep2"><div class="step-label">Step 1 · each case</div>$$ 4^{4}=256,\qquad 2^{4}=16 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · ratio</div>$$ \frac{4^{4}}{2^{4}}=\left(\frac{4}{2}\right)^{4}=2^{4}=16 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{factor} = 16 $$</div><b>Answer:</b> doubling $b$ over depth 4 → $2^4=16\times$ — the exponential cost of widening. Hence beam/evaluation pruning.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2-4 / 정리 ══════════ -->
+  <section class="screen" data-ch="2-4" data-chtitle="사고 트리·분해·구조화 출력" data-stage="정리">
+    <div class="eyebrow lang-ko">2-4 · 정리 · Summary</div>
+    <div class="eyebrow lang-en">2-4 · Summary</div>
+    <h1 class="stage-h lang-ko">핵심 정리 · 자주 하는 실수 · 시험 포인트</h1>
+    <h1 class="stage-h lang-en">Key Points · Common Mistakes · Exam Focus</h1>
+    <div class="sumgrid lang-ko">
+      <div class="sumcard key"><h4>핵심 정리</h4><ul>
+        <li>ToT = <strong>분기 생성 → 상태 평가 → 확장/백트래킹</strong>; 리프 수 $N=b^{d}$ (Yao et al. 2023).</li>
+        <li>least-to-most = <strong>먼저 분해</strong> 후 하위문제 순차 해결로 $b^d$를 합으로 완화 (Zhou et al. 2022).</li>
+        <li>구조화 출력 = <strong>JSON schema 강제·함수 호출</strong>로 파이프라인 신뢰성 확보.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
+        <li>$b,d$를 무작정 키우기 → 비용이 <strong>$b^d$로 폭주</strong>.</li>
+        <li>부정확한 상태 평가로 <strong>잘못된 가지 확장</strong> → 성능 저하.</li>
+        <li>스키마 강제를 <strong>추론 정확도 향상</strong>으로 오해 → 목적은 신뢰성.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
+        <li>$b,d$ 주어질 때 리프/노드 수 $b^d$ 계산 빈출.</li>
+        <li>CoT vs ToT vs least-to-most의 차이와 적용 상황.</li>
+        <li>구조화 출력의 목적(파이프라인 신뢰성)과 수단(스키마·함수 호출).</li>
+      </ul></div>
+    </div>
+    <div class="sumgrid lang-en">
+      <div class="sumcard key"><h4>Key points</h4><ul>
+        <li>ToT = <strong>branch generation → state value → expand/backtrack</strong>; leaves $N=b^{d}$ (Yao et al. 2023).</li>
+        <li>Least-to-most = <strong>decompose first</strong>, solve subproblems in sequence, softening $b^d$ into a sum (Zhou et al. 2022).</li>
+        <li>Structured output = <strong>enforce JSON schema / function calling</strong> for pipeline reliability.</li>
+      </ul></div>
+      <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
+        <li>Blindly raising $b,d$ → cost blows up as <strong>$b^d$</strong>.</li>
+        <li>Noisy state values → <strong>expanding wrong branches</strong> → worse performance.</li>
+        <li>Reading schema enforcement as an <strong>accuracy boost</strong> → its aim is reliability.</li>
+      </ul></div>
+      <div class="sumcard exam full"><h4>Exam focus</h4><ul>
+        <li>Given $b,d$ → compute leaf/node count $b^d$ (frequent).</li>
+        <li>Differences and use cases of CoT vs ToT vs least-to-most.</li>
+        <li>Purpose (pipeline reliability) and means (schema / function calling) of structured output.</li>
+      </ul></div>
+    </div>
+  </section>
+</div></main>
+<footer><button class="nav-btn prev" id="prevBtn">← 이전</button><span class="foot-hint" id="footHint">← / → 또는 상단 단계 클릭으로 이동</span><button class="nav-btn next" id="nextBtn">다음 →</button></footer>
+
+<script>
+(function(){
+  var screens=Array.prototype.slice.call(document.querySelectorAll('.screen'));
+  var stage=document.getElementById('stage'), stepbar=document.getElementById('stepbar'), chrail=document.getElementById('chrail');
+  var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  var N=screens.length, active=0;
+  var chapters=[]; screens.forEach(function(s){var c=s.getAttribute('data-ch'); if(chapters.indexOf(c)<0)chapters.push(c);});
+  function chOf(i){return screens[i].getAttribute('data-ch');} function stOf(i){return screens[i].getAttribute('data-stage');}
+
+  function fitActive(){ var u=screens[active]; if(!u)return; u.style.transform='none'; var avail=stage.clientHeight, nat=u.offsetHeight; if(nat<=0||avail<=0)return; if(nat>avail){u.style.transformOrigin='top center'; u.style.transform='scale('+(avail/nat)+')';} else {u.style.transformOrigin='top center'; var _st=u.getAttribute('data-stage'); var _cap=(_st==='점검'||_st==='연습')?44:(avail-nat)/2; u.style.transform='translateY('+Math.min((avail-nat)/2,_cap)+'px)';} }
+
+  function buildChrail(){ chrail.innerHTML=''; chapters.forEach(function(c){ var d=document.createElement('span'); d.className='chdot'; d.textContent=c; d.addEventListener('click',function(){ for(var k=0;k<N;k++){ if(chOf(k)===c){show(k);break;} } }); chrail.appendChild(d); }); }
+  function buildStepper(){ var ch=chOf(active); var list=[]; for(var i=0;i<N;i++){ if(chOf(i)===ch) list.push(i); } stepbar.innerHTML=''; list.forEach(function(idx,k){ var el=document.createElement('div'); var cls='step'; if(idx===active)cls+=' cur'; else if(idx<active)cls+=' done'; el.className=cls; el.innerHTML='<span class="ix">'+(k+1)+'</span>'+stOf(idx); el.addEventListener('click',function(){show(idx);}); stepbar.appendChild(el); if(k<list.length-1){var ln=document.createElement('span'); ln.className='link'; el.appendChild(ln);} }); }
+
+  function render(){ for(var i=0;i<N;i++) screens[i].classList.toggle('active', i===active); var ch=chOf(active); Array.prototype.forEach.call(chrail.children,function(d){ d.classList.toggle('cur', d.textContent===ch); }); buildStepper(); prevBtn.disabled=(active===0); if(active>=N-1){ nextBtn.textContent='✓ 완료 · 목록으로'; } else { var nx=active+1; nextBtn.textContent=(chOf(nx)===ch)?('다음 · '+stOf(nx)+' →'):('다음 챕터 '+chOf(nx)+' →'); } fitActive(); }
+  function show(i){ if(i<0)i=0; if(i>N-1)i=N-1; active=i; render(); }
+
+  function toggleReveal(btn){ var scope=btn.closest('.prob')||btn.closest('.screen'); var t=scope?scope.querySelector('.revealable.solution'):null; if(!t)return; var open=t.classList.toggle('open'); btn.classList.toggle('is-open',open); var sp=btn.querySelector('span'); if(sp)sp.textContent=open?'풀이 숨기기':'풀이 보기'; fitActive(); }
+
+  document.addEventListener('click',function(e){
+    var opt=e.target.closest?e.target.closest('.opt'):null;
+    if(opt){ var wrap=opt.parentElement; Array.prototype.forEach.call(wrap.children,function(o){o.classList.remove('sel');}); opt.classList.add('sel'); return; }
+    var sub=e.target.closest?e.target.closest('.cp-submit'):null;
+    if(sub){ var cq=sub.closest('.cq')||sub.closest('.screen'); var sel=cq.querySelector('.opt.sel'); var fb=cq.querySelector('.cp-fb'); var prof=cq.querySelector('.cp-exp')||cq.querySelector('.cp-prof'); if(!sel){ if(fb){fb.textContent='먼저 보기를 선택하세요'; fb.style.color='var(--gray2)';} return; } var ok=sel.getAttribute('data-correct')==='1'; if(fb){fb.textContent=ok?'✓ 제출됨 — 정답':'제출됨 — 학급 응답에 반영'; fb.style.color='var(--accent)';} Array.prototype.forEach.call(cq.querySelectorAll('.opt'),function(o){if(o.getAttribute('data-correct')==='1')o.classList.add('correct');}); if(prof)prof.classList.add('show'); fitActive(); return; }
+    var chk=e.target.closest?e.target.closest('.pr-check'):null;
+    if(chk){ var pb=chk.closest('.prob')||chk.closest('.screen'); var input=pb.querySelector('.ans-input'); var pf=pb.querySelector('.pr-fb'); if(!input||!pf)return; var ans=parseFloat(input.getAttribute('data-answer')), tol=parseFloat(input.getAttribute('data-tol')||'0.02'); var raw=(input.value||'').replace(/[,\s]/g,''); if(raw===''){pf.textContent='먼저 답을 입력하세요'; pf.className='check-fb pr-fb no'; return;} var v=parseFloat(raw), good=!isNaN(v)&&Math.abs(v-ans)<=Math.abs(ans)*tol; pf.textContent=good?'✓ 정답입니다 — 풀이로 과정 확인':'✗ 다시 — 풀이로 과정 확인'; pf.className='check-fb pr-fb '+(good?'ok':'no'); fitActive(); return; }
+    var rb=e.target.closest?e.target.closest('.reveal-btn'):null; if(rb){ toggleReveal(rb); return; }
+  });
+  document.addEventListener('keydown',function(e){ if(e.target&&e.target.classList&&e.target.classList.contains('ans-input')){ if(e.key==='Enter'){var b=e.target.closest('.prob').querySelector('.pr-check'); if(b)b.click();} return; } if(e.key==='ArrowRight')show(active+1); else if(e.key==='ArrowLeft')show(active-1); });
+  prevBtn.addEventListener('click',function(){show(active-1);}); nextBtn.addEventListener('click',function(){ if(active>=N-1){location.href='/';} else {show(active+1);} });
+  window.addEventListener('resize',fitActive);
+
+  // ── interactive calc widgets ──
+  function _sup(n){var m={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};return String(n).split('').map(function(c){return m[c]||c;}).join('');} function fnum(x){ if(!isFinite(x))return '—'; var a=Math.abs(x); if(a!==0&&(a<0.01||a>=1e5)){ var e=Math.floor(Math.log10(a)); var mn=x/Math.pow(10,e); return (Math.round(mn*100)/100)+' × 10'+_sup(e); } return (Math.round(x*1000)/1000).toLocaleString(); }
+  function initCalcs(){ Array.prototype.forEach.call(document.querySelectorAll('.calc:not([data-init])'),function(c){ c.setAttribute('data-init','1'); var vars; try{vars=JSON.parse(c.getAttribute('data-vars')||'[]');}catch(e){vars=[];} var expr=c.getAttribute('data-expr')||'0'; var outSym=c.getAttribute('data-out')||''; var outUnit=c.getAttribute('data-out-unit')||''; var barmax=parseFloat(c.getAttribute('data-barmax')||'0'); var title=c.getAttribute('data-title')||''; var desc=c.getAttribute('data-desc')||''; var note=c.getAttribute('data-note')||'';
+    var html='<div class="calc-title">'+title+'</div>'; if(desc)html+='<div class="calc-desc">'+desc+'</div>'; html+='<div class="calc-rows"></div><div class="calc-out"><span class="calc-os">'+outSym+'</span><span>=</span><b class="calc-num">—</b><span class="calc-ou">'+outUnit+'</span></div>'; if(barmax>0)html+='<div class="calc-outbar"><div class="bar"><span class="calc-bar" style="width:0%"></span></div></div>'; if(note)html+='<div class="calc-note">'+note+'</div>'; c.innerHTML=html;
+    var rowsEl=c.querySelector('.calc-rows'); var inputs={}; var fn; try{ fn=Function.apply(null, vars.map(function(v){return v.sym;}).concat(['return ('+expr+');'])); }catch(e){ fn=function(){return NaN;}; }
+    vars.forEach(function(v){ var row=document.createElement('div'); row.className='calc-row'; row.innerHTML='<span class="calc-lab">'+(v.label||v.sym)+'</span><input type="range" min="'+v.min+'" max="'+v.max+'" step="'+(v.step||((v.max-v.min)/100))+'" value="'+v.val+'"><span class="calc-val"></span>'; rowsEl.appendChild(row); var rng=row.querySelector('input'); inputs[v.sym]={rng:rng, val:row.querySelector('.calc-val'), unit:v.unit||''}; rng.addEventListener('input',recompute); });
+    function recompute(){ var args=vars.map(function(v){return parseFloat(inputs[v.sym].rng.value);}); vars.forEach(function(v){ var o=inputs[v.sym]; o.val.textContent=fnum(parseFloat(o.rng.value))+(o.unit?(' '+o.unit):''); }); var y; try{y=fn.apply(null,args);}catch(e){y=NaN;} c.querySelector('.calc-num').textContent=fnum(y); if(barmax>0){ var w=Math.max(0,Math.min(100, y/barmax*100)); var b=c.querySelector('.calc-bar'); if(b)b.style.width=w+'%'; } }
+    recompute();
+  }); }
+
+  function renderMath(){ initCalcs(); if(window.renderMathInElement){ renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); } fitActive(); if(window.requestAnimationFrame)requestAnimationFrame(fitActive); }
+
+  function applyDeep(){ var p=new URLSearchParams(location.search), idx=0; var s=parseInt(p.get('slide'),10); if(!isNaN(s))idx=Math.min(Math.max(s,0),N-1); var u=p.get('unit'); if(u){ for(var i=0;i<N;i++){ if(chOf(i)===u){idx=i;break;} } } var rev=p.get('reveal')==='all'; show(idx); if(rev){ Array.prototype.forEach.call(screens[idx].querySelectorAll('.reveal-btn'),function(b){toggleReveal(b);}); Array.prototype.forEach.call(screens[idx].querySelectorAll('.cq'),function(cq){ var o=cq.querySelector('.opt[data-correct]'); if(o){o.classList.add('sel'); var sb=cq.querySelector('.cp-submit'); if(sb)sb.click();} }); } }
+
+  buildChrail();
+  document.addEventListener('DOMContentLoaded',function(){ applyDeep(); renderMath(); });
+  if(document.readyState!=='loading'){ applyDeep(); renderMath(); }
+  window.addEventListener('load',renderMath);
+
+  // ── language toggle (ko / en) ──
+  (function(){
+    var btn=document.getElementById('langToggle'); if(!btn)return;
+    var LABELS={ko:'EN', en:'한국어'};
+    function apply(lang){ var d=document.documentElement; d.classList.remove('lang-ko','lang-en'); d.classList.add('lang-'+lang); btn.textContent=LABELS[lang]; }
+    var lang; try{ lang=localStorage.getItem('lecture_lang'); }catch(e){ lang=null; }
+    if(lang!=='en'&&lang!=='ko') lang='ko';
+    apply(lang);
+    btn.addEventListener('click',function(){
+      lang=(lang==='ko')?'en':'ko';
+      apply(lang);
+      try{ localStorage.setItem('lecture_lang',lang); }catch(e){}
+      if(window.requestAnimationFrame) requestAnimationFrame(fitActive); else fitActive();
+    });
+  })();
+})();
+</script>
+<script>window.HTL_WEEK=2;</script>
+<script src="/htl-track.js" defer></script>
+</body>
+</html>
