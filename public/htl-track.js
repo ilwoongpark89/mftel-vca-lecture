@@ -241,6 +241,44 @@
   var mirroring = false; // 쌍둥이 동기화 중 재귀/추적 차단
   function textOf(el) { return el ? (el.textContent || "").replace(/\s+/g, " ").trim() : ""; }
 
+  // ── 실시간 학급 응답 분포 (점검 퀴즈): 제출 후 실데이터 집계 표시 (가짜 agg 의 정직한 대체) ──
+  var statsCache = {};
+  function renderStats(cqEl, lang, data) {
+    var exp = cqEl.querySelector(".cp-exp");
+    if (!exp) return;
+    var live = exp.querySelector(".agg-live");
+    if (!live) {
+      live = document.createElement("span");
+      live.className = "agg-live";
+      live.style.cssText = "display:block;margin-top:8px;font-size:11.5px;color:#a1a1aa;font-weight:600";
+      exp.appendChild(live);
+    }
+    if (!data || !data.ok || !data.total) {
+      live.textContent = lang === "en" ? "Live class tally — collecting…" : "실시간 학급 집계 — 수집 중…";
+      return;
+    }
+    var parts = data.dist.map(function (d) { return d.opt + " " + d.n; }).join(" · ");
+    live.textContent = (lang === "en" ? "Live class responses n=" : "실시간 학급 응답 n=") + data.total + " · " + parts;
+  }
+  function hydrateStats(scr, cqEl) {
+    var qn = textOf(cqEl.querySelector(".qn")) || "Q";
+    var ch = chOf(scr) || "";
+    var key = WEEK + "|" + ch + "|" + qn;
+    var apply = function (data) {
+      renderStats(cqEl, langOf(cqEl), data);
+      var tw = twinOf(scr, cqEl, ".cq");
+      if (tw) renderStats(tw, langOf(tw), data);
+    };
+    if (statsCache[key]) { apply(statsCache[key]); return; }
+    // sendBeacon 착지 대기 후 조회 (자기 답 포함되도록)
+    setTimeout(function () {
+      fetch("/api/stats?week=" + WEEK + "&chapter=" + encodeURIComponent(ch) + "&question=" + encodeURIComponent(qn))
+        .then(function (r) { return r.json(); })
+        .then(function (d) { statsCache[key] = d; apply(d); })
+        .catch(function () {});
+    }, 900);
+  }
+
   document.addEventListener("click", function (e) {
     if (REVEAL) return; // 딥링크 자동 제출 무시
     var t = e.target;
@@ -281,6 +319,7 @@
               } finally { mirroring = false; }
             }
           }
+          hydrateStats(scr, cq); // 실데이터 학급 분포 (본인+쌍둥이 해설에 주입)
         }
       }, 0);
       return;
