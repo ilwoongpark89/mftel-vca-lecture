@@ -223,7 +223,7 @@
       <div class="rm-item"><span class="rn">3-2</span><span><span class="rt">Chunking, Reranking &amp; Caching</span> <span class="rd">— chunk size and overlap, rerank, the token budget $B$, and cache reuse</span></span></div>
       <div class="rm-item"><span class="rn">3-3</span><span><span class="rt">The Agent Loop</span> <span class="rd">— iterating tool call, observation, and feedback; designing stop conditions</span></span></div>
       <div class="rm-item"><span class="rn">3-4</span><span><span class="rt">Spec-Driven &amp; Multi-Agent</span> <span class="rd">— pinning work with a spec and orchestrating role-specialized agents</span></span></div>
-      <div class="rm-item"><span class="rn">3-5</span><span><span class="rt">Vector DB Retrieval</span> <span class="rd">— embeddings and vector similarity $\cos\theta$, vector DBs and approximate nearest neighbours (ANN)</span></span></div>
+      <div class="rm-item"><span class="rn">3-5</span><span><span class="rt">Embedding Search &amp; Vector DBs</span> <span class="rd">— embeddings and vector similarity $\cos\theta$, vector DBs and approximate nearest neighbours (ANN)</span></span></div>
       <div class="rm-item"><span class="rn">3-6</span><span><span class="rt">Tool Design &amp; Function Calling</span> <span class="rd">— designing reliable tool schemas and function-calling interfaces</span></span></div>
     </div>
 
@@ -364,23 +364,23 @@
 <marker id="rag31ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
 </defs>
 <rect x="22" y="18" width="120" height="40" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
-<text x="82" y="43" font-size="12" fill="#1d4ed8" text-anchor="middle" font-weight="700">질의 $q$</text>
+<text x="82" y="43" font-size="12" fill="#1d4ed8" text-anchor="middle" font-weight="700">질의 q</text>
 <line x1="82" y1="58" x2="82" y2="82" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31ko)"/>
 <rect x="22" y="84" width="120" height="46" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
 <text x="82" y="103" font-size="11.5" fill="#15803d" text-anchor="middle" font-weight="700">① 검색 retrieve</text>
-<text x="82" y="120" font-size="10" fill="#52525b" text-anchor="middle">top-$k$ 유사도</text>
+<text x="82" y="120" font-size="10" fill="#52525b" text-anchor="middle">top-k 유사도</text>
 <rect x="288" y="84" width="168" height="46" rx="8" fill="#fafafa" stroke="#a1a1aa" stroke-width="1.4"/>
-<text x="372" y="103" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">코퍼스 $\{d_i\}$</text>
+<text x="372" y="103" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">코퍼스 {dᵢ}</text>
 <text x="372" y="120" font-size="10" fill="#71717a" text-anchor="middle">벡터 인덱스</text>
 <line x1="288" y1="107" x2="146" y2="107" stroke="#a1a1aa" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#rag31ko)"/>
 <line x1="82" y1="130" x2="82" y2="154" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31ko)"/>
 <rect x="22" y="156" width="120" height="46" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.6"/>
 <text x="82" y="175" font-size="11.5" fill="#a16207" text-anchor="middle" font-weight="700">② 증강 augment</text>
-<text x="82" y="192" font-size="10" fill="#52525b" text-anchor="middle">$[D_k;\,q]$</text>
+<text x="82" y="192" font-size="10" fill="#52525b" text-anchor="middle">[Dₖ; q]</text>
 <line x1="82" y1="202" x2="82" y2="226" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31ko)"/>
 <rect x="22" y="228" width="120" height="46" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
 <text x="82" y="247" font-size="11.5" fill="#b91c1c" text-anchor="middle" font-weight="700">③ 생성 generate</text>
-<text x="82" y="264" font-size="10" fill="#52525b" text-anchor="middle">$y\sim p_\theta$</text>
+<text x="82" y="264" font-size="10" fill="#52525b" text-anchor="middle">y ∼ p<tspan dy="2" font-size="8">θ</tspan></text>
 <rect x="288" y="228" width="168" height="46" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
 <text x="372" y="247" font-size="11" fill="#6d28d9" text-anchor="middle" font-weight="700">답변 + 출처</text>
 <text x="372" y="264" font-size="10" fill="#71717a" text-anchor="middle">grounded</text>
@@ -407,23 +407,23 @@
 <marker id="rag31en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
 </defs>
 <rect x="22" y="18" width="120" height="40" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
-<text x="82" y="43" font-size="12" fill="#1d4ed8" text-anchor="middle" font-weight="700">query $q$</text>
+<text x="82" y="43" font-size="12" fill="#1d4ed8" text-anchor="middle" font-weight="700">query q</text>
 <line x1="82" y1="58" x2="82" y2="82" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31en)"/>
 <rect x="22" y="84" width="120" height="46" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
 <text x="82" y="103" font-size="11.5" fill="#15803d" text-anchor="middle" font-weight="700">① retrieve</text>
-<text x="82" y="120" font-size="10" fill="#52525b" text-anchor="middle">top-$k$ similar</text>
+<text x="82" y="120" font-size="10" fill="#52525b" text-anchor="middle">top-k similar</text>
 <rect x="288" y="84" width="168" height="46" rx="8" fill="#fafafa" stroke="#a1a1aa" stroke-width="1.4"/>
-<text x="372" y="103" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">corpus $\{d_i\}$</text>
+<text x="372" y="103" font-size="11" fill="#52525b" text-anchor="middle" font-weight="700">corpus {dᵢ}</text>
 <text x="372" y="120" font-size="10" fill="#71717a" text-anchor="middle">vector index</text>
 <line x1="288" y1="107" x2="146" y2="107" stroke="#a1a1aa" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#rag31en)"/>
 <line x1="82" y1="130" x2="82" y2="154" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31en)"/>
 <rect x="22" y="156" width="120" height="46" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.6"/>
 <text x="82" y="175" font-size="11.5" fill="#a16207" text-anchor="middle" font-weight="700">② augment</text>
-<text x="82" y="192" font-size="10" fill="#52525b" text-anchor="middle">$[D_k;\,q]$</text>
+<text x="82" y="192" font-size="10" fill="#52525b" text-anchor="middle">[Dₖ; q]</text>
 <line x1="82" y1="202" x2="82" y2="226" stroke="#71717a" stroke-width="1.5" marker-end="url(#rag31en)"/>
 <rect x="22" y="228" width="120" height="46" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
 <text x="82" y="247" font-size="11.5" fill="#b91c1c" text-anchor="middle" font-weight="700">③ generate</text>
-<text x="82" y="264" font-size="10" fill="#52525b" text-anchor="middle">$y\sim p_\theta$</text>
+<text x="82" y="264" font-size="10" fill="#52525b" text-anchor="middle">y ∼ p<tspan dy="2" font-size="8">θ</tspan></text>
 <rect x="288" y="228" width="168" height="46" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
 <text x="372" y="247" font-size="11" fill="#6d28d9" text-anchor="middle" font-weight="700">answer + cites</text>
 <text x="372" y="264" font-size="10" fill="#71717a" text-anchor="middle">grounded</text>
@@ -484,7 +484,7 @@
         <button class="opt">③ 증강 → 생성 → 검색</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — RAG는 질의에 대해 먼저 문서를 <strong>검색</strong>하고, 찾은 근거를 프롬프트에 <strong>증강(주입)</strong>한 뒤 그 문맥으로 <strong>생성</strong>한다. <span class="dim">오답 ①·③: 생성이나 증강이 검색보다 앞서면 근거 없이 답을 만들게 되어 grounding이 성립하지 않는다.</span> <span class="agg">학급 n=41 · ① 5 · ② 33 · ③ 3</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — RAG는 질의에 대해 먼저 문서를 <strong>검색</strong>하고, 찾은 근거를 프롬프트에 <strong>증강(주입)</strong>한 뒤 그 문맥으로 <strong>생성</strong>한다. <span class="dim">오답 ①·③: 생성이나 증강이 검색보다 앞서면 근거 없이 답을 만들게 되어 grounding이 성립하지 않는다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Which lists the <strong>three RAG stages</strong> in the correct order?</p>
@@ -494,7 +494,7 @@
         <button class="opt">③ augment → generate → retrieve</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — RAG first <strong>retrieves</strong> documents for the query, <strong>augments</strong> the prompt with the found evidence, then <strong>generates</strong> using that context. <span class="dim">Wrong ①·③: if generation or augmentation precedes retrieval, the answer is produced without evidence and grounding fails.</span> <span class="agg">class n=41 · ① 5 · ② 33 · ③ 3</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — RAG first <strong>retrieves</strong> documents for the query, <strong>augments</strong> the prompt with the found evidence, then <strong>generates</strong> using that context. <span class="dim">Wrong ①·③: if generation or augmentation precedes retrieval, the answer is produced without evidence and grounding fails.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>검색 문서 수 <strong>$k$</strong>를 무한정 키우면 왜 정확도가 항상 좋아지지는 않는가?</p>
@@ -504,7 +504,7 @@
         <button class="opt">③ 임베딩 유사도 계산이 $k$가 커지면 불가능해지기 때문</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 재현항은 포화하는 반면, $k$가 커지면 <strong>무관 문서</strong>가 섞여 context distraction을 일으키고 토큰 예산·지연이 선형으로 증가한다. 그래서 최적 $k$가 존재한다. <span class="dim">오답 ①·③: ①재현율은 $k$에 따라 (반비례가 아니라) 포화하며 증가하고, ③유사도 계산은 $k$와 무관하게 가능하다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 재현항은 포화하는 반면, $k$가 커지면 <strong>무관 문서</strong>가 섞여 context distraction을 일으키고 토큰 예산·지연이 선형으로 증가한다. 그래서 최적 $k$가 존재한다. <span class="dim">오답 ①·③: ①재현율은 $k$에 따라 (반비례가 아니라) 포화하며 증가하고, ③유사도 계산은 $k$와 무관하게 가능하다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Why does increasing the retrieved count <strong>$k$</strong> indefinitely not always improve accuracy?</p>
@@ -514,7 +514,7 @@
         <button class="opt">③ because embedding similarity becomes impossible for large $k$</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the recall term saturates, while a larger $k$ mixes in <strong>irrelevant documents</strong> that cause context distraction and grow token budget and latency linearly. Hence an optimal $k$ exists. <span class="dim">Wrong ①·③: ① recall increases and saturates with $k$ (not inversely); ③ similarity computation is independent of $k$.</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the recall term saturates, while a larger $k$ mixes in <strong>irrelevant documents</strong> that cause context distraction and grow token budget and latency linearly. Hence an optimal $k$ exists. <span class="dim">Wrong ①·③: ① recall increases and saturates with $k$ (not inversely); ③ similarity computation is independent of $k$.</span></div>
     </div>
   </section>
 
@@ -842,7 +842,7 @@
         <button class="opt">③ 캐시 히트율이 0이 된다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 청크가 작으면 임베딩은 정밀하지만 앞뒤 문맥이 여러 청크로 흩어져 검색이 필요한 정보를 한 번에 못 가져온다. <span class="dim">오답 ①·③: ①은 <strong>너무 클 때</strong>의 문제(잡음 희석)이고, ③ 캐시 히트율은 청크 크기가 아니라 접두부 재사용에 좌우된다.</span> <span class="agg">학급 n=41 · ① 8 · ② 29 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 청크가 작으면 임베딩은 정밀하지만 앞뒤 문맥이 여러 청크로 흩어져 검색이 필요한 정보를 한 번에 못 가져온다. <span class="dim">오답 ①·③: ①은 <strong>너무 클 때</strong>의 문제(잡음 희석)이고, ③ 캐시 히트율은 청크 크기가 아니라 접두부 재사용에 좌우된다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>What is the characteristic problem of cutting chunks <strong>too small</strong>?</p>
@@ -852,7 +852,7 @@
         <button class="opt">③ the cache hit rate becomes zero</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — small chunks give precise embeddings but scatter surrounding context across many chunks, so retrieval can't fetch the needed information at once. <span class="dim">Wrong ①·③: ① is the problem of chunks that are <strong>too large</strong> (noise dilution); ③ the cache hit rate depends on prefix reuse, not chunk size.</span> <span class="agg">class n=41 · ① 8 · ② 29 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — small chunks give precise embeddings but scatter surrounding context across many chunks, so retrieval can't fetch the needed information at once. <span class="dim">Wrong ①·③: ① is the problem of chunks that are <strong>too large</strong> (noise dilution); ③ the cache hit rate depends on prefix reuse, not chunk size.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>프롬프트 캐싱에서 <strong>read≈0.1×</strong>, <strong>write≈1.25×</strong>(5분 TTL)일 때, 손익분기를 넘기려면?</p>
@@ -862,7 +862,7 @@
         <button class="opt">③ 접두부에 타임스탬프를 넣어 매번 새로 쓴다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 첫 요청은 write($1.25\times$), 이후는 read($0.1\times$). 2회 사용 시 $1.25+0.1=1.35 < 2$(캐시 미사용 2회)로 손익분기를 넘는다. <span class="dim">오답 ①·③: ①1회면 write만 물어 오히려 비싸고, ③타임스탬프는 매 요청 접두부를 바꿔 캐시를 조용히 무효화한다(read=0).</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 첫 요청은 write($1.25\times$), 이후는 read($0.1\times$). 2회 사용 시 $1.25+0.1=1.35 < 2$(캐시 미사용 2회)로 손익분기를 넘는다. <span class="dim">오답 ①·③: ①1회면 write만 물어 오히려 비싸고, ③타임스탬프는 매 요청 접두부를 바꿔 캐시를 조용히 무효화한다(read=0).</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>With <strong>read≈0.1×</strong> and <strong>write≈1.25×</strong> (5-minute TTL), what is needed to clear break-even?</p>
@@ -872,7 +872,7 @@
         <button class="opt">③ put a timestamp in the prefix so it's rewritten each time</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the first request writes ($1.25\times$), later ones read ($0.1\times$). Two uses give $1.25+0.1=1.35 < 2$ (two uncached calls), clearing break-even. <span class="dim">Wrong ①·③: ① one use only pays the write premium and costs more; ③ a timestamp changes the prefix every request and silently invalidates the cache (read=0).</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the first request writes ($1.25\times$), later ones read ($0.1\times$). Two uses give $1.25+0.1=1.35 < 2$ (two uncached calls), clearing break-even. <span class="dim">Wrong ①·③: ① one use only pays the write premium and costs more; ③ a timestamp changes the prefix every request and silently invalidates the cache (read=0).</span></div>
     </div>
   </section>
 
@@ -1184,8 +1184,8 @@
     <div class="eyebrow lang-en">3-3 · Interactive</div>
     <h1 class="stage-h lang-ko">검증 게이트 × 반복수 — 통과율 직접 조절</h1>
     <h1 class="stage-h lang-en">Gate × Iterations — Steer the Pass Rate</h1>
-    <p class="lede lang-ko">검증 게이트가 있는 코딩 에이전트는 <strong>테스트가 통과할 때까지 반복</strong>합니다. 한 번 시도의 성공률 $q$와 반복수 $N$으로 최종 통과율은 <strong>$1-(1-q)^{N}$</strong>(간단 모델). 슬라이더로 $q$와 $N$을 바꾸며 반복이 낮은 $q$를 얼마나 보완하는지 확인하세요. (게이트가 없다면 통과율은 오히려 $q^{N}$으로 떨어집니다.)</p>
-    <p class="lede lang-en">A coding agent with a verification gate <strong>iterates until tests pass</strong>. With per-attempt success $q$ and $N$ iterations, the final pass rate is <strong>$1-(1-q)^{N}$</strong> (a simple model). Move the sliders for $q$ and $N$ to see how iteration compensates for a low $q$. (Without a gate the rate instead falls as $q^{N}$.)</p>
+    <p class="lede lang-ko">검증 게이트가 있는 코딩 에이전트는 <strong>테스트가 통과할 때까지 반복</strong>합니다. 한 번 시도의 성공률 $q$와 반복수 $N$으로 최종 통과율은 <strong>$1-(1-q)^{N}$</strong>(간단 모델). 슬라이더로 $q$와 $N$을 바꾸며 반복이 낮은 $q$를 얼마나 보완하는지 확인하세요. (검증 없이 $N$단계를 이어 붙이면 통과율은 오히려 $q^{N}$으로 붕괴합니다.)</p>
+    <p class="lede lang-en">A coding agent with a verification gate <strong>iterates until tests pass</strong>. With per-attempt success $q$ and $N$ iterations, the final pass rate is <strong>$1-(1-q)^{N}$</strong> (a simple model). Move the sliders for $q$ and $N$ to see how iteration compensates for a low $q$. (Chaining $N$ unverified stages instead collapses the rate to $q^{N}$.)</p>
     <div class="calc lang-ko"
       data-title="검증 게이트 통과율 $\;P = 1-(1-q)^{N}$"
       data-desc="q = 한 번 시도의 성공률 (0~1), N = 반복 횟수. 기본값 q=0.4, N=3 → P≈0.784. 완벽한 게이트 가정(거짓 통과 없음)."
@@ -1218,7 +1218,7 @@
         <button class="opt">③ 반복 횟수를 무조건 늘려 통과율을 100%로 만든다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 게이트는 테스트·타입체크 같은 <strong>외부 기준</strong>으로 pass/fail을 판정하여 실패한 결과를 버리고 성공만 채택하게 한다. 이것이 $1-(1-q)^{N}$처럼 반복을 <strong>수렴</strong>시키는 힘이다. <span class="dim">오답 ①·③: ①길이는 무관하고, ③완벽한 게이트라도 $N$이 유한하면 $100\%$는 아니며 게이트가 불완전하면 거짓 통과가 생긴다.</span> <span class="agg">학급 n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 게이트는 테스트·타입체크 같은 <strong>외부 기준</strong>으로 pass/fail을 판정하여 실패한 결과를 버리고 성공만 채택하게 한다. 이것이 $1-(1-q)^{N}$처럼 반복을 <strong>수렴</strong>시키는 힘이다. <span class="dim">오답 ①·③: ①길이는 무관하고, ③완벽한 게이트라도 $N$이 유한하면 $100\%$는 아니며 게이트가 불완전하면 거짓 통과가 생긴다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>What is the essential role of the <strong>verification gate</strong> in an agent loop?</p>
@@ -1228,7 +1228,7 @@
         <button class="opt">③ it always raises iteration count to force a 100% pass rate</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the gate judges pass/fail by an <strong>external criterion</strong> (tests, type-check), discarding failures and accepting only successes. That is what makes iteration <strong>converge</strong> as in $1-(1-q)^{N}$. <span class="dim">Wrong ①·③: ① length is irrelevant; ③ even a perfect gate with finite $N$ isn't $100\%$, and an imperfect gate admits false passes.</span> <span class="agg">class n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the gate judges pass/fail by an <strong>external criterion</strong> (tests, type-check), discarding failures and accepting only successes. That is what makes iteration <strong>converge</strong> as in $1-(1-q)^{N}$. <span class="dim">Wrong ①·③: ① length is irrelevant; ③ even a perfect gate with finite $N$ isn't $100\%$, and an imperfect gate admits false passes.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>검증 없이 여러 단계를 이어 붙이면 최종 성공확률은 왜 <strong>$q^{N}$</strong>으로 붕괴하는가?</p>
@@ -1238,7 +1238,7 @@
         <button class="opt">③ 반복이 토큰을 절약해 정확도가 올라가기 때문</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 게이트가 없으면 실패를 걸러내지 못해 각 단계가 앞 단계에 의존한다. 독립 가정 하에 $N$단계가 모두 옳을 확률은 $q\times q\times\cdots=q^{N}$이고, $q<1$이면 $N$이 커질수록 $0$으로 붕괴한다(환각 누적). <span class="dim">오답 ②·③: 반복 자체가 지능이나 정확도를 높이는 것이 아니며, 오히려 검증이 없으면 오류가 증폭된다.</span> <span class="agg">학급 n=41 · ① 30 · ② 6 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 게이트가 없으면 실패를 걸러내지 못해 각 단계가 앞 단계에 의존한다. 독립 가정 하에 $N$단계가 모두 옳을 확률은 $q\times q\times\cdots=q^{N}$이고, $q<1$이면 $N$이 커질수록 $0$으로 붕괴한다(환각 누적). <span class="dim">오답 ②·③: 반복 자체가 지능이나 정확도를 높이는 것이 아니며, 오히려 검증이 없으면 오류가 증폭된다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Why does chaining steps without verification collapse the final success to <strong>$q^{N}$</strong>?</p>
@@ -1248,7 +1248,7 @@
         <button class="opt">③ iterating saves tokens, which raises accuracy</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — without a gate, failures aren't filtered and each step depends on the last. Under independence, the probability that all $N$ steps are right is $q\times q\times\cdots=q^{N}$, which collapses to $0$ as $N$ grows when $q<1$ (hallucination compounding). <span class="dim">Wrong ②·③: iteration alone raises neither intelligence nor accuracy; without verification it amplifies errors.</span> <span class="agg">class n=41 · ① 30 · ② 6 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — without a gate, failures aren't filtered and each step depends on the last. Under independence, the probability that all $N$ steps are right is $q\times q\times\cdots=q^{N}$, which collapses to $0$ as $N$ grows when $q<1$ (hallucination compounding). <span class="dim">Wrong ②·③: iteration alone raises neither intelligence nor accuracy; without verification it amplifies errors.</span></div>
     </div>
   </section>
 
@@ -1442,7 +1442,7 @@
     <h1 class="stage-h lang-en">Specs Are Old Wisdom; Agents Are the New Stage</h1>
     <div class="two lang-ko">
       <div class="col2 reading">
-        <p><strong>수용기준</strong>과 검증 가능한 요구는 소프트웨어공학에서 오래 다뤄졌습니다. <strong>IEEE 830-1998</strong>은 좋은 요구 명세의 성질로 <em>정확·모호하지 않음·검증 가능·완전·일관</em>을 제시했고, <strong>행위 주도 개발(BDD)</strong>은 이를 <em>given/when/then</em> 시나리오로 실행 가능한 명세로 만들었습니다(North, 2006). 바이브 코딩 시대에도 원리는 같습니다 — <strong>검증할 수 없는 요구는 프롬프트로도 검증할 수 없습니다.</strong></p>
+        <p><strong>수용기준</strong>과 검증 가능한 요구는 소프트웨어공학에서 오래 다뤄졌습니다. <strong>IEEE 830-1998</strong>은 좋은 요구 명세의 성질 <strong>여덟 가지</strong>(그중 <em>정확·모호하지 않음·검증 가능·완전·일관</em> 등)를 제시했고, <strong>행위 주도 개발(BDD)</strong>은 이를 <em>given/when/then</em> 시나리오로 실행 가능한 명세로 만들었습니다(North, 2006). 바이브 코딩 시대에도 원리는 같습니다 — <strong>검증할 수 없는 요구는 프롬프트로도 검증할 수 없습니다.</strong></p>
         <p class="pullquote">"검증할 수 없으면 요구가 아니다." — 명세의 제1원칙</p>
         <p><strong>멀티 에이전트</strong>는 새 무대입니다. 토론·역할극이 추론을 개선한다는 보고가 있으나(예: Du et al., 2023, multiagent debate; Wu et al., AutoGen, 2023), <strong>단일 강한 에이전트 + 좋은 명세</strong>가 더 낫거나 대등한 경우도 흔합니다. 태스크가 <strong>분해 가능하고 병렬적</strong>이면 역할 분리가 유리하고, 단계가 <strong>강하게 의존</strong>하면 조율 비용이 이득을 잠식합니다(태스크 의존에 따른 일반 우위는 <strong>UNVERIFIED</strong>).</p>
       </div>
@@ -1453,7 +1453,7 @@
     </div>
     <div class="two lang-en">
       <div class="col2 reading">
-        <p><strong>Acceptance criteria</strong> and verifiable requirements are long-standing in software engineering. <strong>IEEE 830-1998</strong> lists the qualities of a good requirement spec as <em>correct, unambiguous, verifiable, complete, consistent</em>; <strong>behavior-driven development (BDD)</strong> turned these into executable specs via <em>given/when/then</em> scenarios (North, 2006). The principle survives into the vibe-coding era — <strong>a requirement you cannot verify, you cannot verify with a prompt either.</strong></p>
+        <p><strong>Acceptance criteria</strong> and verifiable requirements are long-standing in software engineering. <strong>IEEE 830-1998</strong> lists <strong>eight</strong> qualities of a good requirement spec (among them <em>correct, unambiguous, verifiable, complete, consistent</em>); <strong>behavior-driven development (BDD)</strong> turned these into executable specs via <em>given/when/then</em> scenarios (North, 2006). The principle survives into the vibe-coding era — <strong>a requirement you cannot verify, you cannot verify with a prompt either.</strong></p>
         <p class="pullquote">"If you can't verify it, it isn't a requirement." — first principle of specs</p>
         <p><strong>Multi-agent</strong> is the new stage. Debate and role-play are reported to improve reasoning (e.g., Du et al., 2023, multiagent debate; Wu et al., AutoGen, 2023), yet a <strong>single strong agent + a good spec</strong> is often better or on par. When a task is <strong>decomposable and parallel</strong>, role separation helps; when stages are <strong>tightly dependent</strong>, coordination cost erodes the gain (a general advantage by task dependency is <strong>UNVERIFIED</strong>).</p>
       </div>
@@ -1606,7 +1606,7 @@
         <button class="opt">③ 에이전트 수를 늘려 병렬성을 높이는 것</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 수용기준은 "완료의 정의"이며, 검증 가능한 테스트로 번역될 때 LLM 출력이 "그럴듯함"이 아니라 <strong>통과/실패</strong>로 판정된다(BDD의 given/when/then). <span class="dim">오답 ①·③: ①길이·어투는 무관하고, ③에이전트 수는 별개의 조율 문제다.</span> <span class="agg">학급 n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 수용기준은 "완료의 정의"이며, 검증 가능한 테스트로 번역될 때 LLM 출력이 "그럴듯함"이 아니라 <strong>통과/실패</strong>로 판정된다(BDD의 given/when/then). <span class="dim">오답 ①·③: ①길이·어투는 무관하고, ③에이전트 수는 별개의 조율 문제다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>In spec-driven development, the core role of <strong>acceptance criteria</strong> is to:</p>
@@ -1616,7 +1616,7 @@
         <button class="opt">③ increase the number of agents to raise parallelism</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — acceptance criteria are the "definition of done"; translated into verifiable tests, LLM output is judged <strong>pass/fail</strong> rather than by plausibility (BDD's given/when/then). <span class="dim">Wrong ①·③: ① length/tone is irrelevant; ③ agent count is a separate coordination concern.</span> <span class="agg">class n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — acceptance criteria are the "definition of done"; translated into verifiable tests, LLM output is judged <strong>pass/fail</strong> rather than by plausibility (BDD's given/when/then). <span class="dim">Wrong ①·③: ① length/tone is irrelevant; ③ agent count is a separate coordination concern.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>$G=\Delta Q-\alpha(n-1)$일 때, <strong>단일 에이전트</strong>가 멀티보다 나은 상황은?</p>
@@ -1626,7 +1626,7 @@
         <button class="opt">③ 검토 에이전트가 편향을 상쇄해 품질이 크게 오를 때</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 멀티 에이전트의 순이득은 품질 이득에서 조율·통합 비용을 뺀 $G$로, 단계 의존이 강해 $\alpha(n-1)$이 $\Delta Q$를 넘으면 $G\le 0$이 되어 단일이 낫다. "멀티가 항상 우위"는 <strong>UNVERIFIED</strong>. <span class="dim">오답 ①·③: 둘 다 $\Delta Q$가 크거나 병렬이 쉬운 경우로, 오히려 멀티가 유리한 조건이다.</span> <span class="agg">학급 n=41 · ① 7 · ② 28 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 멀티 에이전트의 순이득은 품질 이득에서 조율·통합 비용을 뺀 $G$로, 단계 의존이 강해 $\alpha(n-1)$이 $\Delta Q$를 넘으면 $G\le 0$이 되어 단일이 낫다. "멀티가 항상 우위"는 <strong>UNVERIFIED</strong>. <span class="dim">오답 ①·③: 둘 다 $\Delta Q$가 크거나 병렬이 쉬운 경우로, 오히려 멀티가 유리한 조건이다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>With $G=\Delta Q-\alpha(n-1)$, when is a <strong>single agent</strong> better than multi?</p>
@@ -1636,7 +1636,7 @@
         <button class="opt">③ when a reviewer agent cancels bias and quality rises sharply</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the net gain is quality gain minus coordination/integration cost, $G$; when dependency is strong and $\alpha(n-1)$ exceeds $\Delta Q$, $G\le 0$ and a single agent wins. "Multi is always better" is <strong>UNVERIFIED</strong>. <span class="dim">Wrong ①·③: both describe large $\Delta Q$ or easy parallelism — conditions that favor multi.</span> <span class="agg">class n=41 · ① 7 · ② 28 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the net gain is quality gain minus coordination/integration cost, $G$; when dependency is strong and $\alpha(n-1)$ exceeds $\Delta Q$, $G\le 0$ and a single agent wins. "Multi is always better" is <strong>UNVERIFIED</strong>. <span class="dim">Wrong ①·③: both describe large $\Delta Q$ or easy parallelism — conditions that favor multi.</span></div>
     </div>
   </section>
 
@@ -1718,7 +1718,7 @@
       <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
         <li>$R(s)=k(1-s/100)$에 $s,k$ 대입 계산.</li>
         <li>$G=\Delta Q-\alpha(n-1)$로 단일/멀티 판정 및 손익분기 $n$.</li>
-        <li>수용기준(AC)·BDD given/when/then의 역할과 명세 5성질(IEEE 830).</li>
+        <li>수용기준(AC)·BDD given/when/then의 역할과 명세 성질(IEEE 830, 8종).</li>
       </ul></div>
     </div>
     <div class="sumgrid lang-en">
@@ -1735,7 +1735,7 @@
       <div class="sumcard exam full"><h4>Exam focus</h4><ul>
         <li>Plug $s,k$ into $R(s)=k(1-s/100)$.</li>
         <li>Judge single/multi with $G=\Delta Q-\alpha(n-1)$ and find break-even $n$.</li>
-        <li>Role of acceptance criteria / BDD given/when/then and the five spec qualities (IEEE 830).</li>
+        <li>Role of acceptance criteria / BDD given/when/then and the eight SRS qualities (IEEE 830).</li>
       </ul></div>
     </div>
   </section>
@@ -1750,7 +1750,7 @@
     <div class="analogy lang-en"><span class="ic">🧭</span><div class="tx"><b>Intuition</b> — In a library, finding "how to raise a cat" should also surface "caring for a pet cat" even without that exact title — you must pick books close in <b>meaning, not words</b>. Turning a sentence into a high-dimensional coordinate (embedding) makes semantically similar texts cluster <b>close in space</b>. A vector DB rapidly finds, among millions of such coordinates, the ones <b>nearest</b> to the query. <span class="src">(Source: Mikolov et al. 2013 word2vec / Karpukhin et al. 2020 DPR)</span></div></div>
     <div class="two lang-ko">
       <div class="col2">
-        <p class="lede"><strong>임베딩(embedding)</strong>은 텍스트를 $d$차원 실수 벡터 $\mathbf{v}\in\mathbb{R}^d$로 사상합니다(대개 $d=384\!\sim\!1536$). 두 벡터의 <strong>유사도</strong>는 보통 <strong>코사인 유사도 $\cos\theta=\dfrac{\mathbf{q}\cdot\mathbf{d}}{\lVert\mathbf{q}\rVert\,\lVert\mathbf{d}\rVert}$</strong>로 잽니다. 벡터 DB는 이 벡터들을 <strong>ANN(근사 최근접 이웃)</strong> 인덱스에 저장해, 정확 완전탐색($O(N)$) 대신 <strong>준-로그 시간</strong>에 <strong>top-$k$</strong>를 반환합니다. 검색 품질이 <strong>RAG 성능의 상한</strong>을 결정합니다 — 넣지 못한 근거는 생성 단계가 되살릴 수 없습니다.</p>
+        <p class="lede"><strong>임베딩(embedding)</strong>은 텍스트를 $d$차원 실수 벡터 $\mathbf{v}\in\mathbb{R}^d$로 사상합니다(대개 $d=384\!\sim\!1536$). 두 벡터의 <strong>유사도</strong>는 보통 <strong>코사인 유사도 $\cos\theta=\dfrac{\mathbf{q}\cdot\mathbf{d}}{\lVert\mathbf{q}\rVert\,\lVert\mathbf{d}\rVert}$</strong>로 잽니다. 벡터 DB는 이 벡터들을 <strong>ANN(근사 최근접 이웃)</strong> 인덱스에 저장해, 정확 완전탐색($O(N)$) 대신 <strong>준선형(sub-linear) 시간</strong>에 <strong>top-$k$</strong>를 반환합니다. 검색 품질이 <strong>RAG 성능의 상한</strong>을 결정합니다 — 넣지 못한 근거는 생성 단계가 되살릴 수 없습니다.</p>
         <div class="keqbox">
           <div class="keq-label">검색 삼분법</div>
           <div class="keqrow"><span class="keqcap">Dense(밀집)</span><span class="keqline">임베딩 + ANN, 의미 매칭</span></div>
@@ -1791,7 +1791,7 @@
           <div class="term"><b>recall@k</b> fraction of true top-$k$ the ANN retrieves</div>
           <div class="term"><b>reranker</b> re-scores candidates with a cross-encoder (higher precision)</div>
         </div>
-        <div class="callout key"><div class="ct">Key</div>A vector DB <strong>approximates exact brute force</strong>. <strong>recall ↔ latency</strong> is a trade-off — widening the search finds more true neighbors but runs slower. <strong>Evidence retrieval fails to include, the LLM cannot invent.</strong></div>
+        <div class="callout key"><div class="ct">Key</div>A vector DB <strong>approximates exact brute force</strong>. <strong>recall ↔ latency</strong> is a trade-off — widening the search finds more true neighbors but runs slower. <strong>Evidence that retrieval fails to include, the LLM cannot invent.</strong></div>
       </div>
     </div>
   </section>
@@ -1878,10 +1878,10 @@
 <text x="80" y="57" font-size="9.5" fill="#7c2d12" text-anchor="middle">"고양이 키우기"</text>
 <rect x="180" y="26" width="120" height="40" rx="8" fill="#e0f2fe" stroke="#0369a1" stroke-width="1.5"/>
 <text x="240" y="42" font-size="11" fill="#075985" text-anchor="middle" font-weight="700">임베딩 모델</text>
-<text x="240" y="57" font-size="9.5" fill="#075985" text-anchor="middle">$\mathbf{q}\in\mathbb{R}^d$</text>
+<text x="240" y="57" font-size="9.5" fill="#075985" text-anchor="middle">q ∈ ℝᵈ</text>
 <rect x="340" y="26" width="120" height="40" rx="8" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.5"/>
-<text x="400" y="42" font-size="11" fill="#5b21b6" text-anchor="middle" font-weight="700">$\ell_2$ 정규화</text>
-<text x="400" y="57" font-size="9.5" fill="#5b21b6" text-anchor="middle">$\lVert\mathbf{q}\rVert=1$</text>
+<text x="400" y="42" font-size="11" fill="#5b21b6" text-anchor="middle" font-weight="700">ℓ₂ 정규화</text>
+<text x="400" y="57" font-size="9.5" fill="#5b21b6" text-anchor="middle">‖q‖ = 1</text>
 <line x1="140" y1="46" x2="178" y2="46" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35ko)"/>
 <line x1="300" y1="46" x2="338" y2="46" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35ko)"/>
 <line x1="400" y1="66" x2="400" y2="96" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35ko)"/>
@@ -1896,10 +1896,10 @@
 <line x1="240" y1="150" x2="280" y2="145" stroke="#d4d4d8" stroke-width="1"/>
 <line x1="240" y1="150" x2="248" y2="158" stroke="#d4d4d8" stroke-width="1"/>
 <text x="400" y="118" font-size="9.5" fill="#5b21b6" text-anchor="middle">탐색폭</text>
-<text x="400" y="132" font-size="10" fill="#c2410c" text-anchor="middle" font-weight="700">$efSearch$</text>
+<text x="400" y="132" font-size="10" fill="#c2410c" text-anchor="middle" font-weight="700">efSearch</text>
 <line x1="240" y1="190" x2="240" y2="216" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35ko)"/>
 <rect x="150" y="222" width="180" height="42" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
-<text x="240" y="240" font-size="11" fill="#166534" text-anchor="middle" font-weight="700">top-$k$ 후보</text>
+<text x="240" y="240" font-size="11" fill="#166534" text-anchor="middle" font-weight="700">top-k 후보</text>
 <text x="240" y="255" font-size="9.5" fill="#166534" text-anchor="middle">→ (선택) reranker → RAG</text>
 </svg>
       </div>
@@ -1925,10 +1925,10 @@
 <text x="80" y="57" font-size="9.5" fill="#7c2d12" text-anchor="middle">"raise a cat"</text>
 <rect x="180" y="26" width="120" height="40" rx="8" fill="#e0f2fe" stroke="#0369a1" stroke-width="1.5"/>
 <text x="240" y="42" font-size="11" fill="#075985" text-anchor="middle" font-weight="700">embed model</text>
-<text x="240" y="57" font-size="9.5" fill="#075985" text-anchor="middle">$\mathbf{q}\in\mathbb{R}^d$</text>
+<text x="240" y="57" font-size="9.5" fill="#075985" text-anchor="middle">q ∈ ℝᵈ</text>
 <rect x="340" y="26" width="120" height="40" rx="8" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.5"/>
-<text x="400" y="42" font-size="11" fill="#5b21b6" text-anchor="middle" font-weight="700">$\ell_2$ normalize</text>
-<text x="400" y="57" font-size="9.5" fill="#5b21b6" text-anchor="middle">$\lVert\mathbf{q}\rVert=1$</text>
+<text x="400" y="42" font-size="11" fill="#5b21b6" text-anchor="middle" font-weight="700">ℓ₂ normalize</text>
+<text x="400" y="57" font-size="9.5" fill="#5b21b6" text-anchor="middle">‖q‖ = 1</text>
 <line x1="140" y1="46" x2="178" y2="46" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35en)"/>
 <line x1="300" y1="46" x2="338" y2="46" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35en)"/>
 <line x1="400" y1="66" x2="400" y2="96" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35en)"/>
@@ -1943,10 +1943,10 @@
 <line x1="240" y1="150" x2="280" y2="145" stroke="#d4d4d8" stroke-width="1"/>
 <line x1="240" y1="150" x2="248" y2="158" stroke="#d4d4d8" stroke-width="1"/>
 <text x="400" y="118" font-size="9.5" fill="#5b21b6" text-anchor="middle">search width</text>
-<text x="400" y="132" font-size="10" fill="#c2410c" text-anchor="middle" font-weight="700">$efSearch$</text>
+<text x="400" y="132" font-size="10" fill="#c2410c" text-anchor="middle" font-weight="700">efSearch</text>
 <line x1="240" y1="190" x2="240" y2="216" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar35en)"/>
 <rect x="150" y="222" width="180" height="42" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
-<text x="240" y="240" font-size="11" fill="#166534" text-anchor="middle" font-weight="700">top-$k$ candidates</text>
+<text x="240" y="240" font-size="11" fill="#166534" text-anchor="middle" font-weight="700">top-k candidates</text>
 <text x="240" y="255" font-size="9.5" fill="#166534" text-anchor="middle">→ (opt.) reranker → RAG</text>
 </svg>
       </div>
@@ -2002,7 +2002,7 @@
         <button class="opt">③ recall은 그대로이고 지연만 줄어든다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 탐색폭을 넓히면 더 많은 후보를 방문하므로 참 최근접을 찾을 확률(recall)이 오르되 포화하고, 방문 수에 비례해 지연은 커진다. 이것이 recall↔지연 <strong>교환 관계</strong>다. <span class="dim">오답 ①·③: ①둘 다 줄 수는 없고, ③recall 불변·지연 감소는 근사탐색 거동과 반대다.</span> <span class="agg">학급 n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 탐색폭을 넓히면 더 많은 후보를 방문하므로 참 최근접을 찾을 확률(recall)이 오르되 포화하고, 방문 수에 비례해 지연은 커진다. 이것이 recall↔지연 <strong>교환 관계</strong>다. <span class="dim">오답 ①·③: ①둘 다 줄 수는 없고, ③recall 불변·지연 감소는 근사탐색 거동과 반대다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>What generally happens when you <strong>increase HNSW's $efSearch$</strong>?</p>
@@ -2012,7 +2012,7 @@
         <button class="opt">③ recall stays the same and only latency drops</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — a wider search visits more candidates, so the probability of finding the true nearest neighbor (recall) rises but saturates, while latency grows with the number of visits. This is the recall ↔ latency <strong>trade-off</strong>. <span class="dim">Wrong ①·③: ① both cannot fall together; ③ constant recall with falling latency contradicts approximate-search behavior.</span> <span class="agg">class n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — a wider search visits more candidates, so the probability of finding the true nearest neighbor (recall) rises but saturates, while latency grows with the number of visits. This is the recall ↔ latency <strong>trade-off</strong>. <span class="dim">Wrong ①·③: ① both cannot fall together; ③ constant recall with falling latency contradicts approximate-search behavior.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>질의에 등장한 <strong>정확한 희귀 고유명사(예: 제품 코드 "XK-9271")</strong>로 문서를 찾을 때 가장 견고한 방식은?</p>
@@ -2022,7 +2022,7 @@
         <button class="opt">③ 임베딩 차원 $d$를 무조건 늘린다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 희귀 고유명사·코드처럼 <strong>정확 단어 일치</strong>가 중요한 질의는 Dense가 놓치기 쉽다. BM25(Sparse)는 정확어에 강하므로 둘을 융합한 하이브리드에 reranker를 더하면 견고하다. <span class="dim">오답 ①·③: ①Dense 단독은 정확어에 약하고, ③$d$를 늘려도 정확 토큰 일치 문제 자체는 해결되지 않는다.</span> <span class="agg">학급 n=41 · ① 8 · ② 28 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 희귀 고유명사·코드처럼 <strong>정확 단어 일치</strong>가 중요한 질의는 Dense가 놓치기 쉽다. BM25(Sparse)는 정확어에 강하므로 둘을 융합한 하이브리드에 reranker를 더하면 견고하다. <span class="dim">오답 ①·③: ①Dense 단독은 정확어에 약하고, ③$d$를 늘려도 정확 토큰 일치 문제 자체는 해결되지 않는다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>To find documents by an <strong>exact rare proper noun in the query (e.g., product code "XK-9271")</strong>, which is most robust?</p>
@@ -2032,7 +2032,7 @@
         <button class="opt">③ just increase the embedding dimension $d$</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — queries hinging on <strong>exact term matches</strong> (rare proper nouns, codes) are easily missed by Dense. BM25 (Sparse) is strong on exact terms, so a hybrid fusing both plus a reranker is robust. <span class="dim">Wrong ①·③: ① Dense alone is weak on exact terms; ③ raising $d$ does not solve exact-token matching.</span> <span class="agg">class n=41 · ① 8 · ② 28 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — queries hinging on <strong>exact term matches</strong> (rare proper nouns, codes) are easily missed by Dense. BM25 (Sparse) is strong on exact terms, so a hybrid fusing both plus a reranker is robust. <span class="dim">Wrong ①·③: ① Dense alone is weak on exact terms; ③ raising $d$ does not solve exact-token matching.</span></div>
     </div>
   </section>
 
@@ -2068,28 +2068,28 @@
     </div>
     <div class="prob lang-ko">
       <div class="prob-num">연습 2 · 응용 · 코사인 = 정규화 후 내적</div>
-      <p class="prob-statement">질의와 문서 임베딩이 <strong>단위 벡터로 정규화</strong>되어 있다($\lVert\mathbf{q}\rVert=\lVert\mathbf{d}\rVert=1$). 내적이 $\mathbf{q}\cdot\mathbf{d}=0.6$이다. 이때 두 벡터가 이루는 각 $\theta$의 <strong>코사인 값 $\cos\theta$</strong>는 얼마인가?</p>
-      <div class="given"><span class="chip">$\lVert\mathbf{q}\rVert=\lVert\mathbf{d}\rVert=1$</span><span class="chip">$\mathbf{q}\cdot\mathbf{d}=0.6$</span></div>
+      <p class="prob-statement">질의와 문서 임베딩이 <strong>정규화되지 않은</strong> 상태다. 내적이 $\mathbf{q}\cdot\mathbf{d}=3$, 노름이 $\lVert\mathbf{q}\rVert=2.5$, $\lVert\mathbf{d}\rVert=2$이다. 이때 두 벡터가 이루는 각 $\theta$의 <strong>코사인 값 $\cos\theta$</strong>는 얼마인가?</p>
+      <div class="given"><span class="chip">$\mathbf{q}\cdot\mathbf{d}=3$</span><span class="chip">$\lVert\mathbf{q}\rVert=2.5$</span><span class="chip">$\lVert\mathbf{d}\rVert=2$</span></div>
       <div class="find"><b>구할 것:</b> $\cos\theta$</div>
       <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.6" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
       <div class="revealable solution">
         <div class="dstep2"><div class="step-label">Step 1 · 코사인 정의</div>$$ \cos\theta=\frac{\mathbf{q}\cdot\mathbf{d}}{\lVert\mathbf{q}\rVert\,\lVert\mathbf{d}\rVert} $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · 정규화 대입</div>$$ \cos\theta=\frac{0.6}{1\times 1}=0.6 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ \cos\theta = 0.6 $$</div><b>정답:</b> 정규화하면 <strong>내적 자체가 코사인</strong> — 벡터 DB가 미리 $\ell_2$ 정규화 후 내적만 계산하는 이유.</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 노름으로 나누기</div>$$ \cos\theta=\frac{3}{2.5\times 2}=\frac{3}{5}=0.6 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \cos\theta = 0.6 $$</div><b>정답:</b> 정규화 전에는 내적($3$)이 코사인이 아니다 — <strong>내적=코사인은 정규화 후에만</strong> 성립. 벡터 DB가 미리 $\ell_2$ 정규화 후 내적만 계산하는 이유.</div>
       </div>
     </div>
     <div class="prob lang-en">
       <div class="prob-num">Practice 2 · Applied · cosine = dot after normalization</div>
-      <p class="prob-statement">The query and document embeddings are <strong>normalized to unit vectors</strong> ($\lVert\mathbf{q}\rVert=\lVert\mathbf{d}\rVert=1$). Their dot product is $\mathbf{q}\cdot\mathbf{d}=0.6$. What is the <strong>cosine $\cos\theta$</strong> of the angle $\theta$ between them?</p>
-      <div class="given"><span class="chip">$\lVert\mathbf{q}\rVert=\lVert\mathbf{d}\rVert=1$</span><span class="chip">$\mathbf{q}\cdot\mathbf{d}=0.6$</span></div>
+      <p class="prob-statement">The query and document embeddings are <strong>not normalized</strong>. Their dot product is $\mathbf{q}\cdot\mathbf{d}=3$, with norms $\lVert\mathbf{q}\rVert=2.5$ and $\lVert\mathbf{d}\rVert=2$. What is the <strong>cosine $\cos\theta$</strong> of the angle $\theta$ between them?</p>
+      <div class="given"><span class="chip">$\mathbf{q}\cdot\mathbf{d}=3$</span><span class="chip">$\lVert\mathbf{q}\rVert=2.5$</span><span class="chip">$\lVert\mathbf{d}\rVert=2$</span></div>
       <div class="find"><b>Find:</b> $\cos\theta$</div>
       <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.6" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
       <div class="revealable solution">
         <div class="dstep2"><div class="step-label">Step 1 · cosine definition</div>$$ \cos\theta=\frac{\mathbf{q}\cdot\mathbf{d}}{\lVert\mathbf{q}\rVert\,\lVert\mathbf{d}\rVert} $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · substitute unit norms</div>$$ \cos\theta=\frac{0.6}{1\times 1}=0.6 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ \cos\theta = 0.6 $$</div><b>Answer:</b> normalized, the <strong>dot product itself is the cosine</strong> — why vector DBs $\ell_2$-normalize first and compute only dot products.</div>
+        <div class="dstep2"><div class="step-label">Step 2 · divide by the norms</div>$$ \cos\theta=\frac{3}{2.5\times 2}=\frac{3}{5}=0.6 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \cos\theta = 0.6 $$</div><b>Answer:</b> before normalization the dot product ($3$) is not the cosine — <strong>dot = cosine only after normalization</strong>; why vector DBs $\ell_2$-normalize first and compute only dot products.</div>
       </div>
     </div>
   </section>
@@ -2338,7 +2338,7 @@
     <p class="lede lang-en">More <strong>tools</strong> raises selection confusion; higher <strong>schema clarity</strong> restores accuracy. Below is a <strong>toy model</strong> $\text{acc}=q\cdot(1-\text{conf})$ (with $\text{conf}=(N-1)/(N-1+k)$, $k$=clarity buffer). Read the <strong>trend</strong>, not the number — real values vary by model/domain (UNVERIFIED).</p>
     <div class="calc lang-ko"
       data-title="도구 정확도(개략) $\text{acc}=q\,(1-\frac{N-1}{N-1+k})$"
-      data-desc="N=도구 수, q=스키마 명확도(0~1), k=명확도 완충. 기본 N=6, q=0.9, k=4 → acc≈0.61. 도구를 줄이거나 스키마를 명확히 하면 오른다. 경향만 보는 개략 모형(UNVERIFIED)."
+      data-desc="N=도구 수, q=스키마 명확도(0~1), k=명확도 완충. 기본 N=6, q=0.9, k=4 → acc≈0.40. 도구를 줄이거나 스키마를 명확히 하면 오른다. 경향만 보는 개략 모형(UNVERIFIED)."
       data-vars='[{"sym":"N","label":"$N$ · 도구 수","min":1,"max":20,"val":6,"step":1,"unit":"개"},{"sym":"q","label":"$q$ · 스키마 명확도","min":0.3,"max":1,"val":0.9,"step":0.05,"unit":""},{"sym":"k","label":"$k$ · 명확도 완충","min":1,"max":12,"val":4,"step":1,"unit":""}]'
       data-expr="q*(1-(N-1)/(N-1+k))"
       data-out="$\text{acc}$" data-out-unit=""
@@ -2346,7 +2346,7 @@
       data-note="도구를 6→3으로 줄이거나 k를 4→8로 올리면 acc가 눈에 띄게 상승 — '도구 수 절제 + 스키마 명확도'의 두 레버를 보여준다."></div>
     <div class="calc lang-en"
       data-title="Tool accuracy (toy) $\text{acc}=q\,(1-\frac{N-1}{N-1+k})$"
-      data-desc="N=tool count, q=schema clarity (0..1), k=clarity buffer. Default N=6, q=0.9, k=4 → acc≈0.61. Fewer tools or clearer schemas raise it. Trend-only toy model (UNVERIFIED)."
+      data-desc="N=tool count, q=schema clarity (0..1), k=clarity buffer. Default N=6, q=0.9, k=4 → acc≈0.40. Fewer tools or clearer schemas raise it. Trend-only toy model (UNVERIFIED)."
       data-vars='[{"sym":"N","label":"$N$ · tool count","min":1,"max":20,"val":6,"step":1,"unit":""},{"sym":"q","label":"$q$ · schema clarity","min":0.3,"max":1,"val":0.9,"step":0.05,"unit":""},{"sym":"k","label":"$k$ · clarity buffer","min":1,"max":12,"val":4,"step":1,"unit":""}]'
       data-expr="q*(1-(N-1)/(N-1+k))"
       data-out="$\text{acc}$" data-out-unit=""
@@ -2368,7 +2368,7 @@
         <button class="opt">③ 해당 필드를 $\text{required}$에 넣는다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $\text{enum}$은 허용 값을 스키마 수준에서 고정해 모델이 제각각의 표기를 방출할 여지를 없앤다. <span class="dim">오답 ①·③: ①검증을 코드로 미루면 오류 표면이 커지고, ③required는 "채워야 함"만 강제할 뿐 "어떤 값인지"는 제약하지 않는다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $\text{enum}$은 허용 값을 스키마 수준에서 고정해 모델이 제각각의 표기를 방출할 여지를 없앤다. <span class="dim">오답 ①·③: ①검증을 코드로 미루면 오류 표면이 커지고, ③required는 "채워야 함"만 강제할 뿐 "어떤 값인지"는 제약하지 않는다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>When a parameter must accept only a <strong>fixed set of values</strong> (e.g. celsius/fahrenheit), what is best to use in the schema?</p>
@@ -2378,7 +2378,7 @@
         <button class="opt">③ put the field into $\text{required}$</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — $\text{enum}$ fixes allowed values at the schema level, removing the room for the model to emit inconsistent spellings. <span class="dim">Wrong ①·③: ① deferring validation to code enlarges the error surface; ③ required only forces "must be filled," not "which value."</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — $\text{enum}$ fixes allowed values at the schema level, removing the room for the model to emit inconsistent spellings. <span class="dim">Wrong ①·③: ① deferring validation to code enlarges the error surface; ③ required only forces "must be filled," not "which value."</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>함수 호출과 MCP의 관계를 가장 정확히 설명한 것은?</p>
@@ -2388,7 +2388,7 @@
         <button class="opt">③ MCP는 스키마 없이 동작하므로 설명·enum이 필요 없다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 함수 호출은 도구를 정의·호출하는 메커니즘이고, MCP는 그 도구들을 표준 형태로 노출해 여러 클라이언트가 공유하게 하는 프로토콜이다. 좋은 스키마 원칙은 양쪽 모두에 동일하게 적용된다. <span class="dim">오답 ①·③: ①대체가 아니라 표준화 계층이고, ③MCP 도구도 명확한 설명·enum이 필요하다.</span> <span class="agg">학급 n=41 · ① 9 · ② 27 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 함수 호출은 도구를 정의·호출하는 메커니즘이고, MCP는 그 도구들을 표준 형태로 노출해 여러 클라이언트가 공유하게 하는 프로토콜이다. 좋은 스키마 원칙은 양쪽 모두에 동일하게 적용된다. <span class="dim">오답 ①·③: ①대체가 아니라 표준화 계층이고, ③MCP 도구도 명확한 설명·enum이 필요하다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Which best describes the relationship between function calling and MCP?</p>
@@ -2398,7 +2398,7 @@
         <button class="opt">③ MCP works without schemas, so it needs no descriptions or enums</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — function calling is the mechanism to define and invoke tools; MCP is a protocol that exposes those tools in a standard shape so many clients can share them. Good-schema principles apply equally to both. <span class="dim">Wrong ①·③: ① it is a standardization layer, not a replacement; ③ MCP tools still need clear descriptions and enums.</span> <span class="agg">class n=41 · ① 9 · ② 27 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — function calling is the mechanism to define and invoke tools; MCP is a protocol that exposes those tools in a standard shape so many clients can share them. Good-schema principles apply equally to both. <span class="dim">Wrong ①·③: ① it is a standardization layer, not a replacement; ③ MCP tools still need clear descriptions and enums.</span></div>
     </div>
   </section>
 

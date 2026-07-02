@@ -196,8 +196,8 @@
     <h1 class="intro-h lang-ko">왜 어떤 프롬프트는 되고<br><span class="hl">어떤 프롬프트는 안 될까 — 감이 아니라 근거로</span></h1>
     <h1 class="intro-h lang-en">Why do some prompts work<br><span class="hl">and others fail — grounded in evidence, not intuition</span></h1>
 
-    <p class="lede lang-ko">"이렇게 쓰면 잘 되더라"는 <strong>일화(anecdote)</strong>는 재현되지 않는다. 이번 파트는 커뮤니티 팁을 걷어내고, <strong>동료 심사를 거친 논문으로 검증된 기법</strong>만 다룬다. 예를 들어 사고 사슬(chain-of-thought)은 GSM8K 산술 추론에서 정확도를 $17.9\%$에서 $58.1\%$로 끌어올렸고, 자기일관성(self-consistency)은 여기서 다시 $+17.9$ 포인트를 더했다. 각 기법은 <strong>언제 이득이 나고 언제 오히려 손해인지</strong> 조건까지 함께 배운다 — 모델 규모, 과제 유형, 민감도가 그 경계를 정한다. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
-    <p class="lede lang-en">"It worked for me when I wrote it this way" is an <strong>anecdote</strong>, and anecdotes do not reproduce. This part we set aside community folklore and cover only <strong>techniques validated in peer-reviewed papers</strong>. For instance, chain-of-thought prompting lifted GSM8K arithmetic-reasoning accuracy from $17.9\%$ to $58.1\%$, and self-consistency added a further $+17.9$ points on top. For every method we also learn its <strong>conditions — when it helps and when it hurts</strong>: model scale, task type, and sensitivity define those boundaries. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
+    <p class="lede lang-ko">"이렇게 쓰면 잘 되더라"는 <strong>일화(anecdote)</strong>는 재현되지 않는다. 이번 파트는 커뮤니티 팁을 걷어내고, <strong>동료 심사를 거친 논문으로 검증된 기법</strong>만 다룬다. 예를 들어 사고 사슬(chain-of-thought)은 GSM8K 산술 추론에서 정확도를 $17.9\%$에서 $56.9\%$로 끌어올렸고, 자기일관성(self-consistency)은 여기서 다시 $+17.9$ 포인트를 더했다. 각 기법은 <strong>언제 이득이 나고 언제 오히려 손해인지</strong> 조건까지 함께 배운다 — 모델 규모, 과제 유형, 민감도가 그 경계를 정한다. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
+    <p class="lede lang-en">"It worked for me when I wrote it this way" is an <strong>anecdote</strong>, and anecdotes do not reproduce. This part we set aside community folklore and cover only <strong>techniques validated in peer-reviewed papers</strong>. For instance, chain-of-thought prompting lifted GSM8K arithmetic-reasoning accuracy from $17.9\%$ to $56.9\%$, and self-consistency added a further $+17.9$ points on top. For every method we also learn its <strong>conditions — when it helps and when it hurts</strong>: model scale, task type, and sensitivity define those boundaries. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
   </div>
 </section>
 
@@ -365,7 +365,7 @@
 </defs>
 <line x1="52" y1="248" x2="452" y2="248" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21ko)"/>
 <line x1="52" y1="248" x2="52" y2="24" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21ko)"/>
-<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">예시 개수 $k$ (0 → 5)</text>
+<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">예시 개수 k (0 → 5)</text>
 <text x="20" y="135" font-size="11.5" fill="#52525b" text-anchor="middle" transform="rotate(-90 20 135)">기대 정확도</text>
 <line x1="52" y1="70" x2="452" y2="70" stroke="#d4d4d8" stroke-width="1" stroke-dasharray="4 4"/>
 <text x="440" y="64" font-size="9.5" fill="#a1a1aa" text-anchor="end">cap (포화 상한)</text>
@@ -404,7 +404,7 @@
 </defs>
 <line x1="52" y1="248" x2="452" y2="248" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21en)"/>
 <line x1="52" y1="248" x2="52" y2="24" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar21en)"/>
-<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">example count $k$ (0 → 5)</text>
+<text x="252" y="272" font-size="11.5" fill="#52525b" text-anchor="middle">example count k (0 → 5)</text>
 <text x="20" y="135" font-size="11.5" fill="#52525b" text-anchor="middle" transform="rotate(-90 20 135)">expected accuracy</text>
 <line x1="52" y1="70" x2="452" y2="70" stroke="#d4d4d8" stroke-width="1" stroke-dasharray="4 4"/>
 <text x="440" y="64" font-size="9.5" fill="#a1a1aa" text-anchor="end">cap (saturation)</text>
@@ -446,20 +446,20 @@
     <p class="lede lang-en">Model the qualitative saturation of few-shot with a simple curve: $\text{acc}=\text{base}+(\text{cap}-\text{base})\,(1-e^{-n/2})$. Use the sliders for <strong>example count $n$</strong>, the zero-shot <strong>base</strong>, and the saturation <strong>cap</strong> to see the steep rise and the plateau. (Conceptual model — not real accuracy, UNVERIFIED.)</p>
     <div class="calc lang-ko"
       data-title="퓨샷 포화 모델 $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$"
-      data-desc="n = 예시 개수, base = 제로샷 정확도(k=0), cap = 포화 상한. 기본값 n=2, base=0.35, cap=0.85 → acc≈0.665. n을 키우면 급상승 후 cap에 수렴합니다."
+      data-desc="n = 예시 개수, base = 제로샷 정확도(k=0), cap = 포화 상한. 기본값 n=2, base=0.35, cap=0.85 → acc≈0.666. n을 키우면 급상승 후 cap에 수렴합니다."
       data-vars='[{"sym":"n","label":"$n$ · 예시 개수","min":0,"max":10,"val":2,"step":1,"unit":"개"},{"sym":"base","label":"$\\text{base}$ · 제로샷 정확도","min":0.1,"max":0.6,"val":0.35,"step":0.05,"unit":""},{"sym":"cap","label":"$\\text{cap}$ · 포화 상한","min":0.6,"max":0.98,"val":0.85,"step":0.01,"unit":""}]'
       data-expr="base+(cap-base)*(1-Math.exp(-n/2))"
       data-out="$\text{acc}$" data-out-unit=""
       data-barmax="1"
-      data-note="n을 0→2로 올리면 acc가 base(0.35)에서 약 0.665로 급상승 — 초기 예시의 효과가 가장 큽니다. n≥6부터는 거의 cap에 붙어 포화."></div>
+      data-note="n을 0→2로 올리면 acc가 base(0.35)에서 약 0.666으로 급상승 — 초기 예시의 효과가 가장 큽니다. n≥6부터는 거의 cap에 붙어 포화."></div>
     <div class="calc lang-en"
       data-title="Few-shot saturation model $\text{acc}=\text{base}+(\text{cap}-\text{base})(1-e^{-n/2})$"
-      data-desc="n = example count, base = zero-shot accuracy (k=0), cap = saturation ceiling. Default n=2, base=0.35, cap=0.85 → acc≈0.665. Increasing n rises steeply then converges to cap."
+      data-desc="n = example count, base = zero-shot accuracy (k=0), cap = saturation ceiling. Default n=2, base=0.35, cap=0.85 → acc≈0.666. Increasing n rises steeply then converges to cap."
       data-vars='[{"sym":"n","label":"$n$ · example count","min":0,"max":10,"val":2,"step":1,"unit":"ex"},{"sym":"base","label":"$\\text{base}$ · zero-shot accuracy","min":0.1,"max":0.6,"val":0.35,"step":0.05,"unit":""},{"sym":"cap","label":"$\\text{cap}$ · saturation ceiling","min":0.6,"max":0.98,"val":0.85,"step":0.01,"unit":""}]'
       data-expr="base+(cap-base)*(1-Math.exp(-n/2))"
       data-out="$\text{acc}$" data-out-unit=""
       data-barmax="1"
-      data-note="Raising n from 0→2 lifts acc from base (0.35) to about 0.665 — early examples have the biggest effect. From n≥6 it nearly sticks to cap (saturated)."></div>
+      data-note="Raising n from 0→2 lifts acc from base (0.35) to about 0.666 — early examples have the biggest effect. From n≥6 it nearly sticks to cap (saturated)."></div>
     <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 정확도(0~1) 감: 제로샷 base $\approx 0.3\!\sim\!0.5$(과제 난이도별) · 한두 예시가 가장 큰 이득 · cap 근처는 개당 이득 미미하지만 <strong>토큰 비용은 선형 증가</strong>. 그래서 실무에서는 "정확도/토큰" 균형점에서 $k$를 멈추는 것이 관건. 이 모델은 포화의 <em>모양</em>만 담을 뿐 실제 수치가 아님. <span class="src">(출처: 포화 경향 = Brown et al. 2020; 수식은 교육용 근사, UNVERIFIED)</span></div>
     <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — feel for accuracy (0~1): zero-shot base $\approx 0.3\!\sim\!0.5$ (task-dependent) · the first one or two examples give the biggest gain · near cap each extra example adds little while <strong>token cost grows linearly</strong>. In practice the trick is stopping $k$ at the "accuracy/token" sweet spot. This model captures only the <em>shape</em> of saturation, not real numbers. <span class="src">(Source: saturation trend = Brown et al. 2020; the formula is an educational approximation, UNVERIFIED)</span></div>
   </section>
@@ -476,7 +476,7 @@
         <button class="opt">③ 순서는 무관하며 결과 차이는 순전히 난수 때문</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ICL은 가중치를 바꾸지 않고, 예측 $p(y\mid I,S_\pi)$는 예시 배열 $S_\pi$에 명시적으로 조건화된다. 위치 인코딩·최근성 편향 때문에 순열 $\pi$가 바뀌면 조건 자체가 바뀐다(Lu et al. 2022). <span class="dim">오답 ①·③: ①ICL은 재학습이 없고, ③순서는 구조적으로 영향을 주는 실제 변수다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ICL은 가중치를 바꾸지 않고, 예측 $p(y\mid I,S_\pi)$는 예시 배열 $S_\pi$에 명시적으로 조건화된다. 위치 인코딩·최근성 편향 때문에 순열 $\pi$가 바뀌면 조건 자체가 바뀐다(Lu et al. 2022). <span class="dim">오답 ①·③: ①ICL은 재학습이 없고, ③순서는 구조적으로 영향을 주는 실제 변수다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Why does <strong>reordering the same example set</strong> change the result?</p>
@@ -486,7 +486,7 @@
         <button class="opt">③ order is irrelevant; the difference is purely random noise</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ICL does not change weights; the prediction $p(y\mid I,S_\pi)$ is explicitly conditioned on the ordered set $S_\pi$. Because of positional encodings and recency bias, changing the permutation $\pi$ changes the conditioning itself (Lu et al. 2022). <span class="dim">Wrong ①·③: ① ICL has no re-training; ③ order is a real, structural variable.</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ICL does not change weights; the prediction $p(y\mid I,S_\pi)$ is explicitly conditioned on the ordered set $S_\pi$. Because of positional encodings and recency bias, changing the permutation $\pi$ changes the conditioning itself (Lu et al. 2022). <span class="dim">Wrong ①·③: ① ICL has no re-training; ③ order is a real, structural variable.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>예시 개수 $k$를 계속 늘릴 때의 전형적 정확도 거동은?</p>
@@ -496,7 +496,7 @@
         <button class="opt">③ $k$가 커질수록 항상 정확도가 감소</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — Brown et al.(2020)은 $0\to k$로 예시를 늘리면 성능이 대체로 오르되 이득이 <strong>포화</strong>함을 보고했다. 초기 한두 예시의 이득이 가장 크고, 이후엔 토큰 비용만 늘어난다. <span class="dim">오답 ①·③: ①무한 선형 증가가 아니며, ③일반적으로 감소가 아니라 포화한다(순서·품질이 나쁘면 정체·저하도 가능).</span> <span class="agg">학급 n=41 · ① 8 · ② 29 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — Brown et al.(2020)은 $0\to k$로 예시를 늘리면 성능이 대체로 오르되 이득이 <strong>포화</strong>함을 보고했다. 초기 한두 예시의 이득이 가장 크고, 이후엔 토큰 비용만 늘어난다. <span class="dim">오답 ①·③: ①무한 선형 증가가 아니며, ③일반적으로 감소가 아니라 포화한다(순서·품질이 나쁘면 정체·저하도 가능).</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>As example count $k$ keeps increasing, the typical accuracy behavior is:</p>
@@ -506,7 +506,7 @@
         <button class="opt">③ accuracy always decreases as $k$ grows</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — Brown et al. (2020) reported that increasing examples $0\to k$ generally improves performance but the gains <strong>saturate</strong>. The first one or two examples give the biggest lift; beyond that, token cost grows while gains taper. <span class="dim">Wrong ①·③: ① it is not unbounded-linear; ③ it saturates rather than always decreasing (though bad order/quality can stall or hurt it).</span> <span class="agg">class n=41 · ① 8 · ② 29 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — Brown et al. (2020) reported that increasing examples $0\to k$ generally improves performance but the gains <strong>saturate</strong>. The first one or two examples give the biggest lift; beyond that, token cost grows while gains taper. <span class="dim">Wrong ①·③: ① it is not unbounded-linear; ③ it saturates rather than always decreasing (though bad order/quality can stall or hurt it).</span></div>
     </div>
   </section>
 
@@ -732,8 +732,8 @@
 <marker id="ar22ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
 </defs>
 <rect x="18" y="128" width="70" height="44" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
-<text x="53" y="147" font-size="11.5" fill="#52525b" text-anchor="middle">질문 $x$</text>
-<text x="53" y="163" font-size="10" fill="#71717a" text-anchor="middle">$T>0$ 샘플</text>
+<text x="53" y="147" font-size="11.5" fill="#52525b" text-anchor="middle">질문 x</text>
+<text x="53" y="163" font-size="10" fill="#71717a" text-anchor="middle">T&gt;0 샘플</text>
 <line x1="88" y1="150" x2="118" y2="60" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22ko)"/>
 <line x1="88" y1="150" x2="118" y2="110" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22ko)"/>
 <line x1="88" y1="150" x2="118" y2="192" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22ko)"/>
@@ -751,7 +751,7 @@
 <line x1="272" y1="193" x2="330" y2="156" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22ko)"/>
 <line x1="272" y1="245" x2="330" y2="164" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22ko)"/>
 <rect x="334" y="122" width="126" height="56" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
-<text x="397" y="145" font-size="11" fill="#065f46" text-anchor="middle" font-weight="700">다수결 $\hat{y}$</text>
+<text x="397" y="145" font-size="11" fill="#065f46" text-anchor="middle" font-weight="700">다수결 ŷ</text>
 <text x="397" y="164" font-size="14" fill="#065f46" text-anchor="middle" font-weight="700">= 42 (3표)</text>
 </svg>
       </div>
@@ -774,8 +774,8 @@
 <marker id="ar22en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
 </defs>
 <rect x="18" y="128" width="70" height="44" rx="7" fill="#fff" stroke="#71717a" stroke-width="1.5"/>
-<text x="53" y="147" font-size="11.5" fill="#52525b" text-anchor="middle">query $x$</text>
-<text x="53" y="163" font-size="10" fill="#71717a" text-anchor="middle">$T>0$ sample</text>
+<text x="53" y="147" font-size="11.5" fill="#52525b" text-anchor="middle">query x</text>
+<text x="53" y="163" font-size="10" fill="#71717a" text-anchor="middle">T&gt;0 sample</text>
 <line x1="88" y1="150" x2="118" y2="60" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22en)"/>
 <line x1="88" y1="150" x2="118" y2="110" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22en)"/>
 <line x1="88" y1="150" x2="118" y2="192" stroke="#71717a" stroke-width="1.4" marker-end="url(#ar22en)"/>
@@ -793,7 +793,7 @@
 <line x1="272" y1="193" x2="330" y2="156" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22en)"/>
 <line x1="272" y1="245" x2="330" y2="164" stroke="#a1a1aa" stroke-width="1.2" marker-end="url(#ar22en)"/>
 <rect x="334" y="122" width="126" height="56" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
-<text x="397" y="145" font-size="11" fill="#065f46" text-anchor="middle" font-weight="700">vote $\hat{y}$</text>
+<text x="397" y="145" font-size="11" fill="#065f46" text-anchor="middle" font-weight="700">vote ŷ</text>
 <text x="397" y="164" font-size="14" fill="#065f46" text-anchor="middle" font-weight="700">= 42 (3 votes)</text>
 </svg>
       </div>
@@ -850,7 +850,7 @@
         <button class="opt">③ 경로를 1개만 뽑고 길이를 최대로 늘린다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 다수결이 의미를 가지려면 서로 다른 추론 경로가 필요하므로 <strong>온도 $T>0$로 다양성</strong>을 확보해야 한다. <span class="dim">오답 ①·③: ①$T=0$은 항상 같은 경로만 내 다수결이 무의미하고, ③경로가 1개면 투표 자체가 성립하지 않는다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 다수결이 의미를 가지려면 서로 다른 추론 경로가 필요하므로 <strong>온도 $T>0$로 다양성</strong>을 확보해야 한다. <span class="dim">오답 ①·③: ①$T=0$은 항상 같은 경로만 내 다수결이 무의미하고, ③경로가 1개면 투표 자체가 성립하지 않는다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>For self-consistency (Wang et al. 2022) to benefit from voting, how must <strong>decoding</strong> be done?</p>
@@ -860,7 +860,7 @@
         <button class="opt">③ draw only one path and maximize its length</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — voting is meaningful only with distinct reasoning paths, so <strong>diversity via $T>0$</strong> is required. <span class="dim">Wrong ①·③: ① $T=0$ always yields the same path, making the vote pointless; ③ with only one path there is no vote at all.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — voting is meaningful only with distinct reasoning paths, so <strong>diversity via $T>0$</strong> is required. <span class="dim">Wrong ①·③: ① $T=0$ always yields the same path, making the vote pointless; ③ with only one path there is no vote at all.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>Wei et al.(2022)에 따르면 사고 사슬(CoT)의 이득은 <strong>모델 규모</strong>와 어떤 관계입니까?</p>
@@ -870,7 +870,7 @@
         <button class="opt" data-correct="1">③ 창발적 — 작은 모델엔 효과가 작거나 역효과, 대형 모델에서 큰 이득</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ③</b> — CoT 이득은 <strong>창발적(emergent)</strong>이어서 대략 $\sim\!100\text{B}$급 이상에서 크게 나타나고, 작은 모델에서는 미미하거나 오히려 성능을 떨어뜨릴 수 있다. <span class="dim">오답 ①·②: ①규모 무관이 아니라 규모에 의존하며, ②관계가 정반대다(작은 모델에서 이득이 크지 않다).</span> <span class="agg">학급 n=41 · ① 5 · ② 7 · ③ 29</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ③</b> — CoT 이득은 <strong>창발적(emergent)</strong>이어서 대략 $\sim\!100\text{B}$급 이상에서 크게 나타나고, 작은 모델에서는 미미하거나 오히려 성능을 떨어뜨릴 수 있다. <span class="dim">오답 ①·②: ①규모 무관이 아니라 규모에 의존하며, ②관계가 정반대다(작은 모델에서 이득이 크지 않다).</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Per Wei et al. (2022), how does chain-of-thought (CoT) benefit relate to <strong>model scale</strong>?</p>
@@ -880,7 +880,7 @@
         <button class="opt" data-correct="1">③ emergent — small models gain little or worse, large models gain much</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ③</b> — CoT's benefit is <strong>emergent</strong>, appearing strongly around $\sim\!100\text{B}$-scale and above, while in small models it is negligible or can even hurt. <span class="dim">Wrong ①·②: ① it is scale-dependent, not scale-independent; ② the relationship is the opposite (small models do not gain the most).</span> <span class="agg">class n=41 · ① 5 · ② 7 · ③ 29</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ③</b> — CoT's benefit is <strong>emergent</strong>, appearing strongly around $\sim\!100\text{B}$-scale and above, while in small models it is negligible or can even hurt. <span class="dim">Wrong ①·②: ① it is scale-dependent, not scale-independent; ② the relationship is the opposite (small models do not gain the most).</span></div>
     </div>
   </section>
 
@@ -1106,15 +1106,15 @@
 <marker id="arw23ko" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
 </defs>
 <rect x="176" y="18" width="128" height="34" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
-<text x="240" y="40" font-size="12" fill="#3730a3" text-anchor="middle" font-weight="700">질문 $q$</text>
+<text x="240" y="40" font-size="12" fill="#3730a3" text-anchor="middle" font-weight="700">질문 q</text>
 <rect x="60" y="94" width="150" height="40" rx="9" fill="#ecfeff" stroke="#0891b2" stroke-width="1.8"/>
-<text x="135" y="119" font-size="12.5" fill="#155e75" text-anchor="middle" font-weight="700">🧭 Thought $t_i$</text>
+<text x="135" y="119" font-size="12.5" fill="#155e75" text-anchor="middle" font-weight="700">🧭 Thought tᵢ</text>
 <rect x="270" y="94" width="150" height="40" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.8"/>
-<text x="345" y="119" font-size="12.5" fill="#92400e" text-anchor="middle" font-weight="700">🔧 Action $a_i$</text>
+<text x="345" y="119" font-size="12.5" fill="#92400e" text-anchor="middle" font-weight="700">🔧 Action aᵢ</text>
 <rect x="270" y="196" width="150" height="40" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
-<text x="345" y="221" font-size="12.5" fill="#166534" text-anchor="middle" font-weight="700">👁 Observation $o_i$</text>
+<text x="345" y="221" font-size="12.5" fill="#166534" text-anchor="middle" font-weight="700">👁 Observation oᵢ</text>
 <rect x="60" y="196" width="150" height="40" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
-<text x="135" y="221" font-size="12" fill="#991b1b" text-anchor="middle" font-weight="700">✅ Answer $\hat y$</text>
+<text x="135" y="221" font-size="12" fill="#991b1b" text-anchor="middle" font-weight="700">✅ Answer ŷ</text>
 <line x1="220" y1="52" x2="150" y2="90" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23ko)"/>
 <line x1="210" y1="114" x2="266" y2="114" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23ko)"/>
 <line x1="345" y1="134" x2="345" y2="192" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23ko)"/>
@@ -1147,15 +1147,15 @@
 <marker id="arw23en" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker>
 </defs>
 <rect x="176" y="18" width="128" height="34" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
-<text x="240" y="40" font-size="12" fill="#3730a3" text-anchor="middle" font-weight="700">question $q$</text>
+<text x="240" y="40" font-size="12" fill="#3730a3" text-anchor="middle" font-weight="700">question q</text>
 <rect x="60" y="94" width="150" height="40" rx="9" fill="#ecfeff" stroke="#0891b2" stroke-width="1.8"/>
-<text x="135" y="119" font-size="12.5" fill="#155e75" text-anchor="middle" font-weight="700">🧭 Thought $t_i$</text>
+<text x="135" y="119" font-size="12.5" fill="#155e75" text-anchor="middle" font-weight="700">🧭 Thought tᵢ</text>
 <rect x="270" y="94" width="150" height="40" rx="9" fill="#fef3c7" stroke="#d97706" stroke-width="1.8"/>
-<text x="345" y="119" font-size="12.5" fill="#92400e" text-anchor="middle" font-weight="700">🔧 Action $a_i$</text>
+<text x="345" y="119" font-size="12.5" fill="#92400e" text-anchor="middle" font-weight="700">🔧 Action aᵢ</text>
 <rect x="270" y="196" width="150" height="40" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
-<text x="345" y="221" font-size="12.5" fill="#166534" text-anchor="middle" font-weight="700">👁 Observation $o_i$</text>
+<text x="345" y="221" font-size="12.5" fill="#166534" text-anchor="middle" font-weight="700">👁 Observation oᵢ</text>
 <rect x="60" y="196" width="150" height="40" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
-<text x="135" y="221" font-size="12" fill="#991b1b" text-anchor="middle" font-weight="700">✅ Answer $\hat y$</text>
+<text x="135" y="221" font-size="12" fill="#991b1b" text-anchor="middle" font-weight="700">✅ Answer ŷ</text>
 <line x1="220" y1="52" x2="150" y2="90" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23en)"/>
 <line x1="210" y1="114" x2="266" y2="114" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23en)"/>
 <line x1="345" y1="134" x2="345" y2="192" stroke="#71717a" stroke-width="1.5" marker-end="url(#arw23en)"/>
@@ -1222,7 +1222,7 @@
         <button class="opt">③ Observation → Answer → Thought</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ReAct는 <strong>Thought</strong>(다음 할 일 추론)→<strong>Action</strong>(도구 호출)→<strong>Observation</strong>(도구 결과)을 한 스텝으로 반복한다(Yao et al. 2022). <span class="dim">오답 ①·③: Answer는 루프가 충분히 돈 뒤 마지막에만 나오며, 순서가 뒤바뀌면 접지 되먹임이 성립하지 않는다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ReAct는 <strong>Thought</strong>(다음 할 일 추론)→<strong>Action</strong>(도구 호출)→<strong>Observation</strong>(도구 결과)을 한 스텝으로 반복한다(Yao et al. 2022). <span class="dim">오답 ①·③: Answer는 루프가 충분히 돈 뒤 마지막에만 나오며, 순서가 뒤바뀌면 접지 되먹임이 성립하지 않는다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Pick the three elements of one ReAct step <strong>in order</strong>.</p>
@@ -1232,7 +1232,7 @@
         <button class="opt">③ Observation → Answer → Thought</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ReAct repeats <strong>Thought</strong> (reason about next step) → <strong>Action</strong> (tool call) → <strong>Observation</strong> (tool result) as one step (Yao et al. 2022). <span class="dim">Wrong ①·③: the Answer comes only at the end after enough looping, and reordering breaks the grounding feedback.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ReAct repeats <strong>Thought</strong> (reason about next step) → <strong>Action</strong> (tool call) → <strong>Observation</strong> (tool result) as one step (Yao et al. 2022). <span class="dim">Wrong ①·③: the Answer comes only at the end after enough looping, and reordering breaks the grounding feedback.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>순수 CoT 대비 ReAct가 <strong>환각을 줄이는 근본 이유</strong>는?</p>
@@ -1242,7 +1242,7 @@
         <button class="opt">③ 온도(temperature)를 0으로 두기 때문</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ReAct는 매 스텝 실제 도구 결과 $o_i$를 문맥에 추가해 $p(\hat y\mid q, o_{1:n})$처럼 <strong>사실에 조건화</strong>한다. 근거가 문맥에 있으므로 지어낼 여지가 줄어든다. <span class="dim">오답 ①·③: 모델 크기나 온도 설정도 영향은 있지만, ReAct의 핵심 메커니즘은 <strong>관찰 기반 접지</strong>이지 이들 하이퍼파라미터가 아니다.</span> <span class="agg">학급 n=41 · ① 5 · ② 30 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ReAct는 매 스텝 실제 도구 결과 $o_i$를 문맥에 추가해 $p(\hat y\mid q, o_{1:n})$처럼 <strong>사실에 조건화</strong>한다. 근거가 문맥에 있으므로 지어낼 여지가 줄어든다. <span class="dim">오답 ①·③: 모델 크기나 온도 설정도 영향은 있지만, ReAct의 핵심 메커니즘은 <strong>관찰 기반 접지</strong>이지 이들 하이퍼파라미터가 아니다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What is the <strong>fundamental reason</strong> ReAct reduces hallucination versus pure CoT?</p>
@@ -1252,7 +1252,7 @@
         <button class="opt">③ because temperature is set to 0</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ReAct appends real tool results $o_i$ to the context each step, conditioning on facts as in $p(\hat y\mid q, o_{1:n})$. With evidence in context, there is less room to fabricate. <span class="dim">Wrong ①·③: model size and temperature matter too, but ReAct's core mechanism is <strong>observation-based grounding</strong>, not those hyperparameters.</span> <span class="agg">class n=41 · ① 5 · ② 30 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ReAct appends real tool results $o_i$ to the context each step, conditioning on facts as in $p(\hat y\mid q, o_{1:n})$. With evidence in context, there is less room to fabricate. <span class="dim">Wrong ①·③: model size and temperature matter too, but ReAct's core mechanism is <strong>observation-based grounding</strong>, not those hyperparameters.</span></div>
     </div>
   </section>
 
@@ -1425,12 +1425,12 @@
     <div class="deriv lang-ko">
       <div class="dcard"><h4>① 분기 = 곱셈</h4><div class="sub">넓힘의 대가</div><div class="ana">🌱 한 노드가 $b$갈래 → 다음 층은 $b\times$</div><div class="eq">$ N_{\text{leaf}} = b^{d} $</div><p>매 깊이마다 후보가 $b$배씩 곱해져 <strong>리프 수가 지수적</strong>으로 증가. $b{=}3, d{=}4$면 $81$개 경로.</p></div>
       <div class="dcard"><h4>② 백트래킹 = 가지치기</h4><div class="sub">평가로 잘라내기</div><div class="ana">✂️ 낮은 value 노드는 확장 안 함</div><div class="eq">$ N_{\text{eval}} \ll b^{d} $</div><p>상태 평가로 <strong>유망 노드만</strong> 확장(beam $k$)하면 실제 평가 비용은 $b^d$보다 훨씬 작아짐. 넓힘과 잘라냄의 균형.</p></div>
-      <div class="dcard"><h4>③ 분해 = 깊이 압축</h4><div class="sub">least-to-most</div><div class="ana">🪜 큰 문제를 작은 하위문제 사슬로</div><div class="eq">$ b^{d} \rightarrow \textstyle\sum_j b_j^{\,d_j} $</div><p>Zhou 2022의 <strong>least-to-most</strong>: 문제를 쉬운 하위문제로 나눠 순차 해결 → 각 단계의 $b,d$가 작아져 <strong>곱이 합으로</strong> 완화.</p></div>
+      <div class="dcard"><h4>③ 분해 = 깊이 압축</h4><div class="sub">least-to-most</div><div class="ana">🪜 큰 문제를 작은 하위문제 사슬로</div><div class="eq">$ b^{d} \rightarrow \textstyle\sum_j b_j^{\,d_j} $</div><p>Zhou, D. 2022의 <strong>least-to-most</strong>: 문제를 쉬운 하위문제로 나눠 순차 해결 → 각 단계의 $b,d$가 작아져 <strong>곱이 합으로</strong> 완화.</p></div>
     </div>
     <div class="deriv lang-en">
       <div class="dcard"><h4>① Branching = multiply</h4><div class="sub">cost of widening</div><div class="ana">🌱 one node → $b$ ways → next layer $\times b$</div><div class="eq">$ N_{\text{leaf}} = b^{d} $</div><p>Candidates multiply by $b$ at each depth, so the <strong>leaf count grows exponentially</strong>. With $b{=}3, d{=}4$ that is $81$ paths.</p></div>
       <div class="dcard"><h4>② Backtracking = pruning</h4><div class="sub">cut by evaluation</div><div class="ana">✂️ don't expand low-value nodes</div><div class="eq">$ N_{\text{eval}} \ll b^{d} $</div><p>Keeping only <strong>promising nodes</strong> (beam $k$) via state value makes real cost far below $b^d$ — the balance of widening and cutting.</p></div>
-      <div class="dcard"><h4>③ Decomposition = depth cut</h4><div class="sub">least-to-most</div><div class="ana">🪜 big problem → chain of small subproblems</div><div class="eq">$ b^{d} \rightarrow \textstyle\sum_j b_j^{\,d_j} $</div><p>Zhou 2022's <strong>least-to-most</strong>: split into easy subproblems solved in sequence → smaller $b,d$ per stage turns a <strong>product into a sum</strong>.</p></div>
+      <div class="dcard"><h4>③ Decomposition = depth cut</h4><div class="sub">least-to-most</div><div class="ana">🪜 big problem → chain of small subproblems</div><div class="eq">$ b^{d} \rightarrow \textstyle\sum_j b_j^{\,d_j} $</div><p>Zhou, D. 2022's <strong>least-to-most</strong>: split into easy subproblems solved in sequence → smaller $b,d$ per stage turns a <strong>product into a sum</strong>.</p></div>
     </div>
     <div class="callout warn lang-ko"><div class="ct">주의 · 넓다고 항상 좋은 건 아니다</div>분기폭 $b$와 깊이 $d$를 무작정 키우면 비용이 $b^d$로 폭주하고, <strong>평가 신호가 부정확</strong>하면 잘못된 가지를 확장해 오히려 성능이 나빠질 수 있다. 넓힘은 <strong>신뢰할 수 있는 상태 평가</strong>가 있을 때만 이득이다.</div>
     <div class="callout warn lang-en"><div class="ct">Caution · wider is not always better</div>Blindly raising $b$ and $d$ makes cost blow up as $b^d$; if the <strong>evaluation signal is noisy</strong>, you expand wrong branches and performance can drop. Widening pays off only with a <strong>trustworthy state value</strong>.</div>
@@ -1446,22 +1446,22 @@
       <div class="col2 reading">
         <p><strong>Yao et al.(2023)</strong>의 <em>Tree of Thoughts</em>는 Game of 24, 창의적 글쓰기, 미니 크로스워드처럼 <strong>탐색이 필요한 과제</strong>에서 CoT를 크게 앞섰다고 보고한다. 저자들은 GPT-4로 Game of 24에서 CoT가 낮은 성공률에 그친 반면 ToT는 훨씬 높은 성공률을 보였다고 서술한다(<strong>구체 수치는 논문 원문 확인 권장 · UNVERIFIED</strong>).</p>
         <p class="pullquote">"먼저 여러 후보를 생성하고, 평가하고, 유망한 가지만 확장하라."</p>
-        <p><strong>Zhou et al.(2022)</strong>의 <em>Least-to-Most Prompting</em>은 문제를 쉬운 하위문제로 <strong>먼저 분해</strong>한 뒤 순차적으로 풀어 일반화(어려운 조합 과제)에서 CoT보다 나은 결과를 보였다. 한편 <strong>구조화 출력</strong>은 모델이 자유 텍스트 대신 <strong>JSON schema</strong>를 따르게 강제(제약 디코딩·함수 호출)해 후속 파이프라인이 파싱 실패 없이 값을 소비하게 한다.</p>
+        <p><strong>Zhou, D. et al.(2022)</strong>의 <em>Least-to-Most Prompting</em>은 문제를 쉬운 하위문제로 <strong>먼저 분해</strong>한 뒤 순차적으로 풀어 일반화(어려운 조합 과제)에서 CoT보다 나은 결과를 보였다. 한편 <strong>구조화 출력</strong>은 모델이 자유 텍스트 대신 <strong>JSON schema</strong>를 따르게 강제(제약 디코딩·함수 호출)해 후속 파이프라인이 파싱 실패 없이 값을 소비하게 한다.</p>
       </div>
       <div class="col2">
         <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>ToT = <strong>생성 → 평가 → 확장/백트래킹</strong>의 반복.</li><li>least-to-most = <strong>분해 우선</strong> → 하위문제 순차 해결.</li><li>구조화 출력 = <strong>스키마 강제</strong>로 파이프라인 신뢰성 확보.</li></ul></div>
-        <p class="readmeta">참고: Yao et al.(2023) <em>Tree of Thoughts</em>, NeurIPS · Zhou et al.(2022) <em>Least-to-Most Prompting</em>, ICLR 2023 · Wei et al.(2022) <em>Chain-of-Thought</em>, NeurIPS</p>
+        <p class="readmeta">참고: Yao et al.(2023) <em>Tree of Thoughts</em>, NeurIPS · Zhou, D. et al.(2022) <em>Least-to-Most Prompting</em>, ICLR 2023 · Wei et al.(2022) <em>Chain-of-Thought</em>, NeurIPS</p>
       </div>
     </div>
     <div class="two lang-en">
       <div class="col2 reading">
         <p><strong>Yao et al. (2023)</strong>, <em>Tree of Thoughts</em>, reports large gains over CoT on <strong>search-heavy tasks</strong> such as Game of 24, creative writing, and mini crosswords. The authors describe that with GPT-4, CoT achieved a low success rate on Game of 24 while ToT reached a much higher one (<strong>consult the paper for exact numbers · UNVERIFIED</strong>).</p>
         <p class="pullquote">"First generate several candidates, evaluate them, and expand only the promising branches."</p>
-        <p><strong>Zhou et al. (2022)</strong>, <em>Least-to-Most Prompting</em>, first <strong>decomposes</strong> a problem into easier subproblems and solves them in sequence, beating CoT on generalization (hard compositional tasks). Meanwhile, <strong>structured output</strong> forces the model to follow a <strong>JSON schema</strong> (constrained decoding / function calling) so downstream pipelines consume values without parse failures.</p>
+        <p><strong>Zhou, D. et al. (2022)</strong>, <em>Least-to-Most Prompting</em>, first <strong>decomposes</strong> a problem into easier subproblems and solves them in sequence, beating CoT on generalization (hard compositional tasks). Meanwhile, <strong>structured output</strong> forces the model to follow a <strong>JSON schema</strong> (constrained decoding / function calling) so downstream pipelines consume values without parse failures.</p>
       </div>
       <div class="col2">
         <div class="callout key"><div class="ct">Must know</div><ul><li>ToT = the loop of <strong>generate → evaluate → expand/backtrack</strong>.</li><li>Least-to-most = <strong>decompose first</strong> → solve subproblems in sequence.</li><li>Structured output = <strong>enforce a schema</strong> for pipeline reliability.</li></ul></div>
-        <p class="readmeta">Refs: Yao et al. (2023) <em>Tree of Thoughts</em>, NeurIPS · Zhou et al. (2022) <em>Least-to-Most Prompting</em>, ICLR 2023 · Wei et al. (2022) <em>Chain-of-Thought</em>, NeurIPS</p>
+        <p class="readmeta">Refs: Yao et al. (2023) <em>Tree of Thoughts</em>, NeurIPS · Zhou, D. et al. (2022) <em>Least-to-Most Prompting</em>, ICLR 2023 · Wei et al. (2022) <em>Chain-of-Thought</em>, NeurIPS</p>
       </div>
     </div>
   </section>
@@ -1492,7 +1492,7 @@
 <line x1="200" y1="208" x2="200" y2="256" stroke="#16a34a" stroke-width="2.2" marker-end="url(#ar24ko)"/>
 <!-- root -->
 <circle cx="240" cy="34" r="15" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-<text x="240" y="38" font-size="10.5" fill="#4f46e5" text-anchor="middle" font-weight="700">$s_0$</text>
+<text x="240" y="38" font-size="10.5" fill="#4f46e5" text-anchor="middle" font-weight="700">s₀</text>
 <!-- depth1 -->
 <circle cx="140" cy="120" r="14" fill="#fff" stroke="#4f46e5" stroke-width="1.8"/>
 <text x="140" y="124" font-size="9.5" fill="#4f46e5" text-anchor="middle">.7</text>
@@ -1540,7 +1540,7 @@
 <line x1="340" y1="128" x2="400" y2="192" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#ar24en)"/>
 <line x1="200" y1="208" x2="200" y2="256" stroke="#16a34a" stroke-width="2.2" marker-end="url(#ar24en)"/>
 <circle cx="240" cy="34" r="15" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
-<text x="240" y="38" font-size="10.5" fill="#4f46e5" text-anchor="middle" font-weight="700">$s_0$</text>
+<text x="240" y="38" font-size="10.5" fill="#4f46e5" text-anchor="middle" font-weight="700">s₀</text>
 <circle cx="140" cy="120" r="14" fill="#fff" stroke="#4f46e5" stroke-width="1.8"/>
 <text x="140" y="124" font-size="9.5" fill="#4f46e5" text-anchor="middle">.7</text>
 <circle cx="340" cy="120" r="14" fill="#fff" stroke="#4f46e5" stroke-width="1.8"/>
@@ -1612,7 +1612,7 @@
         <button class="opt">③ 추론 없이 곧바로 최종 답만 출력한다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ToT는 단일 사슬 대신 <strong>분기 탐색 + 상태 평가 + 백트래킹</strong>을 명시적으로 수행한다(Yao et al. 2023). <span class="dim">오답 ①·③: ①탐색 노드가 $b^d$로 늘어 오히려 더 비싸고, ③추론 단계 없이 답만 내는 것은 직접 답(IO) 방식이다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — ToT는 단일 사슬 대신 <strong>분기 탐색 + 상태 평가 + 백트래킹</strong>을 명시적으로 수행한다(Yao et al. 2023). <span class="dim">오답 ①·③: ①탐색 노드가 $b^d$로 늘어 오히려 더 비싸고, ③추론 단계 없이 답만 내는 것은 직접 답(IO) 방식이다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Compared with Chain-of-Thought (CoT), what key extra capability does <strong>Tree of Thought (ToT)</strong> add?</p>
@@ -1622,7 +1622,7 @@
         <button class="opt">③ it outputs the final answer directly without reasoning</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ToT explicitly performs <strong>branching search + state evaluation + backtracking</strong> instead of a single chain (Yao et al. 2023). <span class="dim">Wrong ①·③: ① search nodes grow as $b^d$, so it is usually more expensive; ③ emitting an answer with no reasoning is the direct (IO) method.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — ToT explicitly performs <strong>branching search + state evaluation + backtracking</strong> instead of a single chain (Yao et al. 2023). <span class="dim">Wrong ①·③: ① search nodes grow as $b^d$, so it is usually more expensive; ③ emitting an answer with no reasoning is the direct (IO) method.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>모델 출력에 <strong>JSON schema를 강제</strong>하는 주된 목적은?</p>
@@ -1632,7 +1632,7 @@
         <button class="opt">③ 토큰 수를 줄여 무조건 비용을 낮추기 위해</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 구조화 출력(제약 디코딩·함수 호출)은 자유 텍스트의 파싱 불확실성을 없애 <strong>파이프라인 신뢰성</strong>을 확보한다. <span class="dim">오답 ①·③: ①스키마는 형식을 고정할 뿐 추론 정확도를 항상 올리지는 않고, ③스키마 필드가 오히려 토큰을 더 쓸 수도 있어 비용 절감이 목적은 아니다.</span> <span class="agg">학급 n=41 · ① 8 · ② 29 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 구조화 출력(제약 디코딩·함수 호출)은 자유 텍스트의 파싱 불확실성을 없애 <strong>파이프라인 신뢰성</strong>을 확보한다. <span class="dim">오답 ①·③: ①스키마는 형식을 고정할 뿐 추론 정확도를 항상 올리지는 않고, ③스키마 필드가 오히려 토큰을 더 쓸 수도 있어 비용 절감이 목적은 아니다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What is the main purpose of <strong>enforcing a JSON schema</strong> on model output?</p>
@@ -1642,7 +1642,7 @@
         <button class="opt">③ to cut tokens and unconditionally lower cost</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — structured output (constrained decoding / function calling) removes the parse uncertainty of free text, securing <strong>pipeline reliability</strong>. <span class="dim">Wrong ①·③: ① a schema fixes format but does not always improve reasoning accuracy; ③ schema fields may even add tokens, so cost reduction is not the aim.</span> <span class="agg">class n=41 · ① 8 · ② 29 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — structured output (constrained decoding / function calling) removes the parse uncertainty of free text, securing <strong>pipeline reliability</strong>. <span class="dim">Wrong ①·③: ① a schema fixes format but does not always improve reasoning accuracy; ③ schema fields may even add tokens, so cost reduction is not the aim.</span></div>
     </div>
   </section>
 
@@ -1713,7 +1713,7 @@
     <div class="sumgrid lang-ko">
       <div class="sumcard key"><h4>핵심 정리</h4><ul>
         <li>ToT = <strong>분기 생성 → 상태 평가 → 확장/백트래킹</strong>; 리프 수 $N=b^{d}$ (Yao et al. 2023).</li>
-        <li>least-to-most = <strong>먼저 분해</strong> 후 하위문제 순차 해결로 $b^d$를 합으로 완화 (Zhou et al. 2022).</li>
+        <li>least-to-most = <strong>먼저 분해</strong> 후 하위문제 순차 해결로 $b^d$를 합으로 완화 (Zhou, D. et al. 2022).</li>
         <li>구조화 출력 = <strong>JSON schema 강제·함수 호출</strong>로 파이프라인 신뢰성 확보.</li>
       </ul></div>
       <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
@@ -1730,7 +1730,7 @@
     <div class="sumgrid lang-en">
       <div class="sumcard key"><h4>Key points</h4><ul>
         <li>ToT = <strong>branch generation → state value → expand/backtrack</strong>; leaves $N=b^{d}$ (Yao et al. 2023).</li>
-        <li>Least-to-most = <strong>decompose first</strong>, solve subproblems in sequence, softening $b^d$ into a sum (Zhou et al. 2022).</li>
+        <li>Least-to-most = <strong>decompose first</strong>, solve subproblems in sequence, softening $b^d$ into a sum (Zhou, D. et al. 2022).</li>
         <li>Structured output = <strong>enforce JSON schema / function calling</strong> for pipeline reliability.</li>
       </ul></div>
       <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
@@ -1875,7 +1875,7 @@
 <rect x="44" y="166" width="392" height="66" rx="7" fill="#fff" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5 4"/>
 <text x="56" y="184" font-size="10.5" fill="#a16207" font-weight="700">``` 구분자 ```</text>
 <text x="56" y="203" font-size="10" fill="#52525b">데이터: "배송은 느렸지만 품질은 최고였어요."</text>
-<text x="56" y="221" font-size="9.5" fill="#b91c1c">(이 안의 '지시를 무시하라'는 무력화)</text>
+<text x="56" y="221" font-size="9.5" fill="#b91c1c">(이 안의 '지시를 무시하라'는 오독 위험 감소)</text>
 <line x1="240" y1="248" x2="240" y2="278" stroke="#71717a" stroke-width="1.6" marker-end="url(#arKo25)"/>
 <defs><marker id="arKo25" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker></defs>
 <text x="240" y="294" font-size="10.5" fill="#16a34a" text-anchor="middle" font-weight="700">→ 좁고 일관된 출력</text>
@@ -1909,7 +1909,7 @@
 <rect x="44" y="166" width="392" height="66" rx="7" fill="#fff" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5 4"/>
 <text x="56" y="184" font-size="10.5" fill="#a16207" font-weight="700">``` delimiter ```</text>
 <text x="56" y="203" font-size="10" fill="#52525b">data: "Shipping was slow but quality was superb."</text>
-<text x="56" y="221" font-size="9.5" fill="#b91c1c">('ignore the instructions' inside is neutralized)</text>
+<text x="56" y="221" font-size="9.5" fill="#b91c1c">('ignore the instructions' inside is less likely to be misread as an instruction)</text>
 <line x1="240" y1="248" x2="240" y2="278" stroke="#71717a" stroke-width="1.6" marker-end="url(#arEn25)"/>
 <defs><marker id="arEn25" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#71717a"/></marker></defs>
 <text x="240" y="294" font-size="10.5" fill="#16a34a" text-anchor="middle" font-weight="700">→ narrow, consistent output</text>
@@ -1970,7 +1970,7 @@
         <button class="opt">③ assistant 메시지</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 페르소나·제약·톤 같은 전역 지시는 대화 내내 유지되는 system 메시지에 두어야 매 턴 반복 없이 일관되게 적용된다. <span class="dim">오답 ②·③: ②user는 매 턴 바뀌는 구체 요청·데이터용, ③assistant는 모델의 응답이지 지시 입력이 아니다.</span> <span class="agg">학급 n=41 · ① 31 · ② 8 · ③ 2</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 페르소나·제약·톤 같은 전역 지시는 대화 내내 유지되는 system 메시지에 두어야 매 턴 반복 없이 일관되게 적용된다. <span class="dim">오답 ②·③: ②user는 매 턴 바뀌는 구체 요청·데이터용, ③assistant는 모델의 응답이지 지시 입력이 아니다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Where should the global <strong>role, constraints, and tone</strong> standardly go?</p>
@@ -1980,7 +1980,7 @@
         <button class="opt">③ the assistant message</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — global directives like persona/constraints/tone belong in the system message, which persists across the chat so they apply consistently without per-turn repetition. <span class="dim">Wrong ②·③: ② user carries the turn-specific request/data; ③ assistant is the model's reply, not an instruction input.</span> <span class="agg">class n=41 · ① 31 · ② 8 · ③ 2</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — global directives like persona/constraints/tone belong in the system message, which persists across the chat so they apply consistently without per-turn repetition. <span class="dim">Wrong ②·③: ② user carries the turn-specific request/data; ③ assistant is the model's reply, not an instruction input.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>데이터를 삼중 백틱이나 XML 태그 같은 <strong>구분자</strong>로 감싸는 주된 이유 두 가지는?</p>
@@ -1990,7 +1990,7 @@
         <button class="opt">③ 모델의 최대 출력 길이를 늘리기 위해</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 구분자는 (1) 지시와 처리 대상 데이터의 경계를 명확히 해 오독을 막고, (2) 데이터 속 "이전 지시를 무시하라" 류를 지시로 오인하지 않게 해 주입 표면을 줄인다. <span class="dim">오답 ①·③: ①구분자는 오히려 토큰을 약간 늘리고, ③출력 길이 한도와 무관하다.</span> <span class="agg">학급 n=41 · ① 5 · ② 33 · ③ 3</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 구분자는 (1) 지시와 처리 대상 데이터의 경계를 명확히 해 오독을 막고, (2) 데이터 속 "이전 지시를 무시하라" 류를 지시로 오인하지 않게 해 주입 표면을 줄인다. <span class="dim">오답 ①·③: ①구분자는 오히려 토큰을 약간 늘리고, ③출력 길이 한도와 무관하다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What are the two main reasons to wrap data in a <strong>delimiter</strong> (triple backticks or XML tags)?</p>
@@ -2000,7 +2000,7 @@
         <button class="opt">③ to raise the model's maximum output length</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — delimiters (1) draw a clear boundary between instructions and material-to-process, preventing misreads, and (2) keep data-borne "ignore previous instructions" from being taken as commands, shrinking the injection surface. <span class="dim">Wrong ①·③: ① delimiters slightly increase tokens; ③ they are unrelated to output-length limits.</span> <span class="agg">class n=41 · ① 5 · ② 33 · ③ 3</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — delimiters (1) draw a clear boundary between instructions and material-to-process, preventing misreads, and (2) keep data-borne "ignore previous instructions" from being taken as commands, shrinking the injection surface. <span class="dim">Wrong ①·③: ① delimiters slightly increase tokens; ③ they are unrelated to output-length limits.</span></div>
     </div>
   </section>
 
@@ -2110,8 +2110,8 @@
     <div class="eyebrow lang-en">2-6 · Concept</div>
     <h1 class="stage-h lang-ko">손으로 튜닝하지 말고 — 프롬프트를 탐색·최적화하라</h1>
     <h1 class="stage-h lang-en">Stop Hand-Tuning — Search and Optimize the Prompt</h1>
-    <div class="analogy lang-ko"><span class="ic">🎰</span><div class="tx"><b>직관</b> — 좋은 프롬프트를 손으로 고치는 일은 <b>슬롯머신 손잡이를 하나씩 당기며 감으로 조정</b>하는 것과 같다. 한 번 잘 나와도 다른 입력에서는 무너진다. 대신 <b>여러 후보를 자동으로 만들고(생성) → 데이터로 점수 매기고(eval) → 최고를 고르는(선정)</b> 루프를 돌리면, 사람의 감이 아니라 <b>측정치가 프롬프트를 고른다</b>. <span class="src">(출처: Zhou et al. 2022 "Large Language Models Are Human-Level Prompt Engineers" (APE) / Khattab et al. 2023 DSPy)</span></div></div>
-    <div class="analogy lang-en"><span class="ic">🎰</span><div class="tx"><b>Intuition</b> — Hand-tuning a good prompt is like <b>pulling a slot-machine lever and adjusting by feel</b>. One lucky output collapses on the next input. Instead, run a loop that <b>auto-generates candidates (generate) → scores them on data (eval) → picks the best (select)</b>: now a <b>measured metric, not human gut, chooses the prompt</b>. <span class="src">(Source: Zhou et al. 2022 "Large Language Models Are Human-Level Prompt Engineers" (APE) / Khattab et al. 2023 DSPy)</span></div></div>
+    <div class="analogy lang-ko"><span class="ic">🎰</span><div class="tx"><b>직관</b> — 좋은 프롬프트를 손으로 고치는 일은 <b>슬롯머신 손잡이를 하나씩 당기며 감으로 조정</b>하는 것과 같다. 한 번 잘 나와도 다른 입력에서는 무너진다. 대신 <b>여러 후보를 자동으로 만들고(생성) → 데이터로 점수 매기고(eval) → 최고를 고르는(선정)</b> 루프를 돌리면, 사람의 감이 아니라 <b>측정치가 프롬프트를 고른다</b>. <span class="src">(출처: Zhou, Y. et al. 2022 "Large Language Models Are Human-Level Prompt Engineers" (APE) / Khattab et al. 2023 DSPy)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">🎰</span><div class="tx"><b>Intuition</b> — Hand-tuning a good prompt is like <b>pulling a slot-machine lever and adjusting by feel</b>. One lucky output collapses on the next input. Instead, run a loop that <b>auto-generates candidates (generate) → scores them on data (eval) → picks the best (select)</b>: now a <b>measured metric, not human gut, chooses the prompt</b>. <span class="src">(Source: Zhou, Y. et al. 2022 "Large Language Models Are Human-Level Prompt Engineers" (APE) / Khattab et al. 2023 DSPy)</span></div></div>
     <div class="two lang-ko">
       <div class="col2">
         <p class="lede"><strong>프롬프트 최적화(prompt optimization)</strong>는 사람이 문구를 손으로 다듬는 <strong>수동 튜닝</strong>을 <strong>체계적 탐색·자동화</strong>로 대체합니다. 핵심 도구는 세 가지입니다. <strong>APE</strong>는 LLM 스스로 후보 지시문을 생성·선정하고, <strong>DSPy</strong>는 프롬프트를 손문자열이 아니라 <strong>프로그램(모듈)</strong>으로 보고 컴파일·최적화하며, <strong>메타프롬프팅</strong>은 "프롬프트를 개선하라"는 프롬프트로 LLM에게 개선을 위임합니다. 세 방법 모두 공통적으로 <strong>eval(검증셋 점수)</strong> 위에서 후보를 고릅니다.</p>
@@ -2125,7 +2125,7 @@
       <div class="col2">
         <div class="keq-label">핵심 용어</div>
         <div class="terms">
-          <div class="term"><b>APE</b> Automatic Prompt Engineer — LLM이 지시문 후보를 생성·점수화·선정 (Zhou et al. 2022)</div>
+          <div class="term"><b>APE</b> Automatic Prompt Engineer — LLM이 지시문 후보를 생성·점수화·선정 (Zhou, Y. et al. 2022)</div>
           <div class="term"><b>DSPy</b> 프롬프트를 <strong>선언적 프로그램</strong>으로 컴파일·최적화하는 프레임워크 (Khattab et al. 2023)</div>
           <div class="term"><b>메타프롬프트</b> "프롬프트를 개선하라"고 지시하는 상위 프롬프트</div>
           <div class="term"><b>eval/검증셋 $D$</b> 후보를 채점할 라벨된 예제 집합, 점수 $s_i$</div>
@@ -2148,7 +2148,7 @@
       <div class="col2">
         <div class="keq-label">Key terms</div>
         <div class="terms">
-          <div class="term"><b>APE</b> Automatic Prompt Engineer — LLM generates, scores, and selects instruction candidates (Zhou et al. 2022)</div>
+          <div class="term"><b>APE</b> Automatic Prompt Engineer — LLM generates, scores, and selects instruction candidates (Zhou, Y. et al. 2022)</div>
           <div class="term"><b>DSPy</b> framework that compiles/optimizes prompts as a <strong>declarative program</strong> (Khattab et al. 2023)</div>
           <div class="term"><b>Meta-prompt</b> a higher-level prompt that instructs "improve this prompt"</div>
           <div class="term"><b>eval / val set $D$</b> labeled examples to score candidates, giving score $s_i$</div>
@@ -2190,24 +2190,24 @@
     <h1 class="stage-h lang-en">APE and DSPy — Prompts as Code</h1>
     <div class="two lang-ko">
       <div class="col2 reading">
-        <p><strong>APE</strong>(Zhou et al. 2022)는 사람이 지시문을 쓰는 대신, LLM에게 몇 개의 입력–출력 예시를 주고 <strong>"이 예시를 만들어낸 지시문을 역으로 추론"</strong>하게 해 후보 지시문 여러 개를 생성합니다. 각 후보를 검증셋에서 실행해 점수를 매기고 최고를 고른 뒤, 상위 후보 주변을 다시 탐색(반복)합니다. 저자들은 이렇게 자동 발견한 지시문이 여러 과제에서 사람이 손으로 쓴 지시문과 <strong>대등하거나 그 이상</strong>이었다고 보고합니다(대표 예: "Let's think step by step"류를 능가하는 지시문 발견). <span class="src">(구체 벤치 수치·과제 수는 원논문 표 참조 — 여기서는 UNVERIFIED)</span></p>
+        <p><strong>APE</strong>(Zhou, Y. et al. 2022)는 사람이 지시문을 쓰는 대신, LLM에게 몇 개의 입력–출력 예시를 주고 <strong>"이 예시를 만들어낸 지시문을 역으로 추론"</strong>하게 해 후보 지시문 여러 개를 생성합니다. 각 후보를 검증셋에서 실행해 점수를 매기고 최고를 고른 뒤, 상위 후보 주변을 다시 탐색(반복)합니다. 저자들은 이렇게 자동 발견한 지시문이 여러 과제에서 사람이 손으로 쓴 지시문과 <strong>대등하거나 그 이상</strong>이었다고 보고합니다(대표 예: "Let's think step by step"류를 능가하는 지시문 발견). <span class="src">(구체 벤치 수치·과제 수는 원논문 표 참조 — 여기서는 UNVERIFIED)</span></p>
         <p class="pullquote">프롬프트는 손으로 다듬는 문자열이 아니라, <em>탐색·컴파일할 수 있는 대상</em>이다.</p>
         <p><strong>DSPy</strong>(Khattab et al. 2023)는 한 걸음 더 나아가, 프롬프트를 지운 자리에 <strong>signature(입력→출력 선언)</strong>와 <strong>module(예: Predict, ChainOfThought)</strong>를 두고, <strong>컴파일러(teleprompter)</strong>가 검증셋 점수를 기준으로 <strong>지시문·few-shot 예시를 자동 최적화</strong>합니다. 프롬프트 문자열을 사람이 손대지 않아도, 파이프라인을 <strong>선언</strong>하면 최적화가 뒤따르는 구조입니다.</p>
       </div>
       <div class="col2">
         <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>APE·DSPy·메타프롬프팅은 모두 <strong>eval 위의 생성→선정 루프</strong>다.</li><li>DSPy의 핵심은 프롬프트를 <strong>프로그램</strong>으로 보고 <strong>컴파일</strong>한다는 것.</li><li>최종 판단은 항상 <strong>테스트셋 점수</strong>로 — 검증셋 과적합 경계.</li></ul></div>
-        <p class="readmeta">참고: Zhou et al. 2022 (APE) / Khattab et al. 2023 (DSPy) / Pryzant et al. 2023 (APO, 텍스트 그래디언트). 구체 수치는 원논문 표 = UNVERIFIED.</p>
+        <p class="readmeta">참고: Zhou, Y. et al. 2022 (APE) / Khattab et al. 2023 (DSPy) / Pryzant et al. 2023 (APO, 텍스트 그래디언트). 구체 수치는 원논문 표 = UNVERIFIED.</p>
       </div>
     </div>
     <div class="two lang-en">
       <div class="col2 reading">
-        <p><strong>APE</strong> (Zhou et al. 2022): instead of a human writing the instruction, the LLM is given a few input–output examples and asked to <strong>infer, in reverse, the instruction that would have produced them</strong>, generating many candidate instructions. Each is run on the validation set, scored, and the best kept; the search then re-explores around the top candidates (iterate). The authors report that such auto-discovered instructions were <strong>on par with or better</strong> than human-written ones across tasks (e.g. discovering an instruction beating the "Let's think step by step" style). <span class="src">(Exact benchmark numbers/task counts are in the paper's tables — treated here as UNVERIFIED)</span></p>
+        <p><strong>APE</strong> (Zhou, Y. et al. 2022): instead of a human writing the instruction, the LLM is given a few input–output examples and asked to <strong>infer, in reverse, the instruction that would have produced them</strong>, generating many candidate instructions. Each is run on the validation set, scored, and the best kept; the search then re-explores around the top candidates (iterate). The authors report that such auto-discovered instructions were <strong>on par with or better</strong> than human-written ones across tasks (e.g. discovering an instruction beating the "Let's think step by step" style). <span class="src">(Exact benchmark numbers/task counts are in the paper's tables — treated here as UNVERIFIED)</span></p>
         <p class="pullquote">A prompt is not a string to polish by hand, but <em>an object you can search and compile</em>.</p>
         <p><strong>DSPy</strong> (Khattab et al. 2023) goes further: in place of the erased prompt it puts a <strong>signature (input→output declaration)</strong> and <strong>modules (e.g. Predict, ChainOfThought)</strong>, and a <strong>compiler (teleprompter)</strong> <strong>auto-optimizes instructions and few-shot examples</strong> against a validation metric. You never touch the prompt string by hand — you <strong>declare</strong> the pipeline and optimization follows.</p>
       </div>
       <div class="col2">
         <div class="callout key"><div class="ct">Must know</div><ul><li>APE, DSPy, and meta-prompting are all a <strong>generate→select loop over eval</strong>.</li><li>DSPy's core idea: treat the prompt as a <strong>program</strong> and <strong>compile</strong> it.</li><li>Final judgment always on a <strong>test-set score</strong> — beware validation overfit.</li></ul></div>
-        <p class="readmeta">Refs: Zhou et al. 2022 (APE) / Khattab et al. 2023 (DSPy) / Pryzant et al. 2023 (APO, text gradients). Exact numbers in original tables = UNVERIFIED.</p>
+        <p class="readmeta">Refs: Zhou, Y. et al. 2022 (APE) / Khattab et al. 2023 (DSPy) / Pryzant et al. 2023 (APO, text gradients). Exact numbers in original tables = UNVERIFIED.</p>
       </div>
     </div>
   </section>
@@ -2227,24 +2227,24 @@
 </defs>
 <rect x="24" y="30" width="128" height="46" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
 <text x="88" y="50" font-size="11.5" fill="#1e3a8a" text-anchor="middle" font-weight="700">① 생성 (propose)</text>
-<text x="88" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">LLM이 $p_1..p_N$ 후보</text>
+<text x="88" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">LLM이 p₁..pN 후보</text>
 <rect x="176" y="30" width="128" height="46" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
 <text x="240" y="50" font-size="11.5" fill="#166534" text-anchor="middle" font-weight="700">② 평가 (eval)</text>
-<text x="240" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">검증셋 $D$ 점수 $s_i$</text>
+<text x="240" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">검증셋 D 점수 sᵢ</text>
 <rect x="328" y="30" width="128" height="46" rx="8" fill="#fef3c7" stroke="#c2410c" stroke-width="1.5"/>
 <text x="392" y="50" font-size="11.5" fill="#9a3412" text-anchor="middle" font-weight="700">③ 선정 (select)</text>
-<text x="392" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">$p^\star=\arg\max s_i$</text>
+<text x="392" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">p* = argmax sᵢ</text>
 <line x1="152" y1="53" x2="174" y2="53" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar26ko)"/>
 <line x1="304" y1="53" x2="326" y2="53" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar26ko)"/>
 <path d="M392 78 L392 120 L88 120 L88 80" fill="none" stroke="#71717a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar26ko)"/>
 <text x="240" y="114" font-size="10" fill="#71717a" text-anchor="middle">상위 후보 주변 재탐색 (반복)</text>
 <rect x="150" y="150" width="180" height="40" rx="8" fill="#f4f4f5" stroke="#a1a1aa" stroke-width="1.5"/>
-<text x="240" y="167" font-size="11" fill="#3f3f46" text-anchor="middle" font-weight="700">최적 프롬프트 $p^\star$</text>
+<text x="240" y="167" font-size="11" fill="#3f3f46" text-anchor="middle" font-weight="700">최적 프롬프트 p*</text>
 <text x="240" y="183" font-size="9.5" fill="#52525b" text-anchor="middle">테스트셋에서 최종 검증</text>
 <line x1="392" y1="76" x2="392" y2="140 " stroke="#71717a" stroke-width="0"/>
 <path d="M392 78 L392 135 L332 165" fill="none" stroke="#c2410c" stroke-width="1.5" marker-end="url(#ar26ko)"/>
-<text x="240" y="228" font-size="10.5" fill="#52525b" text-anchor="middle">$\mathbb{E}[\max_i s_i]=\dfrac{N}{N+1}$ (Unif[0,1] 근사)</text>
-<text x="240" y="256" font-size="10" fill="#71717a" text-anchor="middle">후보 $N$↑ → 최고 점수 기대↑ (체감)</text>
+<text x="240" y="228" font-size="10.5" fill="#52525b" text-anchor="middle">E[maxᵢ sᵢ] = N/(N+1) (Unif[0,1] 근사)</text>
+<text x="240" y="256" font-size="10" fill="#71717a" text-anchor="middle">후보 N↑ → 최고 점수 기대↑ (체감)</text>
 </svg>
       </div>
       <div>
@@ -2252,10 +2252,10 @@
         <table class="ktab"><thead><tr><th>방법</th><th>후보 생성 주체</th><th style="text-align:right">특징</th></tr></thead><tbody>
           <tr><td>수동 튜닝</td><td class="k">사람</td><td>감·비체계, 재현성 낮음</td></tr>
           <tr><td>메타프롬프팅</td><td class="k">LLM</td><td>"개선하라" 프롬프트로 위임</td></tr>
-          <tr><td>APE</td><td class="k">LLM</td><td>지시문 역추론·점수화 (Zhou 2022)</td></tr>
+          <tr><td>APE</td><td class="k">LLM</td><td>지시문 역추론·점수화 (Zhou, Y. 2022)</td></tr>
           <tr><td>DSPy</td><td class="k">컴파일러</td><td>프로그램으로 컴파일 (Khattab 2023)</td></tr>
         </tbody></table>
-        <div class="keqnote">공통 뼈대 = <strong>생성 → eval($D$ 점수 $s_i$) → 선정($\arg\max$)</strong>. 차이는 "누가 후보를 만들고 어떻게 반복하느냐". 구체 성능 수치는 각 원논문 표 참조 = UNVERIFIED. (출처: Zhou et al. 2022 / Khattab et al. 2023)</div>
+        <div class="keqnote">공통 뼈대 = <strong>생성 → eval($D$ 점수 $s_i$) → 선정($\arg\max$)</strong>. 차이는 "누가 후보를 만들고 어떻게 반복하느냐". 구체 성능 수치는 각 원논문 표 참조 = UNVERIFIED. (출처: Zhou, Y. et al. 2022 / Khattab et al. 2023)</div>
       </div>
     </div>
     <div class="vizgrid lang-en">
@@ -2267,23 +2267,23 @@
 </defs>
 <rect x="24" y="30" width="128" height="46" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
 <text x="88" y="50" font-size="11.5" fill="#1e3a8a" text-anchor="middle" font-weight="700">① propose</text>
-<text x="88" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">LLM makes $p_1..p_N$</text>
+<text x="88" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">LLM makes p₁..pN</text>
 <rect x="176" y="30" width="128" height="46" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
 <text x="240" y="50" font-size="11.5" fill="#166534" text-anchor="middle" font-weight="700">② eval</text>
-<text x="240" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">score $s_i$ on val $D$</text>
+<text x="240" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">score sᵢ on val D</text>
 <rect x="328" y="30" width="128" height="46" rx="8" fill="#fef3c7" stroke="#c2410c" stroke-width="1.5"/>
 <text x="392" y="50" font-size="11.5" fill="#9a3412" text-anchor="middle" font-weight="700">③ select</text>
-<text x="392" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">$p^\star=\arg\max s_i$</text>
+<text x="392" y="66" font-size="9.5" fill="#52525b" text-anchor="middle">p* = argmax sᵢ</text>
 <line x1="152" y1="53" x2="174" y2="53" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar26en)"/>
 <line x1="304" y1="53" x2="326" y2="53" stroke="#71717a" stroke-width="1.5" marker-end="url(#ar26en)"/>
 <path d="M392 78 L392 120 L88 120 L88 80" fill="none" stroke="#71717a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar26en)"/>
 <text x="240" y="114" font-size="10" fill="#71717a" text-anchor="middle">re-explore around top candidates (iterate)</text>
 <rect x="150" y="150" width="180" height="40" rx="8" fill="#f4f4f5" stroke="#a1a1aa" stroke-width="1.5"/>
-<text x="240" y="167" font-size="11" fill="#3f3f46" text-anchor="middle" font-weight="700">best prompt $p^\star$</text>
+<text x="240" y="167" font-size="11" fill="#3f3f46" text-anchor="middle" font-weight="700">best prompt p*</text>
 <text x="240" y="183" font-size="9.5" fill="#52525b" text-anchor="middle">final check on test set</text>
 <path d="M392 78 L392 135 L332 165" fill="none" stroke="#c2410c" stroke-width="1.5" marker-end="url(#ar26en)"/>
-<text x="240" y="228" font-size="10.5" fill="#52525b" text-anchor="middle">$\mathbb{E}[\max_i s_i]=\dfrac{N}{N+1}$ (Unif[0,1] approx.)</text>
-<text x="240" y="256" font-size="10" fill="#71717a" text-anchor="middle">more candidates $N$↑ → higher expected best (diminishing)</text>
+<text x="240" y="228" font-size="10.5" fill="#52525b" text-anchor="middle">E[maxᵢ sᵢ] = N/(N+1) (Unif[0,1] approx.)</text>
+<text x="240" y="256" font-size="10" fill="#71717a" text-anchor="middle">more candidates N↑ → higher expected best (diminishing)</text>
 </svg>
       </div>
       <div>
@@ -2291,10 +2291,10 @@
         <table class="ktab"><thead><tr><th>Method</th><th>Who proposes</th><th style="text-align:right">Feature</th></tr></thead><tbody>
           <tr><td>Manual tuning</td><td class="k">human</td><td>gut, ad-hoc, low reproducibility</td></tr>
           <tr><td>Meta-prompting</td><td class="k">LLM</td><td>delegates via "improve this"</td></tr>
-          <tr><td>APE</td><td class="k">LLM</td><td>reverse-infer & score instructions (Zhou 2022)</td></tr>
+          <tr><td>APE</td><td class="k">LLM</td><td>reverse-infer & score instructions (Zhou, Y. 2022)</td></tr>
           <tr><td>DSPy</td><td class="k">compiler</td><td>compile as a program (Khattab 2023)</td></tr>
         </tbody></table>
-        <div class="keqnote">Shared skeleton = <strong>generate → eval (score $s_i$ on $D$) → select ($\arg\max$)</strong>. The difference is "who makes candidates and how iteration works." Exact performance numbers are in each paper's tables = UNVERIFIED. (Source: Zhou et al. 2022 / Khattab et al. 2023)</div>
+        <div class="keqnote">Shared skeleton = <strong>generate → eval (score $s_i$ on $D$) → select ($\arg\max$)</strong>. The difference is "who makes candidates and how iteration works." Exact performance numbers are in each paper's tables = UNVERIFIED. (Source: Zhou, Y. et al. 2022 / Khattab et al. 2023)</div>
       </div>
     </div>
   </section>
@@ -2323,8 +2323,8 @@
       data-out="$\mathbb{E}[\max]$" data-out-unit=""
       data-barmax="1"
       data-note="Going N=9→99 (10×) raises the expected best only from 0.90 to 0.99 (+0.09) — the gap to perfection shrinks as 1/(N+1): diminishing returns."></div>
-    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 자동 프롬프트 최적화 예산 감: 후보 $N$을 <strong>수십 개</strong> 뽑으면 기대 최고값이 이미 $\approx 0.90\!\sim\!0.98$에 도달($N/(N+1)$)하며, 그 뒤로는 <strong>수익이 급격히 체감</strong>합니다. 각 후보 평가는 검증셋 크기 $|D|$만큼 LLM 호출이 드니, 총비용 $\approx N\times|D|$ — 무작정 $N$을 키우기보다 <strong>검증셋 품질과 반복 탐색</strong>에 예산을 쓰는 편이 효율적입니다. <span class="src">(출처: 순서통계 $\mathbb{E}[\max]=N/(N+1)$ / APE 반복 탐색 = Zhou et al. 2022)</span></div>
-    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — budget feel for auto prompt optimization: with a few <strong>tens</strong> of candidates the expected best already reaches $\approx 0.90\!\sim\!0.98$ ($N/(N+1)$), after which <strong>returns fall off sharply</strong>. Each candidate costs $|D|$ LLM calls to evaluate, so total cost $\approx N\times|D|$ — rather than inflating $N$ blindly, spend budget on <strong>validation-set quality and iterative search</strong>. <span class="src">(Source: order statistics $\mathbb{E}[\max]=N/(N+1)$ / APE iterative search = Zhou et al. 2022)</span></div>
+    <div class="calc-sense lang-ko"><b class="cs-h">공학적 감각</b> — 자동 프롬프트 최적화 예산 감: 후보 $N$을 <strong>수십 개</strong> 뽑으면 기대 최고값이 이미 $\approx 0.90\!\sim\!0.98$에 도달($N/(N+1)$)하며, 그 뒤로는 <strong>수익이 급격히 체감</strong>합니다. 각 후보 평가는 검증셋 크기 $|D|$만큼 LLM 호출이 드니, 총비용 $\approx N\times|D|$ — 무작정 $N$을 키우기보다 <strong>검증셋 품질과 반복 탐색</strong>에 예산을 쓰는 편이 효율적입니다. <span class="src">(출처: 순서통계 $\mathbb{E}[\max]=N/(N+1)$ / APE 반복 탐색 = Zhou, Y. et al. 2022)</span></div>
+    <div class="calc-sense lang-en"><b class="cs-h">Engineering sense</b> — budget feel for auto prompt optimization: with a few <strong>tens</strong> of candidates the expected best already reaches $\approx 0.90\!\sim\!0.98$ ($N/(N+1)$), after which <strong>returns fall off sharply</strong>. Each candidate costs $|D|$ LLM calls to evaluate, so total cost $\approx N\times|D|$ — rather than inflating $N$ blindly, spend budget on <strong>validation-set quality and iterative search</strong>. <span class="src">(Source: order statistics $\mathbb{E}[\max]=N/(N+1)$ / APE iterative search = Zhou, Y. et al. 2022)</span></div>
   </section>
 
   <!-- ══════════ 2-6 / 점검 ══════════ -->
@@ -2332,24 +2332,24 @@
     <div class="panel-head lang-ko"><span class="tag">개념 점검</span><span class="panel-title">학급 제출 · 교수 열람</span></div>
     <div class="panel-head lang-en"><span class="tag">Concept Check</span><span class="panel-title">Class submission · instructor view</span></div>
     <div class="cq lang-ko">
-      <p class="qtext"><span class="qn">Q1.</span>APE(Zhou et al. 2022)에서 <strong>후보 프롬프트를 최종 선정</strong>하는 기준은 무엇입니까?</p>
+      <p class="qtext"><span class="qn">Q1.</span>APE(Zhou, Y. et al. 2022)에서 <strong>후보 프롬프트를 최종 선정</strong>하는 기준은 무엇입니까?</p>
       <div class="opts">
         <button class="opt">① 사람이 읽어 가장 자연스러운 문장</button>
         <button class="opt" data-correct="1">② 검증셋 $D$에서의 성능 점수 $s_i$ ($\arg\max_i s_i$)</button>
         <button class="opt">③ 프롬프트 길이가 가장 짧은 것</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 자동 최적화의 핵심은 사람의 감이 아니라 <strong>eval(검증셋 점수)</strong>로 $p^{\star}=\arg\max_i s_i$를 고르는 것이다. <span class="dim">오답 ①·③: ①"자연스러움"은 성능을 보장하지 않고(자동 발견 지시문이 종종 더 나음), ③길이는 선정 기준이 아니다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 자동 최적화의 핵심은 사람의 감이 아니라 <strong>eval(검증셋 점수)</strong>로 $p^{\star}=\arg\max_i s_i$를 고르는 것이다. <span class="dim">오답 ①·③: ①"자연스러움"은 성능을 보장하지 않고(자동 발견 지시문이 종종 더 나음), ③길이는 선정 기준이 아니다.</span></div>
     </div>
     <div class="cq lang-en">
-      <p class="qtext"><span class="qn">Q1.</span>In APE (Zhou et al. 2022), what criterion <strong>selects</strong> the final candidate prompt?</p>
+      <p class="qtext"><span class="qn">Q1.</span>In APE (Zhou, Y. et al. 2022), what criterion <strong>selects</strong> the final candidate prompt?</p>
       <div class="opts">
         <button class="opt">① the sentence a human finds most natural to read</button>
         <button class="opt" data-correct="1">② the performance score $s_i$ on validation set $D$ ($\arg\max_i s_i$)</button>
         <button class="opt">③ whichever prompt is shortest</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the core of auto-optimization is picking $p^{\star}=\arg\max_i s_i$ by <strong>eval (validation score)</strong>, not human intuition. <span class="dim">Wrong ①·③: ① "naturalness" does not guarantee performance (auto-discovered instructions are often better); ③ length is not the criterion.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the core of auto-optimization is picking $p^{\star}=\arg\max_i s_i$ by <strong>eval (validation score)</strong>, not human intuition. <span class="dim">Wrong ①·③: ① "naturalness" does not guarantee performance (auto-discovered instructions are often better); ③ length is not the criterion.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>DSPy(Khattab et al. 2023)가 <strong>수동 튜닝과 근본적으로 다른 점</strong>은?</p>
@@ -2359,7 +2359,7 @@
         <button class="opt">③ LLM을 쓰지 않고 규칙 기반으로만 문장을 고른다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — DSPy는 프롬프트를 손문자열이 아니라 <strong>선언적 프로그램</strong>으로 보고, teleprompter(컴파일러)가 검증셋 점수 기준으로 지시문·few-shot을 자동 최적화한다. <span class="dim">오답 ①·③: ①사람이 문자열을 손대지 않는 방향이고, ③LLM 위에서 동작한다.</span> <span class="agg">학급 n=41 · ① 5 · ② 30 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — DSPy는 프롬프트를 손문자열이 아니라 <strong>선언적 프로그램</strong>으로 보고, teleprompter(컴파일러)가 검증셋 점수 기준으로 지시문·few-shot을 자동 최적화한다. <span class="dim">오답 ①·③: ①사람이 문자열을 손대지 않는 방향이고, ③LLM 위에서 동작한다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What <strong>fundamentally distinguishes</strong> DSPy (Khattab et al. 2023) from manual tuning?</p>
@@ -2369,7 +2369,7 @@
         <button class="opt">③ it selects sentences purely by rules, without any LLM</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — DSPy treats the prompt as a <strong>declarative program</strong>, and a teleprompter (compiler) auto-optimizes instructions and few-shot examples against a validation metric. <span class="dim">Wrong ①·③: ① the point is that humans do not touch the string; ③ it runs on top of an LLM.</span> <span class="agg">class n=41 · ① 5 · ② 30 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — DSPy treats the prompt as a <strong>declarative program</strong>, and a teleprompter (compiler) auto-optimizes instructions and few-shot examples against a validation metric. <span class="dim">Wrong ①·③: ① the point is that humans do not touch the string; ③ it runs on top of an LLM.</span></div>
     </div>
   </section>
 
@@ -2440,7 +2440,7 @@
     <div class="sumgrid lang-ko">
       <div class="sumcard key"><h4>핵심 정리</h4><ul>
         <li>수동 튜닝 → <strong>생성→eval→선정</strong> 루프로 자동화. $p^{\star}=\arg\max_i s_i$.</li>
-        <li><strong>APE</strong>(Zhou 2022): LLM이 지시문 후보 생성·점수화·선정. <strong>DSPy</strong>(Khattab 2023): 프롬프트를 프로그램으로 컴파일.</li>
+        <li><strong>APE</strong>(Zhou, Y. 2022): LLM이 지시문 후보 생성·점수화·선정. <strong>DSPy</strong>(Khattab 2023): 프롬프트를 프로그램으로 컴파일.</li>
         <li>순서통계: $\mathbb{E}[\max]=\tfrac{N}{N+1}$ — 후보↑ → 최고 점수↑, 단 <strong>체감</strong>.</li>
       </ul></div>
       <div class="sumcard"><h4>⚠ 자주 하는 실수</h4><ul>
@@ -2457,7 +2457,7 @@
     <div class="sumgrid lang-en">
       <div class="sumcard key"><h4>Key points</h4><ul>
         <li>Manual tuning → automate as a <strong>generate→eval→select</strong> loop. $p^{\star}=\arg\max_i s_i$.</li>
-        <li><strong>APE</strong> (Zhou 2022): LLM generates/scores/selects instructions. <strong>DSPy</strong> (Khattab 2023): compile prompts as a program.</li>
+        <li><strong>APE</strong> (Zhou, Y. 2022): LLM generates/scores/selects instructions. <strong>DSPy</strong> (Khattab 2023): compile prompts as a program.</li>
         <li>Order statistics: $\mathbb{E}[\max]=\tfrac{N}{N+1}$ — more candidates ⇒ higher best, but <strong>diminishing</strong>.</li>
       </ul></div>
       <div class="sumcard"><h4>⚠ Common mistakes</h4><ul>
@@ -2477,9 +2477,16 @@
 
 <script>
 (function(){
+  var STRINGS={
+    ko:{ done:'✓ 완료 · 목록으로', nextStage:'다음 · {0} →', nextChapter:'다음 챕터 {0} →', showSolution:'풀이 보기', hideSolution:'풀이 숨기기', selectFirst:'먼저 보기를 선택하세요', submittedCorrect:'✓ 제출됨 — 정답', submittedRecorded:'제출됨 — 학급 응답에 반영', enterAnswerFirst:'먼저 답을 입력하세요', correctFb:'✓ 정답입니다 — 풀이로 과정 확인', incorrectFb:'✗ 다시 — 풀이로 과정 확인', prev:'← 이전', next:'다음 →', footHint:'← / → 또는 상단 단계 클릭으로 이동' },
+    en:{ done:'✓ Done · back to list', nextStage:'Next · {0} →', nextChapter:'Next chapter {0} →', showSolution:'Show solution', hideSolution:'Hide solution', selectFirst:'Select an option first', submittedCorrect:'✓ Submitted — correct', submittedRecorded:'Submitted — recorded in class responses', enterAnswerFirst:'Enter an answer first', correctFb:'✓ Correct — check the solution for the steps', incorrectFb:'✗ Not quite — check the solution for the steps', prev:'← Prev', next:'Next →', footHint:'← / → or click a stage above to navigate' }
+  };
+  function curLang(){ return document.documentElement.classList.contains('lang-en')?'en':'ko'; }
+  function t(key){ return STRINGS[curLang()][key]; }
+  function tf(key,arg){ return t(key).replace('{0}',arg); }
   var screens=Array.prototype.slice.call(document.querySelectorAll('.screen'));
   var stage=document.getElementById('stage'), stepbar=document.getElementById('stepbar'), chrail=document.getElementById('chrail');
-  var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn'), footHint=document.getElementById('footHint');
   var N=screens.length, active=0;
   var chapters=[]; screens.forEach(function(s){var c=s.getAttribute('data-ch'); if(chapters.indexOf(c)<0)chapters.push(c);});
   function chOf(i){return screens[i].getAttribute('data-ch');} function stOf(i){return screens[i].getAttribute('data-stage');}
@@ -2489,18 +2496,18 @@
   function buildChrail(){ chrail.innerHTML=''; chapters.forEach(function(c){ var d=document.createElement('span'); d.className='chdot'; d.textContent=c; d.addEventListener('click',function(){ for(var k=0;k<N;k++){ if(chOf(k)===c){show(k);break;} } }); chrail.appendChild(d); }); }
   function buildStepper(){ var ch=chOf(active); var list=[]; for(var i=0;i<N;i++){ if(chOf(i)===ch) list.push(i); } stepbar.innerHTML=''; list.forEach(function(idx,k){ var el=document.createElement('div'); var cls='step'; if(idx===active)cls+=' cur'; else if(idx<active)cls+=' done'; el.className=cls; el.innerHTML='<span class="ix">'+(k+1)+'</span>'+stOf(idx); el.addEventListener('click',function(){show(idx);}); stepbar.appendChild(el); if(k<list.length-1){var ln=document.createElement('span'); ln.className='link'; el.appendChild(ln);} }); }
 
-  function render(){ for(var i=0;i<N;i++) screens[i].classList.toggle('active', i===active); var ch=chOf(active); Array.prototype.forEach.call(chrail.children,function(d){ d.classList.toggle('cur', d.textContent===ch); }); buildStepper(); prevBtn.disabled=(active===0); if(active>=N-1){ nextBtn.textContent='✓ 완료 · 목록으로'; } else { var nx=active+1; nextBtn.textContent=(chOf(nx)===ch)?('다음 · '+stOf(nx)+' →'):('다음 챕터 '+chOf(nx)+' →'); } fitActive(); }
+  function render(){ for(var i=0;i<N;i++) screens[i].classList.toggle('active', i===active); var ch=chOf(active); Array.prototype.forEach.call(chrail.children,function(d){ d.classList.toggle('cur', d.textContent===ch); }); buildStepper(); prevBtn.disabled=(active===0); prevBtn.textContent=t('prev'); if(footHint)footHint.textContent=t('footHint'); if(active>=N-1){ nextBtn.textContent=t('done'); } else { var nx=active+1; nextBtn.textContent=(chOf(nx)===ch)?tf('nextStage',stOf(nx)):tf('nextChapter',chOf(nx)); } fitActive(); }
   function show(i){ if(i<0)i=0; if(i>N-1)i=N-1; active=i; render(); }
 
-  function toggleReveal(btn){ var scope=btn.closest('.prob')||btn.closest('.screen'); var t=scope?scope.querySelector('.revealable.solution'):null; if(!t)return; var open=t.classList.toggle('open'); btn.classList.toggle('is-open',open); var sp=btn.querySelector('span'); if(sp)sp.textContent=open?'풀이 숨기기':'풀이 보기'; fitActive(); }
+  function toggleReveal(btn){ var scope=btn.closest('.prob')||btn.closest('.screen'); var el=scope?scope.querySelector('.revealable.solution'):null; if(!el)return; var open=el.classList.toggle('open'); btn.classList.toggle('is-open',open); var sp=btn.querySelector('span'); if(sp)sp.textContent=open?t('hideSolution'):t('showSolution'); fitActive(); }
 
   document.addEventListener('click',function(e){
     var opt=e.target.closest?e.target.closest('.opt'):null;
     if(opt){ var wrap=opt.parentElement; Array.prototype.forEach.call(wrap.children,function(o){o.classList.remove('sel');}); opt.classList.add('sel'); return; }
     var sub=e.target.closest?e.target.closest('.cp-submit'):null;
-    if(sub){ var cq=sub.closest('.cq')||sub.closest('.screen'); var sel=cq.querySelector('.opt.sel'); var fb=cq.querySelector('.cp-fb'); var prof=cq.querySelector('.cp-exp')||cq.querySelector('.cp-prof'); if(!sel){ if(fb){fb.textContent='먼저 보기를 선택하세요'; fb.style.color='var(--gray2)';} return; } var ok=sel.getAttribute('data-correct')==='1'; if(fb){fb.textContent=ok?'✓ 제출됨 — 정답':'제출됨 — 학급 응답에 반영'; fb.style.color='var(--accent)';} Array.prototype.forEach.call(cq.querySelectorAll('.opt'),function(o){if(o.getAttribute('data-correct')==='1')o.classList.add('correct');}); if(prof)prof.classList.add('show'); fitActive(); return; }
+    if(sub){ var cq=sub.closest('.cq')||sub.closest('.screen'); var sel=cq.querySelector('.opt.sel'); var fb=cq.querySelector('.cp-fb'); var prof=cq.querySelector('.cp-exp')||cq.querySelector('.cp-prof'); if(!sel){ if(fb){fb.textContent=t('selectFirst'); fb.style.color='var(--gray2)';} return; } var ok=sel.getAttribute('data-correct')==='1'; if(fb){fb.textContent=ok?t('submittedCorrect'):t('submittedRecorded'); fb.style.color='var(--accent)';} Array.prototype.forEach.call(cq.querySelectorAll('.opt'),function(o){if(o.getAttribute('data-correct')==='1')o.classList.add('correct');}); if(prof)prof.classList.add('show'); fitActive(); return; }
     var chk=e.target.closest?e.target.closest('.pr-check'):null;
-    if(chk){ var pb=chk.closest('.prob')||chk.closest('.screen'); var input=pb.querySelector('.ans-input'); var pf=pb.querySelector('.pr-fb'); if(!input||!pf)return; var ans=parseFloat(input.getAttribute('data-answer')), tol=parseFloat(input.getAttribute('data-tol')||'0.02'); var raw=(input.value||'').replace(/[,\s]/g,''); if(raw===''){pf.textContent='먼저 답을 입력하세요'; pf.className='check-fb pr-fb no'; return;} var v=parseFloat(raw), good=!isNaN(v)&&Math.abs(v-ans)<=Math.abs(ans)*tol; pf.textContent=good?'✓ 정답입니다 — 풀이로 과정 확인':'✗ 다시 — 풀이로 과정 확인'; pf.className='check-fb pr-fb '+(good?'ok':'no'); fitActive(); return; }
+    if(chk){ var pb=chk.closest('.prob')||chk.closest('.screen'); var input=pb.querySelector('.ans-input'); var pf=pb.querySelector('.pr-fb'); if(!input||!pf)return; var ans=parseFloat(input.getAttribute('data-answer')), tol=parseFloat(input.getAttribute('data-tol')||'0.02'); var raw=(input.value||'').replace(/[,\s]/g,''); if(raw===''){pf.textContent=t('enterAnswerFirst'); pf.className='check-fb pr-fb no'; return;} var v=parseFloat(raw), good=!isNaN(v)&&Math.abs(v-ans)<=Math.abs(ans)*tol; pf.textContent=good?t('correctFb'):t('incorrectFb'); pf.className='check-fb pr-fb '+(good?'ok':'no'); fitActive(); return; }
     var rb=e.target.closest?e.target.closest('.reveal-btn'):null; if(rb){ toggleReveal(rb); return; }
   });
   document.addEventListener('keydown',function(e){ if(e.target&&e.target.classList&&e.target.classList.contains('ans-input')){ if(e.key==='Enter'){var b=e.target.closest('.prob').querySelector('.pr-check'); if(b)b.click();} return; } if(e.key==='ArrowRight')show(active+1); else if(e.key==='ArrowLeft')show(active-1); });
@@ -2530,7 +2537,7 @@
   (function(){
     var btn=document.getElementById('langToggle'); if(!btn)return;
     var LABELS={ko:'EN', en:'한국어'};
-    function apply(lang){ var d=document.documentElement; d.classList.remove('lang-ko','lang-en'); d.classList.add('lang-'+lang); btn.textContent=LABELS[lang]; }
+    function apply(lang){ var d=document.documentElement; d.classList.remove('lang-ko','lang-en'); d.classList.add('lang-'+lang); btn.textContent=LABELS[lang]; render(); Array.prototype.forEach.call(document.querySelectorAll('.reveal-btn'),function(rb){ var el=(rb.closest('.prob')||rb.closest('.screen')); var sol=el?el.querySelector('.revealable.solution'):null; var sp=rb.querySelector('span'); if(sp&&sol)sp.textContent=sol.classList.contains('open')?t('hideSolution'):t('showSolution'); }); }
     var lang; try{ lang=localStorage.getItem('lecture_lang'); }catch(e){ lang=null; }
     if(lang!=='en'&&lang!=='ko') lang='ko';
     apply(lang);

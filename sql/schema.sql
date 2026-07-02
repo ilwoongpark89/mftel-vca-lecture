@@ -419,3 +419,8 @@ do $$ begin
   revoke all on function public.vca_admin_all_notes(text) from public;
   grant execute on function public.vca_admin_all_notes(text) to anon;
 end $$;
+
+-- ── 하드닝 (2026-07-02 적용): route 우회 anon INSERT 폐쇄 + 서버측 답안 first-write-wins ──
+-- vca_record_event(p_token,...) SECURITY DEFINER RPC 로만 이벤트 기록 (token-gated).
+-- create unique index vca_answer_first_uni on vca_lecture_events(student_id,week,coalesce(chapter,...),...) where kind=answer
+-- drop policy vca_lecture_events_anon_insert  (실 DDL 은 production 적용 완료 — 상세는 git log 참조)

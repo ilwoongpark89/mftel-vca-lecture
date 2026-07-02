@@ -95,3 +95,11 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: false, error: "bad_action" }, { status: 400 });
 }
+
+// 로그아웃 (헤더 학번 칩 클릭): 세션 쿠키 정리.
+export async function DELETE() {
+  const jar = await cookies();
+  jar.delete(STUDENT_COOKIE);
+  jar.delete(SESSION_COOKIE);
+  return NextResponse.json({ ok: true });
+}

@@ -57,6 +57,25 @@
     post({ kind: "enter" });
   }
 
+  // ── 로그인 상태 표시: 헤더에 내 학번 칩(익명이 아님을 명확히). 클릭 = 로그아웃. (ht 역이식) ──
+  (function () {
+    var brand = document.querySelector("header .brand");
+    if (!brand) return;
+    var chip = document.createElement("span");
+    chip.style.cssText = "margin-left:10px;padding:3px 10px;border-radius:999px;background:var(--accent-soft,#f4f4f5);border:1px solid var(--hair,#e4e4e7);color:var(--accent,#18181b);font-weight:700;font-size:12px;white-space:nowrap;cursor:pointer";
+    chip.textContent = IS_PROF ? "👤 교수 열람" : "👤 " + sid;
+    chip.title = IS_PROF ? "" : "클릭하면 로그아웃";
+    brand.appendChild(chip);
+    chip.addEventListener("click", function () {
+      if (IS_PROF) return;
+      if (!confirm(sid + " — 로그아웃할까요? (다음 입장은 학번·비밀번호 필요)")) return;
+      fetch("/api/auth", { method: "DELETE" }).catch(function () {}).then(function () {
+        try { sessionStorage.clear(); } catch (e) {}
+        location.href = "/enter";
+      });
+    });
+  })();
+
   // ── 단계별 체류시간(dwell): "화살표 연타 = 열람"이 아니라 실제 머문 시간을 측정. ──
   //    보이는 동안 현재 화면(chapter+stage)에 머문 ms 를 누적해 화면 전환/이탈/주기마다 전송.
   //    서버는 (학번,챕터,단계) 누적 UPSERT → 부분 전송도 가산이라 안전. <1s 는 연타로 간주해 버림.
@@ -181,8 +200,45 @@
     });
   }
 
-  // ── 답안 hook: 문항당 첫 제출만 기록 (재제출/정답 클릭 후 재제출 중복 차단) ──────
-  var recorded = new WeakSet();
+  // ── 답안 hook: 문항당 첫 제출만 기록 ────────────────────────────
+  //    dedupe = 언어중립 key (한/영 쌍둥이 문항 = 같은 key → 이중 집계 차단) + localStorage 영속 (리로드 재집계 차단).
+  var DONE_KEY = "htl_done_w" + WEEK;
+  var doneSet = (function () {
+    try { return new Set(JSON.parse(localStorage.getItem(DONE_KEY) || "[]")); } catch (e) { return new Set(); }
+  })();
+  function markDone(k) {
+    doneSet.add(k);
+    try { localStorage.setItem(DONE_KEY, JSON.stringify(Array.from(doneSet))); } catch (e) {}
+  }
+  function langOf(el) { return el.closest(".lang-en") || (el.classList && el.classList.contains("lang-en")) ? "en" : "ko"; }
+  // 화면 안 같은 언어 문항들 중 몇 번째인지 = 쌍둥이 간 동일 서수
+  function ordinalOf(scr, el, selector) {
+    var lang = langOf(el), n = 0;
+    var all = scr ? scr.querySelectorAll(selector) : [];
+    for (var i = 0; i < all.length; i++) {
+      if (langOf(all[i]) !== lang) continue;
+      if (all[i] === el) return n;
+      n++;
+    }
+    return n;
+  }
+  function ansKey(scr, el, section, selector) {
+    return WEEK + "|" + (chOf(scr) || "?") + "|" + section + "|" + ordinalOf(scr, el, selector);
+  }
+  // 반대 언어 쌍둥이 문항 찾기
+  function twinOf(scr, el, selector) {
+    if (!scr) return null;
+    var lang = langOf(el), want = lang === "ko" ? "en" : "ko";
+    var ord = ordinalOf(scr, el, selector), n = 0;
+    var all = scr.querySelectorAll(selector);
+    for (var i = 0; i < all.length; i++) {
+      if (langOf(all[i]) !== want) continue;
+      if (n === ord) return all[i];
+      n++;
+    }
+    return null;
+  }
+  var mirroring = false; // 쌍둥이 동기화 중 재귀/추적 차단
   function textOf(el) { return el ? (el.textContent || "").replace(/\s+/g, " ").trim() : ""; }
 
   document.addEventListener("click", function (e) {
@@ -198,16 +254,34 @@
         if (!cq) return;
         var sel = cq.querySelector(".opt.sel");
         if (!sel) return;                 // 미선택 제출 가드
-        if (recorded.has(cq)) return;     // 문항당 1회
-        recorded.add(cq);
         var scr = cq.closest(".screen");
-        post({
-          kind: "answer", slide: slideIndex(scr), chapter: chOf(scr), section: "점검",
-          question: textOf(cq.querySelector(".qn")) || "Q",
-          prompt: textOf(cq.querySelector(".qtext")).slice(0, 200),
-          answer: textOf(sel),
-          isCorrect: sel.getAttribute("data-correct") === "1",
-        });
+        var key = ansKey(scr, cq, "점검", ".cq");
+        if (!mirroring && !doneSet.has(key)) {
+          markDone(key);
+          post({
+            kind: "answer", slide: slideIndex(scr), chapter: chOf(scr), section: "점검",
+            question: textOf(cq.querySelector(".qn")) || "Q",
+            prompt: textOf(cq.querySelector(".qtext")).slice(0, 200),
+            answer: textOf(sel),
+            isCorrect: sel.getAttribute("data-correct") === "1",
+          });
+        }
+        // 반대 언어 쌍둥이 문항에 같은 선택·제출 반영 (언어 전환 시 풀이 상태 일치)
+        if (!mirroring) {
+          var tw = twinOf(scr, cq, ".cq");
+          if (tw && !tw.querySelector(".opt.sel")) {
+            var opts = cq.querySelectorAll(".opt"), twOpts = tw.querySelectorAll(".opt");
+            var selIdx = Array.prototype.indexOf.call(opts, sel);
+            if (selIdx >= 0 && twOpts[selIdx]) {
+              mirroring = true;
+              try {
+                twOpts[selIdx].click();
+                var twSub = tw.querySelector(".cp-submit");
+                if (twSub) twSub.click();
+              } finally { mirroring = false; }
+            }
+          }
+        }
       }, 0);
       return;
     }
@@ -221,18 +295,150 @@
         var inp = pb.querySelector(".ans-input");
         var raw = inp ? (inp.value || "").trim() : "";
         if (!raw) return;                 // 빈 입력 가드
-        if (recorded.has(pb)) return;     // 문항당 1회
-        recorded.add(pb);
-        var fb = pb.querySelector(".pr-fb");
         var scr = pb.closest(".screen");
-        post({
-          kind: "answer", slide: slideIndex(scr), chapter: chOf(scr), section: "연습",
-          question: textOf(pb.querySelector(".prob-num")) || "연습",
-          prompt: textOf(pb.querySelector(".prob-statement")).slice(0, 200),
-          answer: raw,
-          isCorrect: fb ? /(^|\s)ok(\s|$)/.test(fb.className) : null,
-        });
+        var key = ansKey(scr, pb, "연습", ".prob");
+        if (!mirroring && !doneSet.has(key)) {
+          markDone(key);
+          var fb = pb.querySelector(".pr-fb");
+          post({
+            kind: "answer", slide: slideIndex(scr), chapter: chOf(scr), section: "연습",
+            question: textOf(pb.querySelector(".prob-num")) || "연습",
+            prompt: textOf(pb.querySelector(".prob-statement")).slice(0, 200),
+            answer: raw,
+            isCorrect: fb ? /(^|\s)ok(\s|$)/.test(fb.className) : null,
+          });
+        }
+        // 반대 언어 쌍둥이 문제에 같은 입력·채점 반영
+        if (!mirroring) {
+          var tw = twinOf(scr, pb, ".prob");
+          if (tw) {
+            var twInp = tw.querySelector(".ans-input");
+            if (twInp && !(twInp.value || "").trim()) {
+              mirroring = true;
+              try {
+                twInp.value = raw;
+                var twChk = tw.querySelector(".pr-check");
+                if (twChk) twChk.click();
+              } finally { mirroring = false; }
+            }
+          }
+        }
       }, 0);
     }
   });
+
+  // ── 계산기 쌍둥이 동기화: 언어 전환해도 슬라이더 상태 유지 ──────
+  var calcSync = false;
+  document.addEventListener("input", function (e) {
+    if (calcSync) return;
+    var rng = e.target;
+    if (!rng || rng.type !== "range") return;
+    var calc = rng.closest ? rng.closest(".calc") : null;
+    if (!calc) return;
+    var scr = calc.closest(".screen");
+    var tw = twinOf(scr, calc, ".calc");
+    if (!tw) return;
+    var mine = calc.querySelectorAll('input[type="range"]');
+    var theirs = tw.querySelectorAll('input[type="range"]');
+    var idx = Array.prototype.indexOf.call(mine, rng);
+    if (idx < 0 || !theirs[idx]) return;
+    calcSync = true;
+    try {
+      theirs[idx].value = rng.value;
+      theirs[idx].dispatchEvent(new Event("input", { bubbles: true }));
+    } finally { calcSync = false; }
+  });
+
+  // ── 학습 경험 v2: 진도 저장·표시 + 이어보기 + 모바일 세로 스크롤 ──
+  (function () {
+    var N = document.querySelectorAll(".screen").length;
+    if (N < 2) return;
+
+    // 스타일 (진도바 + 이어보기 토스트 + 모바일 반응형: 축소 대신 스크롤·1단 적층)
+    var st = document.createElement("style");
+    st.textContent =
+      "#htlProg{display:flex;align-items:center;gap:9px;min-width:0}" +
+      "#htlProgTxt{font:600 11.5px/1 -apple-system,'Noto Sans KR',sans-serif;color:#71717a;white-space:nowrap;font-variant-numeric:tabular-nums}" +
+      "#htlProgBar{width:120px;height:5px;border-radius:3px;background:#f4f4f5;overflow:hidden}" +
+      "#htlProgBar>span{display:block;height:100%;border-radius:3px;background:var(--accent,#18181b);width:0;transition:width .25s ease}" +
+      "#htlResume{position:fixed;left:50%;transform:translateX(-50%);bottom:78px;z-index:99999;background:#18181b;color:#fff;border-radius:999px;padding:10px 18px;font:600 13px/1.2 -apple-system,'Noto Sans KR',sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.22);white-space:nowrap}" +
+      "#htlResume a{color:#fda4af;text-decoration:underline;text-underline-offset:2px;margin-left:2px}" +
+      "@media (max-width:820px){" +
+      "html,body{overflow:auto!important;height:auto!important}" +
+      "header{height:auto;flex-wrap:wrap;gap:6px;padding:8px 14px}" +
+      ".chrail{display:none}" +
+      ".stepbar{justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 12px}" +
+      "main{height:auto!important;overflow:visible!important;padding:16px 14px 120px}" +
+      ".stage{height:auto!important;overflow:visible!important;max-width:100%}" +
+      ".screen.active{transform:none!important}" +
+      ".two,.vizgrid,.learn-grid,.deriv,.sumgrid{display:block!important}" +
+      ".two>*,.vizgrid>*,.learn-grid>*,.deriv>*,.sumgrid>*{margin-bottom:14px}" +
+      ".stat-grid{grid-template-columns:1fr 1fr!important}" +
+      ".terms{grid-template-columns:1fr!important}" +
+      "table.ktab{font-size:12px}" +
+      "svg{max-width:100%;height:auto}" +
+      "footer{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e4e4e7;z-index:99990;padding:0 14px;height:58px}" +
+      ".foot-hint{display:none}" +
+      "#htlProgBar{width:70px}" +
+      "#htlToc{bottom:72px}" +
+      "#htlNoteBtn{bottom:72px}" +
+      "}";
+    document.head.appendChild(st);
+
+    // 진도 상태 (localStorage — 홈 카드도 같은 key 를 읽음)
+    var PKEY = "htl_progress_w" + WEEK;
+    var prog;
+    try { prog = JSON.parse(localStorage.getItem(PKEY) || "null"); } catch (e) { prog = null; }
+    if (!prog || !prog.seen) prog = { seen: [], last: 0, total: N };
+    var seenSet = new Set(prog.seen);
+
+    var foot = document.querySelector("footer"), bar = null, txt = null;
+    if (foot) {
+      var wrap = document.createElement("div");
+      wrap.id = "htlProg";
+      wrap.innerHTML = '<span id="htlProgTxt"></span><div id="htlProgBar"><span></span></div>';
+      var hint = document.getElementById("footHint");
+      foot.insertBefore(wrap, hint || null);
+      bar = wrap.querySelector("#htlProgBar > span");
+      txt = wrap.querySelector("#htlProgTxt");
+    }
+    function updateBar() {
+      if (!bar) return;
+      var pct = Math.round((seenSet.size / N) * 100);
+      bar.style.width = pct + "%";
+      txt.textContent = seenSet.size + "/" + N + " · " + pct + "%";
+    }
+    function saveProg(idx) {
+      seenSet.add(idx);
+      prog.seen = Array.from(seenSet);
+      prog.last = idx;
+      prog.total = N;
+      try { localStorage.setItem(PKEY, JSON.stringify(prog)); } catch (e) {}
+      updateBar();
+    }
+    var stageEl2 = document.getElementById("stage");
+    if (stageEl2 && window.MutationObserver) {
+      new MutationObserver(function () {
+        var a = document.querySelector(".screen.active");
+        if (a) saveProg(slideIndex(a));
+      }).observe(stageEl2, { attributes: true, subtree: true, attributeFilter: ["class"] });
+    }
+    updateBar();
+
+    // 이어보기: 딥링크 없을 때 저장 위치에서 시작 (defer 실행 = 엔진 applyDeep(DOMContentLoaded) 이전이라 replaceState 로 전달)
+    var q = new URLSearchParams(location.search);
+    if (!REVEAL && !q.has("slide") && !q.has("unit") && prog.last > 0 && prog.last < N) {
+      try {
+        history.replaceState(null, "", location.pathname + "?slide=" + prog.last);
+        var lang = "ko";
+        try { lang = localStorage.getItem("lecture_lang") === "en" ? "en" : "ko"; } catch (e) {}
+        var tst = document.createElement("div");
+        tst.id = "htlResume";
+        tst.innerHTML = (lang === "en" ? "Resumed where you left off · " : "저장된 위치에서 이어봅니다 · ") +
+          '<a href="' + location.pathname + '?slide=0">' + (lang === "en" ? "start over" : "처음부터") + "</a>";
+        document.body.appendChild(tst);
+        setTimeout(function () { if (tst.parentNode) tst.parentNode.removeChild(tst); }, 7000);
+      } catch (e) {}
+    }
+  })();
 })();

@@ -92,12 +92,24 @@ const TIMELINE = [
 export default function Home() {
   const [hasSession, setHasSession] = useState(false);
   const [lang, setLang] = useState<Lang>("ko");
+  const [progress, setProgress] = useState<Record<number, number>>({});
 
   useEffect(() => {
     setHasSession(hasStudentSession());
     try {
       const saved = localStorage.getItem("lecture_lang");
       if (saved === "en" || saved === "ko") setLang(saved);
+    } catch {}
+    // 강의 페이지(htl-track.js)가 저장한 파트별 진도 → 카드에 표시
+    try {
+      const p: Record<number, number> = {};
+      for (const w of WEEKS) {
+        const raw = localStorage.getItem(`htl_progress_w${w.id}`);
+        if (!raw) continue;
+        const d = JSON.parse(raw) as { seen?: number[]; total?: number };
+        if (d?.seen?.length && d?.total) p[w.id] = Math.min(100, Math.round((d.seen.length / d.total) * 100));
+      }
+      setProgress(p);
     } catch {}
   }, []);
 
@@ -217,7 +229,16 @@ export default function Home() {
                     <div className="min-w-0 flex-1">
                       <h3 className="truncate font-semibold text-[#18181b]">{c.title}</h3>
                       <p className="mt-0.5 truncate text-sm text-[#a1a1aa]">{c.sub}</p>
-                      {!hasSession && <p className="mt-1 text-xs text-[#a1a1aa]">{t.enterHint}</p>}
+                      {progress[lec.id] > 0 ? (
+                        <div className="mt-2 flex items-center gap-2">
+                          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#f4f4f5]">
+                            <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${progress[lec.id]}%` }} />
+                          </div>
+                          <span className="text-[11px] font-semibold tabular-nums text-accent">{progress[lec.id]}%</span>
+                        </div>
+                      ) : (
+                        !hasSession && <p className="mt-1 text-xs text-[#a1a1aa]">{t.enterHint}</p>
+                      )}
                     </div>
                   </div>
                 </a>

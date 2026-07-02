@@ -184,7 +184,7 @@
 </style>
 </head>
 <body>
-<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Part 1</span>상변화열전달<span class="sep">·</span>Part 1</span>상변화열전달<span class="sep">·</span>Part N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
+<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Part 1</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
 <div class="stepbar" id="stepbar"></div>
 <main><div class="stage" id="stage">
 <!-- ════════ 시작1 / 환영 ════════ -->
@@ -196,8 +196,8 @@
     <h1 class="intro-h lang-ko">왜 같은 프롬프트가 어떤 날은 완벽하고<br><span class="hl">어떤 날은 헛소리를 내놓을까?</span></h1>
     <h1 class="intro-h lang-en">Why does the same prompt work perfectly one day<br><span class="hl">and hallucinate the next?</span></h1>
 
-    <p class="lede lang-ko">프롬프트를 <strong>주문(呪文)</strong>처럼 외우는 단계를 넘어서려면, 먼저 LLM이 실제로 <strong>무엇을 하는 기계인지</strong> 알아야 한다. 모델은 텍스트를 이해하는 것이 아니라, 문장을 토큰으로 쪼갠 뒤 다음 토큰의 확률 분포 $P(x_t \mid x_{<t})$를 계산하고 거기서 하나를 <strong>샘플링</strong>할 뿐이다. 온도 $T$를 바꾸면 같은 프롬프트도 다른 답을 낸다. 즉 "잘 되는 프롬프트"는 운이 아니라 <strong>토큰화·어텐션·확률 분포·컨텍스트 한계·임베딩·정렬</strong>이라는 부품들이 만들어내는 결과다. 이 부품을 알면 프롬프트는 주술이 아니라 <strong>공학</strong>이 된다. <span class="src">[Vaswani et al., <i>Attention Is All You Need</i>, NeurIPS 2017]</span></p>
-    <p class="lede lang-en">To move beyond memorizing prompts like <strong>incantations</strong>, you first have to know what an LLM actually <strong>does</strong> as a machine. A model does not understand text; it splits a sentence into tokens, computes a probability distribution over the next token $P(x_t \mid x_{<t})$, and simply <strong>samples</strong> one from it. Change the temperature $T$ and the same prompt yields a different answer. A "prompt that works," then, is not luck — it is the product of a few machine parts: <strong>tokenization, attention, the probability distribution, the context limit, embeddings, and alignment</strong>. Once you see these parts, prompting stops being sorcery and becomes <strong>engineering</strong>. <span class="src">[Vaswani et al., <i>Attention Is All You Need</i>, NeurIPS 2017]</span></p>
+    <p class="lede lang-ko">프롬프트를 <strong>주문(呪文)</strong>처럼 외우는 단계를 넘어서려면, 먼저 LLM이 실제로 <strong>무엇을 하는 기계인지</strong> 알아야 한다. 모델은 텍스트를 이해하는 것이 아니라, 문장을 토큰으로 쪼갠 뒤 다음 토큰의 확률 분포 $P(x_t \mid x_{\lt t})$를 계산하고 거기서 하나를 <strong>샘플링</strong>할 뿐이다. 온도 $T$를 바꾸면 같은 프롬프트도 다른 답을 낸다. 즉 "잘 되는 프롬프트"는 운이 아니라 <strong>토큰화·어텐션·확률 분포·컨텍스트 한계·임베딩·정렬</strong>이라는 부품들이 만들어내는 결과다. 이 부품을 알면 프롬프트는 주술이 아니라 <strong>공학</strong>이 된다. <span class="src">[Vaswani et al., <i>Attention Is All You Need</i>, NeurIPS 2017]</span></p>
+    <p class="lede lang-en">To move beyond memorizing prompts like <strong>incantations</strong>, you first have to know what an LLM actually <strong>does</strong> as a machine. A model does not understand text; it splits a sentence into tokens, computes a probability distribution over the next token $P(x_t \mid x_{\lt t})$, and simply <strong>samples</strong> one from it. Change the temperature $T$ and the same prompt yields a different answer. A "prompt that works," then, is not luck — it is the product of a few machine parts: <strong>tokenization, attention, the probability distribution, the context limit, embeddings, and alignment</strong>. Once you see these parts, prompting stops being sorcery and becomes <strong>engineering</strong>. <span class="src">[Vaswani et al., <i>Attention Is All You Need</i>, NeurIPS 2017]</span></p>
   </div>
 </section>
 
@@ -213,18 +213,18 @@
     <div class="roadmap lang-ko" style="margin-top:14px">
       <div class="rm-item"><span class="rn">1-1</span><span><span class="rt">토큰화와 BPE</span> <span class="rd">— 텍스트를 토큰으로 쪼개는 규칙과 Byte-Pair Encoding, 토큰 수가 비용·성능을 좌우하는 이유</span></span></div>
       <div class="rm-item"><span class="rn">1-2</span><span><span class="rt">어텐션과 트랜스포머</span> <span class="rd">— 셀프 어텐션 $\text{softmax}(QK^{\top}/\sqrt{d_k})V$와 병렬 처리 구조</span></span></div>
-      <div class="rm-item"><span class="rn">1-3</span><span><span class="rt">로짓·소프트맥스·샘플링</span> <span class="rd">— 온도 $T$, top-$k$, top-$p$가 출력의 다양성과 안정성을 바꾸는 원리</span></span></div>
-      <div class="rm-item"><span class="rn">1-4</span><span><span class="rt">컨텍스트 윈도우·중간소실</span> <span class="rd">— 유한한 컨텍스트 한계와 "lost in the middle" 현상</span></span></div>
+      <div class="rm-item"><span class="rn">1-3</span><span><span class="rt">다음 토큰 예측: 로짓·소프트맥스·샘플링</span> <span class="rd">— 온도 $T$, top-$k$, top-$p$가 출력의 다양성과 안정성을 바꾸는 원리</span></span></div>
+      <div class="rm-item"><span class="rn">1-4</span><span><span class="rt">컨텍스트 윈도우와 중간 소실</span> <span class="rd">— 유한한 컨텍스트 한계와 "lost in the middle" 현상</span></span></div>
       <div class="rm-item"><span class="rn">1-5</span><span><span class="rt">임베딩과 벡터 표현</span> <span class="rd">— 의미를 좌표로 담는 벡터 공간과 코사인 유사도, RAG의 뿌리</span></span></div>
       <div class="rm-item"><span class="rn">1-6</span><span><span class="rt">사전학습·정렬·RLHF</span> <span class="rd">— 모델이 무엇을 배우고, 어떻게 사람의 지시를 따르게 되는가</span></span></div>
     </div>
     <div class="roadmap lang-en" style="margin-top:14px">
       <div class="rm-item"><span class="rn">1-1</span><span><span class="rt">Tokenization &amp; BPE</span> <span class="rd">— how text is split into tokens, Byte-Pair Encoding, and why token count drives cost and performance</span></span></div>
       <div class="rm-item"><span class="rn">1-2</span><span><span class="rt">Attention &amp; Transformer</span> <span class="rd">— self-attention $\text{softmax}(QK^{\top}/\sqrt{d_k})V$ and the parallel architecture</span></span></div>
-      <div class="rm-item"><span class="rn">1-3</span><span><span class="rt">Logits, Softmax, Sampling</span> <span class="rd">— how temperature $T$, top-$k$, and top-$p$ reshape output diversity and stability</span></span></div>
-      <div class="rm-item"><span class="rn">1-4</span><span><span class="rt">Context Window</span> <span class="rd">— the finite context limit and the "lost in the middle" phenomenon</span></span></div>
+      <div class="rm-item"><span class="rn">1-3</span><span><span class="rt">Next-Token Prediction: Logits, Softmax, Sampling</span> <span class="rd">— how temperature $T$, top-$k$, and top-$p$ reshape output diversity and stability</span></span></div>
+      <div class="rm-item"><span class="rn">1-4</span><span><span class="rt">Context Window &amp; Lost in the Middle</span> <span class="rd">— the finite context limit and the "lost in the middle" phenomenon</span></span></div>
       <div class="rm-item"><span class="rn">1-5</span><span><span class="rt">Embeddings</span> <span class="rd">— vector spaces that hold meaning as coordinates, cosine similarity, and the root of RAG</span></span></div>
-      <div class="rm-item"><span class="rn">1-6</span><span><span class="rt">Pretraining &amp; Alignment</span> <span class="rd">— what a model learns and how it comes to follow human instructions via RLHF</span></span></div>
+      <div class="rm-item"><span class="rn">1-6</span><span><span class="rt">Pretraining, Alignment &amp; RLHF</span> <span class="rd">— what a model learns and how it comes to follow human instructions via RLHF</span></span></div>
     </div>
 
     <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 파트가 끝나면 할 수 있게 된다</h4><ul>
@@ -485,7 +485,7 @@
         <button class="opt">③ 단어의 사전적 의미 유사도</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — BPE는 매 단계 가장 자주 인접하는 기호 쌍 $(a,b)^{*}=\arg\max\ \text{freq}(a,b)$를 골라 병합하는 <strong>빈도 기반 그리디</strong> 알고리즘이다(Sennrich 2016). <span class="dim">오답 ①·③: ①문법이 아니라 통계적 빈도가 기준이고, ③의미 유사도가 아니라 표층 인접 빈도를 본다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — BPE는 매 단계 가장 자주 인접하는 기호 쌍 $(a,b)^{*}=\arg\max\ \text{freq}(a,b)$를 골라 병합하는 <strong>빈도 기반 그리디</strong> 알고리즘이다(Sennrich 2016). <span class="dim">오답 ①·③: ①문법이 아니라 통계적 빈도가 기준이고, ③의미 유사도가 아니라 표층 인접 빈도를 본다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>On what basis are BPE merge rules decided?</p>
@@ -495,7 +495,7 @@
         <button class="opt">③ dictionary meaning similarity of words</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — BPE is a <strong>frequency-based greedy</strong> algorithm that at each step merges the most frequent adjacent pair $(a,b)^{*}=\arg\max\ \text{freq}(a,b)$ (Sennrich 2016). <span class="dim">Wrong ①·③: ① the basis is statistical frequency, not grammar; ③ it looks at surface adjacency frequency, not meaning similarity.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — BPE is a <strong>frequency-based greedy</strong> algorithm that at each step merges the most frequent adjacent pair $(a,b)^{*}=\arg\max\ \text{freq}(a,b)$ (Sennrich 2016). <span class="dim">Wrong ①·③: ① the basis is statistical frequency, not grammar; ③ it looks at surface adjacency frequency, not meaning similarity.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>같은 뜻의 문장인데 한글이 영어보다 토큰을 더 많이 쓰는 주된 이유는?</p>
@@ -505,7 +505,7 @@
         <button class="opt">③ 한글은 모델이 처리할 수 없어 별도 인코딩을 쓰기 때문</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 병합 규칙은 학습 코퍼스 빈도에서 나오므로, 영어 중심 코퍼스에서는 한글 음절 병합이 거의 학습되지 않아 UTF-8 바이트(음절 1자=3바이트) 단위로 잘게 쪼개진다. <span class="dim">오답 ①·③: ①정보량 차이가 아니라 토크나이저 통계 편향 문제이고, ③바이트 단위 BPE는 한글도 정상 처리한다(단지 토큰이 많을 뿐).</span> <span class="agg">학급 n=41 · ① 9 · ② 28 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 병합 규칙은 학습 코퍼스 빈도에서 나오므로, 영어 중심 코퍼스에서는 한글 음절 병합이 거의 학습되지 않아 UTF-8 바이트(음절 1자=3바이트) 단위로 잘게 쪼개진다. <span class="dim">오답 ①·③: ①정보량 차이가 아니라 토크나이저 통계 편향 문제이고, ③바이트 단위 BPE는 한글도 정상 처리한다(단지 토큰이 많을 뿐).</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>For sentences of the same meaning, why does Korean use more tokens than English?</p>
@@ -515,7 +515,7 @@
         <button class="opt">③ Korean cannot be processed by the model, so a separate encoding is used</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — merge rules come from training-corpus frequency, so in an English-dominant corpus few Korean-syllable merges are learned, and text is split into UTF-8 bytes (one syllable = 3 bytes). <span class="dim">Wrong ①·③: ① it is a tokenizer statistical bias, not an information-content difference; ③ byte-level BPE handles Korean fine — it just uses more tokens.</span> <span class="agg">class n=41 · ① 9 · ② 28 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — merge rules come from training-corpus frequency, so in an English-dominant corpus few Korean-syllable merges are learned, and text is split into UTF-8 bytes (one syllable = 3 bytes). <span class="dim">Wrong ①·③: ① it is a tokenizer statistical bias, not an information-content difference; ③ byte-level BPE handles Korean fine — it just uses more tokens.</span></div>
     </div>
   </section>
 
@@ -709,7 +709,7 @@
     <h1 class="stage-h lang-en">"Attention Is All You Need" and the End of Recurrence</h1>
     <div class="two lang-ko">
       <div class="col2 reading">
-        <p>2017년 Google Brain·Google Research의 <strong>Vaswani 외 8인</strong>은 순환(RNN)이나 합성곱 없이 <strong>어텐션만으로</strong> 시퀀스를 처리하는 <strong>트랜스포머</strong>를 제안했습니다. RNN은 토큰을 하나씩 순차 처리해 병렬화가 어렵고, 멀리 떨어진 토큰을 잇는 경로가 길어 학습이 힘들었습니다. 셀프 어텐션은 <strong>모든 토큰 쌍을 동시에</strong> 연결해 이 두 문제를 한꺼번에 풉니다.</p>
+        <p>2017년 Google Brain·Google Research의 <strong>Vaswani 외 7인</strong>은 순환(RNN)이나 합성곱 없이 <strong>어텐션만으로</strong> 시퀀스를 처리하는 <strong>트랜스포머</strong>를 제안했습니다. RNN은 토큰을 하나씩 순차 처리해 병렬화가 어렵고, 멀리 떨어진 토큰을 잇는 경로가 길어 학습이 힘들었습니다. 셀프 어텐션은 <strong>모든 토큰 쌍을 동시에</strong> 연결해 이 두 문제를 한꺼번에 풉니다.</p>
         <p class="pullquote">긴 의존성의 경로 길이를 $O(n)$에서 $O(1)$로 줄인 것이 트랜스포머의 핵심 이점이다.</p>
         <p>논문은 <strong>멀티헤드 어텐션</strong>(여러 사영으로 서로 다른 관계를 병렬 학습)과 <strong>사인·코사인 위치 인코딩</strong>을 도입했습니다. 결과 아키텍처는 기계번역에서 당시 최고 성능(WMT 2014 EN-DE에서 <strong>28.4 BLEU</strong> — 논문 보고값)을 훨씬 적은 학습 비용으로 달성했고, 이후 BERT·GPT 등 거의 모든 대규모 언어모델의 뼈대가 되었습니다.</p>
       </div>
@@ -739,7 +739,7 @@
     <h1 class="stage-h lang-en">At a Glance — Attention Heatmap and Q/K/V Flow</h1>
     <div class="vizgrid lang-ko">
       <div>
-        <div class="vcap">어텐션 가중치 히트맵 (대명사 "그것" → 선행사 "고양이")</div>
+        <div class="vcap">어텐션 가중치 히트맵 (대명사 "그것" → 선행사 "고양이") — 수치는 개념 도해용 예시</div>
         <svg viewBox="0 0 320 250" width="100%" style="max-width:320px">
 <text x="160" y="16" font-size="11" fill="#52525b" text-anchor="middle">"그것"이 각 토큰에 준 주의 $\alpha$</text>
 <!-- column labels -->
@@ -803,12 +803,12 @@
           <tr><td>최대 경로 길이</td><td class="k">$O(1)$</td><td>$O(n)$</td></tr>
           <tr><td>순서 인식</td><td class="k">위치 인코딩 필요</td><td>구조적으로 내재</td></tr>
         </tbody></table>
-        <div class="keqnote">$n$ = 시퀀스 길이, $d$ = 표현 차원. 짧은 시퀀스에서 셀프 어텐션이 유리($n<d$일 때 층당 복잡도도 우세). (출처: Vaswani et al. 2017, Table 1)</div>
+        <div class="keqnote">$n$ = 시퀀스 길이, $d$ = 표현 차원. 짧은 시퀀스에서 셀프 어텐션이 유리($n \lt d$일 때 층당 복잡도도 우세). (출처: Vaswani et al. 2017, Table 1)</div>
       </div>
     </div>
     <div class="vizgrid lang-en">
       <div>
-        <div class="vcap">Attention-weight heatmap (pronoun "it" → antecedent "cat")</div>
+        <div class="vcap">Attention-weight heatmap (pronoun "it" → antecedent "cat") — illustrative values, conceptual diagram</div>
         <svg viewBox="0 0 320 250" width="100%" style="max-width:320px">
 <text x="160" y="16" font-size="11" fill="#52525b" text-anchor="middle">attention $\alpha$ that "it" pays each token</text>
 <text x="70" y="42" font-size="10.5" fill="#52525b" text-anchor="middle">the</text>
@@ -867,7 +867,7 @@
           <tr><td>Max path length</td><td class="k">$O(1)$</td><td>$O(n)$</td></tr>
           <tr><td>Order awareness</td><td class="k">needs positional enc.</td><td>built into structure</td></tr>
         </tbody></table>
-        <div class="keqnote">$n$ = sequence length, $d$ = representation dim. Self-attention wins on short sequences (also cheaper per layer when $n<d$). (Source: Vaswani et al. 2017, Table 1)</div>
+        <div class="keqnote">$n$ = sequence length, $d$ = representation dim. Self-attention wins on short sequences (also cheaper per layer when $n \lt d$). (Source: Vaswani et al. 2017, Table 1)</div>
       </div>
     </div>
   </section>
@@ -912,7 +912,7 @@
         <button class="opt">③ 값 $V$를 확률로 바꾸려고</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $q,k$ 성분이 독립·단위분산이면 내적 분산이 $d_k$가 되어 $d_k$가 클 때 점수가 커진다. $\sqrt{d_k}$로 나눠 분산을 $\approx1$로 되돌려 softmax가 포화하지 않고 부드러운 기울기를 유지한다. <span class="dim">오답 ①·③: ①스케일은 복잡도를 바꾸지 않고, ③값을 확률로 바꾸는 것은 softmax의 역할이다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $q,k$ 성분이 독립·단위분산이면 내적 분산이 $d_k$가 되어 $d_k$가 클 때 점수가 커진다. $\sqrt{d_k}$로 나눠 분산을 $\approx1$로 되돌려 softmax가 포화하지 않고 부드러운 기울기를 유지한다. <span class="dim">오답 ①·③: ①스케일은 복잡도를 바꾸지 않고, ③값을 확률로 바꾸는 것은 softmax의 역할이다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Why do we <strong>divide the scores by $\sqrt{d_k}$</strong> in scaled dot-product attention?</p>
@@ -922,7 +922,7 @@
         <button class="opt">③ to turn the values $V$ into probabilities</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — with independent unit-variance $q,k$ entries, the dot-product variance is $d_k$, so scores grow with $d_k$. Dividing by $\sqrt{d_k}$ restores variance to $\approx1$, keeping softmax unsaturated with smooth gradients. <span class="dim">Wrong ①·③: ① the scale does not change complexity; ③ turning values into probabilities is softmax's job.</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — with independent unit-variance $q,k$ entries, the dot-product variance is $d_k$, so scores grow with $d_k$. Dividing by $\sqrt{d_k}$ restores variance to $\approx1$, keeping softmax unsaturated with smooth gradients. <span class="dim">Wrong ①·③: ① the scale does not change complexity; ③ turning values into probabilities is softmax's job.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>셀프 어텐션에 <strong>위치 인코딩</strong>이 필요한 이유는?</p>
@@ -932,7 +932,7 @@
         <button class="opt">③ $Q,K,V$ 사영 행렬을 학습시키기 위해</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 셀프 어텐션은 집합 연산에 가까워 토큰을 섞어도 결과가 순서에 불변(permutation-equivariant)이다. 순서 정보를 주려면 임베딩에 위치 인코딩 $p_i$를 더해야 한다. <span class="dim">오답 ②·③: ②합을 1로 만드는 것은 softmax, ③사영 행렬 학습은 위치 인코딩과 무관하다.</span> <span class="agg">학급 n=41 · ① 28 · ② 6 · ③ 7</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 셀프 어텐션은 집합 연산에 가까워 토큰을 섞어도 결과가 순서에 불변(permutation-equivariant)이다. 순서 정보를 주려면 임베딩에 위치 인코딩 $p_i$를 더해야 한다. <span class="dim">오답 ②·③: ②합을 1로 만드는 것은 softmax, ③사영 행렬 학습은 위치 인코딩과 무관하다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Why does self-attention need <strong>positional encoding</strong>?</p>
@@ -942,7 +942,7 @@
         <button class="opt">③ to train the $Q,K,V$ projection matrices</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — self-attention is essentially a set operation, so its output is invariant to reordering the tokens (permutation-equivariant). To supply order, a positional encoding $p_i$ is added to the embedding. <span class="dim">Wrong ②·③: ② making the sum 1 is softmax's job; ③ training projection matrices is unrelated to positional encoding.</span> <span class="agg">class n=41 · ① 28 · ② 6 · ③ 7</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — self-attention is essentially a set operation, so its output is invariant to reordering the tokens (permutation-equivariant). To supply order, a positional encoding $p_i$ is added to the embedding. <span class="dim">Wrong ②·③: ② making the sum 1 is softmax's job; ③ training projection matrices is unrelated to positional encoding.</span></div>
     </div>
   </section>
 
@@ -1298,7 +1298,7 @@
         <button class="opt">③ 확률의 합이 1보다 커진다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $P_i/P_j=e^{(z_i-z_j)/T}$이므로 $T{\to}0$이면 격차가 무한대로 벌어져 최대 로짓 토큰에 확률 1이 쏠린다(그리디). <span class="dim">오답 ①·③: ①균등분포는 $T{\to}\infty$의 극한, ③소프트맥스는 항상 $\sum P_i=1$을 보장한다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $P_i/P_j=e^{(z_i-z_j)/T}$이므로 $T{\to}0$이면 격차가 무한대로 벌어져 최대 로짓 토큰에 확률 1이 쏠린다(그리디). <span class="dim">오답 ①·③: ①균등분포는 $T{\to}\infty$의 극한, ③소프트맥스는 항상 $\sum P_i=1$을 보장한다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>As temperature $T$ is lowered <strong>toward 0</strong>, what does softmax do?</p>
@@ -1308,7 +1308,7 @@
         <button class="opt">③ makes the probabilities sum to more than 1</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — since $P_i/P_j=e^{(z_i-z_j)/T}$, as $T{\to}0$ the gaps blow up and all mass concentrates on the max-logit token (greedy). <span class="dim">Wrong ①·③: ① uniform is the $T{\to}\infty$ limit; ③ softmax always guarantees $\sum P_i=1$.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — since $P_i/P_j=e^{(z_i-z_j)/T}$, as $T{\to}0$ the gaps blow up and all mass concentrates on the max-logit token (greedy). <span class="dim">Wrong ①·③: ① uniform is the $T{\to}\infty$ limit; ③ softmax always guarantees $\sum P_i=1$.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span><strong>top-p(핵 샘플링)</strong>와 <strong>top-k</strong>의 차이로 옳은 것은?</p>
@@ -1318,7 +1318,7 @@
         <button class="opt">③ top-p는 온도를 바꾸고 top-k는 로짓을 바꾼다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — top-p는 누적확률이 $p$를 넘는 최소 후보집합("핵")을 남기므로 후보 수가 맥락에 따라 변하고, top-k는 상위 $k$개로 개수를 고정한다(Holtzman et al. 2020). <span class="dim">오답 ①·③: ①개수 고정은 top-k만 해당, ③둘 다 온도가 아니라 후보집합을 절단하는 손잡이다.</span> <span class="agg">학급 n=41 · ① 5 · ② 29 · ③ 7</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — top-p는 누적확률이 $p$를 넘는 최소 후보집합("핵")을 남기므로 후보 수가 맥락에 따라 변하고, top-k는 상위 $k$개로 개수를 고정한다(Holtzman et al. 2020). <span class="dim">오답 ①·③: ①개수 고정은 top-k만 해당, ③둘 다 온도가 아니라 후보집합을 절단하는 손잡이다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Which correctly describes the difference between <strong>top-p (nucleus)</strong> and <strong>top-k</strong>?</p>
@@ -1328,7 +1328,7 @@
         <button class="opt">③ top-p changes temperature and top-k changes the logits</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — top-p keeps the smallest set ("nucleus") whose cumulative mass exceeds $p$, so its size adapts to context, whereas top-k fixes the count at the top $k$ (Holtzman et al. 2020). <span class="dim">Wrong ①·③: ① fixing the count is top-k only; ③ both truncate the candidate set, not the temperature.</span> <span class="agg">class n=41 · ① 5 · ② 29 · ③ 7</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — top-p keeps the smallest set ("nucleus") whose cumulative mass exceeds $p$, so its size adapts to context, whereas top-k fixes the count at the top $k$ (Holtzman et al. 2020). <span class="dim">Wrong ①·③: ① fixing the count is top-k only; ③ both truncate the candidate set, not the temperature.</span></div>
     </div>
   </section>
 
@@ -1367,7 +1367,7 @@
       <p class="prob-statement">확률이 내림차순으로 $[0.5,\ 0.3,\ 0.15,\ 0.05]$이다. <strong>top-p, $p=0.9$</strong>일 때 "핵"에 남는 <strong>후보 개수</strong>를 구하시오. (누적이 $p$를 처음 넘는 지점까지 포함)</p>
       <div class="given"><span class="chip">$P=[0.5,0.3,0.15,0.05]$</span><span class="chip">$p=0.9$</span></div>
       <div class="find"><b>구할 것:</b> 핵 후보 개수 (정수)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="3" data-tol="0.02"/><span class="ans-unit">개</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="3" data-tol="0.02"/><span class="ans-unit">candidates</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
       <div class="revealable solution">
         <div class="dstep2"><div class="step-label">Step 1 · 누적확률</div>$$ 0.5\ \to\ 0.8\ \to\ \underline{0.95}\ \to\ 1.0 $$</div>
@@ -1380,7 +1380,7 @@
       <p class="prob-statement">Descending probabilities are $[0.5,\ 0.3,\ 0.15,\ 0.05]$. For <strong>top-p with $p=0.9$</strong>, find the <strong>number of candidates</strong> in the "nucleus" (include up to the point where the cumulative first exceeds $p$).</p>
       <div class="given"><span class="chip">$P=[0.5,0.3,0.15,0.05]$</span><span class="chip">$p=0.9$</span></div>
       <div class="find"><b>Find:</b> nucleus candidate count (integer)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="3" data-tol="0.02"/><span class="ans-unit">tokens</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="3" data-tol="0.02"/><span class="ans-unit">candidates</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
       <div class="revealable solution">
         <div class="dstep2"><div class="step-label">Step 1 · cumulative</div>$$ 0.5\ \to\ 0.8\ \to\ \underline{0.95}\ \to\ 1.0 $$</div>
@@ -1508,12 +1508,12 @@
     </div>
     <div class="deriv lang-ko">
       <div class="dcard"><h4>1단계 · 예산 검사</h4><div class="sub">truncation</div><div class="ana">📏 책상에 안 올라가면 종이가 떨어진다</div><div class="eq">$ \sum n_i \le L $</div><p>입력이 $L$을 넘으면 초과 토큰이 잘려 <strong>모델 시야에서 완전히 사라집니다</strong>. 이건 위치 편향 이전의 <strong>1차 소실</strong>.</p></div>
-      <div class="dcard"><h4>2단계 · 위치 가중</h4><div class="sub">attention 쏠림</div><div class="ana">👀 눈이 처음·끝에 먼저 간다</div><div class="eq">$ \alpha_{\text{start}},\alpha_{\text{end}} > \alpha_{\text{mid}} $</div><p>softmax 정규화 후 남는 attention이 양끝으로 몰려, 가운데 근거의 유효 가중치 $\alpha_{\text{mid}}$가 작아집니다.</p></div>
+      <div class="dcard"><h4>2단계 · 위치 가중</h4><div class="sub">attention 쏠림</div><div class="ana">👀 눈이 처음·끝에 먼저 간다</div><div class="eq">$ \alpha_{\text{start}},\alpha_{\text{end}} > \alpha_{\text{mid}} $</div><p>관측과 부합하는 <strong>유력한 설명(가설)</strong>: 시작 쪽 쏠림은 attention sink(Xiao et al. 2023), 끝 쪽 쏠림은 인과적 LM의 최근성 편향으로 보며, 그 결과 가운데 근거의 유효 가중치 $\alpha_{\text{mid}}$가 작아집니다. Liu et al. 2023은 현상을 보고할 뿐 이 기전을 확정하지 않습니다.</p></div>
       <div class="dcard"><h4>3단계 · U자 정확도</h4><div class="sub">Lost in the Middle</div><div class="ana">🥣 그릇 모양 — 양끝 높고 가운데 낮다</div><div class="eq">$ \text{acc}(p)=a+b\,(2p-1)^2 $</div><p>정확도를 위치 $p$의 함수로 보면 <strong>중앙($p=0.5$)에서 최저</strong>, 양끝에서 최고인 대칭 U자 곡선(Liu et al. 2023 관측 골격).</p></div>
     </div>
     <div class="deriv lang-en">
       <div class="dcard"><h4>Step 1 · budget check</h4><div class="sub">truncation</div><div class="ana">📏 What doesn't fit the desk falls off</div><div class="eq">$ \sum n_i \le L $</div><p>If input exceeds $L$, excess tokens are cut and <strong>disappear from the model's view entirely</strong> — a <strong>first-order loss</strong> that precedes any positional bias.</p></div>
-      <div class="dcard"><h4>Step 2 · position weighting</h4><div class="sub">attention skew</div><div class="ana">👀 The eyes go first to start & end</div><div class="eq">$ \alpha_{\text{start}},\alpha_{\text{end}} > \alpha_{\text{mid}} $</div><p>After softmax normalization the remaining attention pools at both ends, so the effective weight $\alpha_{\text{mid}}$ on middle evidence shrinks.</p></div>
+      <div class="dcard"><h4>Step 2 · position weighting</h4><div class="sub">attention skew</div><div class="ana">👀 The eyes go first to start & end</div><div class="eq">$ \alpha_{\text{start}},\alpha_{\text{end}} > \alpha_{\text{mid}} $</div><p>A <strong>leading explanation (hypothesis)</strong> consistent with the observations: the start-side pull is attributed to attention sinks (Xiao et al. 2023) and the end-side pull to the recency bias of causal LMs, shrinking the effective weight $\alpha_{\text{mid}}$ on middle evidence. Liu et al. 2023 report the phenomenon without establishing this mechanism.</p></div>
       <div class="dcard"><h4>Step 3 · U-shaped accuracy</h4><div class="sub">Lost in the Middle</div><div class="ana">🥣 Bowl shape — high at ends, low in middle</div><div class="eq">$ \text{acc}(p)=a+b\,(2p-1)^2 $</div><p>Viewed as a function of position $p$, accuracy is <strong>lowest at the center ($p=0.5$)</strong> and highest at the ends — a symmetric U-curve (skeleton of Liu et al. 2023 observations).</p></div>
     </div>
     <div class="callout warn lang-ko"><div class="ct">주의 · 모델링 골격일 뿐</div>$\text{acc}(p)=a+b(2p-1)^2$은 관측된 U자 경향을 잡기 위한 <strong>단순 2차 골격</strong>이며 특정 모델의 실측 계수가 아닙니다. 실제 곡선의 깊이·비대칭은 모델·과제마다 다릅니다(UNVERIFIED 세부 계수).</div>
@@ -1662,7 +1662,7 @@
         <button class="opt">③ 정확도는 정답 위치와 무관하게 일정하다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 정확도는 위치의 함수로, 양끝(primacy·recency)에서 높고 중앙에서 최저인 U자 곡선을 그린다. <span class="dim">오답 ①·③: ①맨 앞은 오히려 가장 높은 축이고, ③위치와 무관하다면 U자 현상 자체가 없다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 정확도는 위치의 함수로, 양끝(primacy·recency)에서 높고 중앙에서 최저인 U자 곡선을 그린다. <span class="dim">오답 ①·③: ①맨 앞은 오히려 가장 높은 축이고, ③위치와 무관하다면 U자 현상 자체가 없다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>What core phenomenon did "Lost in the Middle" (Liu et al. 2023) observe?</p>
@@ -1672,7 +1672,7 @@
         <button class="opt">③ accuracy is constant regardless of answer position</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — accuracy is a function of position: high at the ends (primacy & recency) and lowest at the center, forming a U-curve. <span class="dim">Wrong ①·③: ① the front is actually one of the high points; ③ if it were position-independent, there would be no U-phenomenon at all.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — accuracy is a function of position: high at the ends (primacy & recency) and lowest at the center, forming a U-curve. <span class="dim">Wrong ①·③: ① the front is actually one of the high points; ③ if it were position-independent, there would be no U-phenomenon at all.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>긴 문맥을 다룰 때 실무적으로 <strong>가장 안전한</strong> 배치 전략은?</p>
@@ -1682,7 +1682,7 @@
         <button class="opt" data-correct="1">③ 핵심 지시·근거를 <strong>맨 앞이나 맨 뒤</strong>에 두고, RAG는 re-ranking으로 양끝에 배치한다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ③</b> — U자 곡선의 함의는 "무엇을 어디에" 배치하느냐다. 중요 정보는 양끝에, RAG에서는 재순위화로 관련 문서를 양끝으로 보낸다. <span class="dim">오답 ①·②: ①윈도우 확대는 중간 소실을 없애지 못했고(Liu et al.), ②정중앙은 활용도가 가장 낮은 위치다.</span> <span class="agg">학급 n=41 · ① 5 · ② 3 · ③ 33</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ③</b> — U자 곡선의 함의는 "무엇을 어디에" 배치하느냐다. 중요 정보는 양끝에, RAG에서는 재순위화로 관련 문서를 양끝으로 보낸다. <span class="dim">오답 ①·②: ①윈도우 확대는 중간 소실을 없애지 못했고(Liu et al.), ②정중앙은 활용도가 가장 낮은 위치다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>When handling long context, which placement strategy is <strong>safest</strong> in practice?</p>
@@ -1692,7 +1692,7 @@
         <button class="opt" data-correct="1">③ put key instructions & evidence <strong>at the start or end</strong>, and in RAG use re-ranking to place them at the ends</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ③</b> — the U-curve's implication is about "what goes where." Put important info at the ends; in RAG, re-rank to push relevant docs to the ends. <span class="dim">Wrong ①·②: ① enlarging the window did not remove the middle loss (Liu et al.); ② the exact center is the lowest-utility position.</span> <span class="agg">class n=41 · ① 5 · ② 3 · ③ 33</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ③</b> — the U-curve's implication is about "what goes where." Put important info at the ends; in RAG, re-rank to push relevant docs to the ends. <span class="dim">Wrong ①·②: ① enlarging the window did not remove the middle loss (Liu et al.); ② the exact center is the lowest-utility position.</span></div>
     </div>
   </section>
 
@@ -2018,7 +2018,7 @@
         <button class="opt">③ 항상 정수값을 주기 때문</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 코사인은 크기를 정규화해 없애고 두 벡터의 <strong>각도</strong>만 봅니다. 그래서 빈도가 달라 노름이 다른 단어들도 공정하게 비교됩니다. <span class="dim">오답 ①·③: ①정규화된 벡터에서는 내적과 비슷한 비용이라 항상 더 빠른 건 아니고, ③값은 $[-1,1]$의 실수이지 정수가 아니다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 코사인은 크기를 정규화해 없애고 두 벡터의 <strong>각도</strong>만 봅니다. 그래서 빈도가 달라 노름이 다른 단어들도 공정하게 비교됩니다. <span class="dim">오답 ①·③: ①정규화된 벡터에서는 내적과 비슷한 비용이라 항상 더 빠른 건 아니고, ③값은 $[-1,1]$의 실수이지 정수가 아니다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>What is the <strong>main reason</strong> cosine similarity is preferred over Euclidean distance for comparing embeddings?</p>
@@ -2028,7 +2028,7 @@
         <button class="opt">③ it always returns integer values</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — cosine normalizes away magnitude and reads only the <strong>angle</strong> between vectors, so words with different norms (from different frequencies) compare fairly. <span class="dim">Wrong ①·③: ① on unit-normalized vectors its cost is like a dot product, so it is not always faster; ③ its value is a real number in $[-1,1]$, not an integer.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — cosine normalizes away magnitude and reads only the <strong>angle</strong> between vectors, so words with different norms (from different frequencies) compare fairly. <span class="dim">Wrong ①·③: ① on unit-normalized vectors its cost is like a dot product, so it is not always faster; ③ its value is a real number in $[-1,1]$, not an integer.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>word2vec의 정적 임베딩과 Transformer의 문맥화 임베딩의 <strong>핵심 차이</strong>는?</p>
@@ -2038,7 +2038,7 @@
         <button class="opt">③ 문맥화는 코사인 유사도를 쓸 수 없다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 정적 임베딩(word2vec)은 다의어 "은행"에도 벡터 하나만 부여하지만, 문맥화 임베딩(Transformer self-attention)은 주변 토큰에 따라 벡터가 달라져 강둑/금융을 구분합니다. <span class="dim">오답 ②·③: ②차원은 모델 설계에 따를 뿐 정적이 항상 크지 않고, ③문맥화 벡터에도 코사인 유사도를 그대로 적용한다.</span> <span class="agg">학급 n=41 · ① 30 · ② 5 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 정적 임베딩(word2vec)은 다의어 "은행"에도 벡터 하나만 부여하지만, 문맥화 임베딩(Transformer self-attention)은 주변 토큰에 따라 벡터가 달라져 강둑/금융을 구분합니다. <span class="dim">오답 ②·③: ②차원은 모델 설계에 따를 뿐 정적이 항상 크지 않고, ③문맥화 벡터에도 코사인 유사도를 그대로 적용한다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What is the <strong>core difference</strong> between word2vec's static embeddings and the Transformer's contextual embeddings?</p>
@@ -2048,7 +2048,7 @@
         <button class="opt">③ contextual cannot use cosine similarity</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — static embeddings (word2vec) assign a single vector even to a polyseme like "bank," while contextual embeddings (Transformer self-attention) vary the vector with neighbors, separating riverbank from finance. <span class="dim">Wrong ②·③: ② dimension depends on model design, not static-always-larger; ③ cosine similarity applies to contextual vectors too.</span> <span class="agg">class n=41 · ① 30 · ② 5 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — static embeddings (word2vec) assign a single vector even to a polyseme like "bank," while contextual embeddings (Transformer self-attention) vary the vector with neighbors, separating riverbank from finance. <span class="dim">Wrong ②·③: ② dimension depends on model design, not static-always-larger; ③ cosine similarity applies to contextual vectors too.</span></div>
     </div>
   </section>
 
@@ -2165,7 +2165,7 @@
         <p class="lede">현대 LLM은 세 단계로 만들어집니다. <strong>① 사전학습(pre-training)</strong> — 대규모 텍스트에서 다음 토큰 예측으로 언어·지식을 습득한 <strong>base 모델</strong>. <strong>② 지시 튜닝(SFT, instruction tuning)</strong> — (지시, 응답) 시연 데이터로 "지시를 따르는" 형식을 학습. <strong>③ 정렬(RLHF/DPO)</strong> — 인간 선호(preference)로 "더 나은 응답"을 선택하도록 미세조정. base와 chat 모델의 차이를 만드는 것은 ②③이며, 이것이 곧 <strong>프롬프트 반응성</strong>을 결정합니다.</p>
         <div class="keqbox">
           <div class="keq-label">3단계 파이프라인의 목적함수</div>
-          <div class="keqrow"><span class="keqcap">사전학습</span><span class="keqline">$ \max \ \mathbb{E}\,[\log p_\theta(x_t\mid x_{<t})] $</span></div>
+          <div class="keqrow"><span class="keqcap">사전학습</span><span class="keqline">$ \max \ \mathbb{E}\,[\log p_\theta(x_t\mid x_{\lt t})] $</span></div>
           <div class="keqrow"><span class="keqcap">SFT</span><span class="keqline">$ \max \ \mathbb{E}_{(x,y)}\,[\log p_\theta(y\mid x)] $</span></div>
           <div class="keqrow"><span class="keqcap">정렬(RLHF)</span><span class="keqline">$ \max \ \mathbb{E}\,[r(x,y)] - \beta\,\mathrm{KL} $</span></div>
         </div>
@@ -2188,7 +2188,7 @@
         <p class="lede">A modern LLM is built in three stages. <strong>① Pre-training</strong> — a <strong>base model</strong> that acquires language and knowledge via next-token prediction over massive text. <strong>② Instruction tuning (SFT)</strong> — learning the "instruction-following" format from (instruction, response) demonstrations. <strong>③ Alignment (RLHF/DPO)</strong> — fine-tuning to prefer "better responses" using human preferences. What distinguishes a base model from a chat model is ②③, and this is precisely what sets <strong>prompt responsiveness</strong>.</p>
         <div class="keqbox">
           <div class="keq-label">Objectives across the 3-stage pipeline</div>
-          <div class="keqrow"><span class="keqcap">Pre-training</span><span class="keqline">$ \max \ \mathbb{E}\,[\log p_\theta(x_t\mid x_{<t})] $</span></div>
+          <div class="keqrow"><span class="keqcap">Pre-training</span><span class="keqline">$ \max \ \mathbb{E}\,[\log p_\theta(x_t\mid x_{\lt t})] $</span></div>
           <div class="keqrow"><span class="keqcap">SFT</span><span class="keqline">$ \max \ \mathbb{E}_{(x,y)}\,[\log p_\theta(y\mid x)] $</span></div>
           <div class="keqrow"><span class="keqcap">Alignment (RLHF)</span><span class="keqline">$ \max \ \mathbb{E}\,[r(x,y)] - \beta\,\mathrm{KL} $</span></div>
         </div>
@@ -2392,7 +2392,7 @@
         <button class="opt">③ base 모델은 파라미터 수가 항상 더 적어서</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — base는 사전학습(다음 토큰 예측)으로 능력만 갖췄고, 지시 따르기와 안전은 SFT·RLHF 정렬에서 부여된다. <span class="dim">오답 ①·③: 차이는 데이터 양이나 파라미터 수가 아니라 <strong>정렬 단계의 유무</strong>다.</span> <span class="agg">학급 n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — base는 사전학습(다음 토큰 예측)으로 능력만 갖췄고, 지시 따르기와 안전은 SFT·RLHF 정렬에서 부여된다. <span class="dim">오답 ①·③: 차이는 데이터 양이나 파라미터 수가 아니라 <strong>정렬 단계의 유무</strong>다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>What is the <strong>essential reason</strong> a base model differs from a chat model?</p>
@@ -2402,7 +2402,7 @@
         <button class="opt">③ base models always have fewer parameters</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — base gains capability from pre-training (next-token prediction); instruction-following and safety come from SFT/RLHF alignment. <span class="dim">Wrong ①·③: the difference is neither data volume nor parameter count but the <strong>presence of alignment</strong>.</span> <span class="agg">class n=41 · ① 5 · ② 31 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — base gains capability from pre-training (next-token prediction); instruction-following and safety come from SFT/RLHF alignment. <span class="dim">Wrong ①·③: the difference is neither data volume nor parameter count but the <strong>presence of alignment</strong>.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>RLHF 목적함수의 <strong>KL 페널티 $\beta$</strong>가 하는 역할은?</p>
@@ -2412,7 +2412,7 @@
         <button class="opt">③ 사전학습 데이터의 토큰 수를 늘린다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — $J=r-\beta\,\mathrm{KL}$에서 $\beta$는 참조 정책과의 발산을 벌점해 base 능력을 지키는 닻 역할을 한다. $\beta$가 작으면 보상 해킹, 크면 정렬 소실. <span class="dim">오답 ②·③: RM 학습률이나 사전학습 데이터량과는 무관하다.</span> <span class="agg">학급 n=41 · ① 30 · ② 8 · ③ 3</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — $J=r-\beta\,\mathrm{KL}$에서 $\beta$는 참조 정책과의 발산을 벌점해 base 능력을 지키는 닻 역할을 한다. $\beta$가 작으면 보상 해킹, 크면 정렬 소실. <span class="dim">오답 ②·③: RM 학습률이나 사전학습 데이터량과는 무관하다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What does the <strong>KL penalty $\beta$</strong> do in the RLHF objective?</p>
@@ -2422,7 +2422,7 @@
         <button class="opt">③ increases the number of pre-training tokens</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — in $J=r-\beta\,\mathrm{KL}$, $\beta$ penalizes divergence from the reference policy, anchoring base capability. Too small → reward hacking; too large → alignment vanishes. <span class="dim">Wrong ②·③: it is unrelated to the RM learning rate or pre-training data volume.</span> <span class="agg">class n=41 · ① 30 · ② 8 · ③ 3</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — in $J=r-\beta\,\mathrm{KL}$, $\beta$ penalizes divergence from the reference policy, anchoring base capability. Too small → reward hacking; too large → alignment vanishes. <span class="dim">Wrong ②·③: it is unrelated to the RM learning rate or pre-training data volume.</span></div>
     </div>
   </section>
 
@@ -2537,23 +2537,32 @@
   var chapters=[]; screens.forEach(function(s){var c=s.getAttribute('data-ch'); if(chapters.indexOf(c)<0)chapters.push(c);});
   function chOf(i){return screens[i].getAttribute('data-ch');} function stOf(i){return screens[i].getAttribute('data-stage');}
 
+  var STR={
+    ko:{show:'풀이 보기',hide:'풀이 숨기기',pickFirst:'먼저 보기를 선택하세요',submitOk:'✓ 제출됨 — 정답',submitNo:'제출됨 — 학급 응답에 반영',typeFirst:'먼저 답을 입력하세요',correct:'✓ 정답입니다 — 풀이로 과정 확인',wrong:'✗ 다시 — 풀이로 과정 확인',prev:'← 이전',next:'다음',nextCh:'다음 챕터',finish:'✓ 완료 · 목록으로',hint:'← / → 또는 상단 단계 클릭으로 이동'},
+    en:{show:'Show solution',hide:'Hide solution',pickFirst:'Choose an option first',submitOk:'✓ Submitted — correct',submitNo:'Submitted — recorded in class responses',typeFirst:'Enter an answer first',correct:'✓ Correct — check the steps in the solution',wrong:'✗ Try again — check the steps in the solution',prev:'← Back',next:'Next',nextCh:'Next chapter',finish:'✓ Done · back to list',hint:'← / → or click a stage above'}
+  };
+  var STAGE_EN={'환영':'Welcome','여정':'Roadmap','개념':'Concept','유도':'Derivation','읽을거리':'Reading','그림·표':'Figures & Tables','실습':'Interactive','연습':'Practice','점검':'Check','정리':'Summary'};
+  var curLang='ko';
+  function T(k){return (STR[curLang]||STR.ko)[k];}
+  function stLabel(i){var s=stOf(i); return curLang==='en'?(STAGE_EN[s]||s):s;}
+
   function fitActive(){ var u=screens[active]; if(!u)return; u.style.transform='none'; var avail=stage.clientHeight, nat=u.offsetHeight; if(nat<=0||avail<=0)return; if(nat>avail){u.style.transformOrigin='top center'; u.style.transform='scale('+(avail/nat)+')';} else {u.style.transformOrigin='top center'; var _st=u.getAttribute('data-stage'); var _cap=(_st==='점검'||_st==='연습')?44:(avail-nat)/2; u.style.transform='translateY('+Math.min((avail-nat)/2,_cap)+'px)';} }
 
   function buildChrail(){ chrail.innerHTML=''; chapters.forEach(function(c){ var d=document.createElement('span'); d.className='chdot'; d.textContent=c; d.addEventListener('click',function(){ for(var k=0;k<N;k++){ if(chOf(k)===c){show(k);break;} } }); chrail.appendChild(d); }); }
   function buildStepper(){ var ch=chOf(active); var list=[]; for(var i=0;i<N;i++){ if(chOf(i)===ch) list.push(i); } stepbar.innerHTML=''; list.forEach(function(idx,k){ var el=document.createElement('div'); var cls='step'; if(idx===active)cls+=' cur'; else if(idx<active)cls+=' done'; el.className=cls; el.innerHTML='<span class="ix">'+(k+1)+'</span>'+stOf(idx); el.addEventListener('click',function(){show(idx);}); stepbar.appendChild(el); if(k<list.length-1){var ln=document.createElement('span'); ln.className='link'; el.appendChild(ln);} }); }
 
-  function render(){ for(var i=0;i<N;i++) screens[i].classList.toggle('active', i===active); var ch=chOf(active); Array.prototype.forEach.call(chrail.children,function(d){ d.classList.toggle('cur', d.textContent===ch); }); buildStepper(); prevBtn.disabled=(active===0); if(active>=N-1){ nextBtn.textContent='✓ 완료 · 목록으로'; } else { var nx=active+1; nextBtn.textContent=(chOf(nx)===ch)?('다음 · '+stOf(nx)+' →'):('다음 챕터 '+chOf(nx)+' →'); } fitActive(); }
+  function render(){ for(var i=0;i<N;i++) screens[i].classList.toggle('active', i===active); var ch=chOf(active); Array.prototype.forEach.call(chrail.children,function(d){ d.classList.toggle('cur', d.textContent===ch); }); buildStepper(); prevBtn.disabled=(active===0); prevBtn.textContent=T('prev'); var fh=document.getElementById('footHint'); if(fh)fh.textContent=T('hint'); if(active>=N-1){ nextBtn.textContent=T('finish'); } else { var nx=active+1; nextBtn.textContent=(chOf(nx)===ch)?(T('next')+' · '+stLabel(nx)+' →'):(T('nextCh')+' '+chOf(nx)+' →'); } fitActive(); }
   function show(i){ if(i<0)i=0; if(i>N-1)i=N-1; active=i; render(); }
 
-  function toggleReveal(btn){ var scope=btn.closest('.prob')||btn.closest('.screen'); var t=scope?scope.querySelector('.revealable.solution'):null; if(!t)return; var open=t.classList.toggle('open'); btn.classList.toggle('is-open',open); var sp=btn.querySelector('span'); if(sp)sp.textContent=open?'풀이 숨기기':'풀이 보기'; fitActive(); }
+  function toggleReveal(btn){ var scope=btn.closest('.prob')||btn.closest('.screen'); var t=scope?scope.querySelector('.revealable.solution'):null; if(!t)return; var open=t.classList.toggle('open'); btn.classList.toggle('is-open',open); var sp=btn.querySelector('span'); if(sp)sp.textContent=open?T('hide'):T('show'); fitActive(); }
 
   document.addEventListener('click',function(e){
     var opt=e.target.closest?e.target.closest('.opt'):null;
     if(opt){ var wrap=opt.parentElement; Array.prototype.forEach.call(wrap.children,function(o){o.classList.remove('sel');}); opt.classList.add('sel'); return; }
     var sub=e.target.closest?e.target.closest('.cp-submit'):null;
-    if(sub){ var cq=sub.closest('.cq')||sub.closest('.screen'); var sel=cq.querySelector('.opt.sel'); var fb=cq.querySelector('.cp-fb'); var prof=cq.querySelector('.cp-exp')||cq.querySelector('.cp-prof'); if(!sel){ if(fb){fb.textContent='먼저 보기를 선택하세요'; fb.style.color='var(--gray2)';} return; } var ok=sel.getAttribute('data-correct')==='1'; if(fb){fb.textContent=ok?'✓ 제출됨 — 정답':'제출됨 — 학급 응답에 반영'; fb.style.color='var(--accent)';} Array.prototype.forEach.call(cq.querySelectorAll('.opt'),function(o){if(o.getAttribute('data-correct')==='1')o.classList.add('correct');}); if(prof)prof.classList.add('show'); fitActive(); return; }
+    if(sub){ var cq=sub.closest('.cq')||sub.closest('.screen'); var sel=cq.querySelector('.opt.sel'); var fb=cq.querySelector('.cp-fb'); var prof=cq.querySelector('.cp-exp')||cq.querySelector('.cp-prof'); if(!sel){ if(fb){fb.textContent=T('pickFirst'); fb.style.color='var(--gray2)';} return; } var ok=sel.getAttribute('data-correct')==='1'; if(fb){fb.textContent=ok?T('submitOk'):T('submitNo'); fb.style.color='var(--accent)';} Array.prototype.forEach.call(cq.querySelectorAll('.opt'),function(o){if(o.getAttribute('data-correct')==='1')o.classList.add('correct');}); if(prof)prof.classList.add('show'); fitActive(); return; }
     var chk=e.target.closest?e.target.closest('.pr-check'):null;
-    if(chk){ var pb=chk.closest('.prob')||chk.closest('.screen'); var input=pb.querySelector('.ans-input'); var pf=pb.querySelector('.pr-fb'); if(!input||!pf)return; var ans=parseFloat(input.getAttribute('data-answer')), tol=parseFloat(input.getAttribute('data-tol')||'0.02'); var raw=(input.value||'').replace(/[,\s]/g,''); if(raw===''){pf.textContent='먼저 답을 입력하세요'; pf.className='check-fb pr-fb no'; return;} var v=parseFloat(raw), good=!isNaN(v)&&Math.abs(v-ans)<=Math.abs(ans)*tol; pf.textContent=good?'✓ 정답입니다 — 풀이로 과정 확인':'✗ 다시 — 풀이로 과정 확인'; pf.className='check-fb pr-fb '+(good?'ok':'no'); fitActive(); return; }
+    if(chk){ var pb=chk.closest('.prob')||chk.closest('.screen'); var input=pb.querySelector('.ans-input'); var pf=pb.querySelector('.pr-fb'); if(!input||!pf)return; var ans=parseFloat(input.getAttribute('data-answer')), tol=parseFloat(input.getAttribute('data-tol')||'0.02'); var raw=(input.value||'').replace(/[,\s]/g,''); if(raw===''){pf.textContent=T('typeFirst'); pf.className='check-fb pr-fb no'; return;} var v=parseFloat(raw), good=!isNaN(v)&&Math.abs(v-ans)<=Math.abs(ans)*tol; pf.textContent=good?T('correct'):T('wrong'); pf.className='check-fb pr-fb '+(good?'ok':'no'); fitActive(); return; }
     var rb=e.target.closest?e.target.closest('.reveal-btn'):null; if(rb){ toggleReveal(rb); return; }
   });
   document.addEventListener('keydown',function(e){ if(e.target&&e.target.classList&&e.target.classList.contains('ans-input')){ if(e.key==='Enter'){var b=e.target.closest('.prob').querySelector('.pr-check'); if(b)b.click();} return; } if(e.key==='ArrowRight')show(active+1); else if(e.key==='ArrowLeft')show(active-1); });
@@ -2583,7 +2592,7 @@
   (function(){
     var btn=document.getElementById('langToggle'); if(!btn)return;
     var LABELS={ko:'EN', en:'한국어'};
-    function apply(lang){ var d=document.documentElement; d.classList.remove('lang-ko','lang-en'); d.classList.add('lang-'+lang); btn.textContent=LABELS[lang]; }
+    function apply(lang){ curLang=lang; var d=document.documentElement; d.classList.remove('lang-ko','lang-en'); d.classList.add('lang-'+lang); btn.textContent=LABELS[lang]; render(); }
     var lang; try{ lang=localStorage.getItem('lecture_lang'); }catch(e){ lang=null; }
     if(lang!=='en'&&lang!=='ko') lang='ko';
     apply(lang);

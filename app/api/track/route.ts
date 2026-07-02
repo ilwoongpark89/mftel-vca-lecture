@@ -75,21 +75,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const row = {
-    student_id: sid,
-    week: Number.isFinite(body.week) ? Number(body.week) : 2,
-    kind,
-    slide: Number.isFinite(body.slide) ? Number(body.slide) : null,
-    chapter: clip(body.chapter, 32),
-    section: clip(body.section, 32),
-    question: clip(body.question, 64),
-    prompt: clip(body.prompt, 500),
-    answer: clip(body.answer, 2000),
-    is_correct: typeof body.isCorrect === "boolean" ? body.isCorrect : null,
-    user_agent: clip(req.headers.get("user-agent"), 300),
-  };
-
-  const { error } = await db.from("vca_lecture_events").insert(row);
+  // token-gated RPC 경유 (anon 직접 INSERT 정책 폐쇄 — route 우회 위조/스팸 차단).
+  // answer 는 DB 유니크(first-write-wins)로 서버측 dedupe — 재제출/쌍둥이/리로드 무력화.
+  const { error } = await db.rpc("vca_record_event", {
+    p_token: TOKEN,
+    p_id: sid,
+    p_week: Number.isFinite(body.week) ? Number(body.week) : 2,
+    p_kind: kind,
+    p_slide: Number.isFinite(body.slide) ? Number(body.slide) : null,
+    p_chapter: clip(body.chapter, 32),
+    p_section: clip(body.section, 32),
+    p_question: clip(body.question, 64),
+    p_prompt: clip(body.prompt, 500),
+    p_answer: clip(body.answer, 2000),
+    p_is_correct: typeof body.isCorrect === "boolean" ? body.isCorrect : null,
+    p_user_agent: clip(req.headers.get("user-agent"), 300),
+  });
   if (error) {
     console.error("[track] insert failed:", error.message);
     return NextResponse.json({ ok: false, error: "insert_failed" }, { status: 500 });

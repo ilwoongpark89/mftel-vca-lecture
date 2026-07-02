@@ -212,7 +212,7 @@
 
     <div class="roadmap lang-ko" style="margin-top:14px">
       <div class="rm-item"><span class="rn">4-1</span><span><span class="rt">평가 하네스·회귀</span> <span class="rd">— 골든 데이터셋, 자동화된 회귀 테스트, 프롬프트 변경 전후 점수 추적</span></span></div>
-      <div class="rm-item"><span class="rn">4-2</span><span><span class="rt">LLM-as-Judge</span> <span class="rd">— 모델로 출력을 채점하기, 루브릭 설계, 편향·자기일관성 $\kappa$</span></span></div>
+      <div class="rm-item"><span class="rn">4-2</span><span><span class="rt">LLM-as-Judge</span> <span class="rd">— 모델로 출력을 채점하기, 루브릭 설계, 편향 완화, 일치도 $\alpha$·위치편향 $\text{PB}$</span></span></div>
       <div class="rm-item"><span class="rn">4-3</span><span><span class="rt">환각·프롬프트 인젝션</span> <span class="rd">— 근거 없는 생성, 지시 탈취, 방어적 프롬프트 설계</span></span></div>
       <div class="rm-item"><span class="rn">4-4</span><span><span class="rt">재현성·결정성</span> <span class="rd">— $\text{temperature}=0$, 시드, 버전 고정, 분산 $\sigma^{2}$ 관리</span></span></div>
       <div class="rm-item"><span class="rn">4-5</span><span><span class="rt">벤치마크·데이터 오염</span> <span class="rd">— 학습 데이터 유출이 점수를 부풀리는 방식과 정직한 측정</span></span></div>
@@ -220,7 +220,7 @@
     </div>
     <div class="roadmap lang-en" style="margin-top:14px">
       <div class="rm-item"><span class="rn">4-1</span><span><span class="rt">Eval Harness &amp; Regression</span> <span class="rd">— golden datasets, automated regression tests, score tracking across prompt changes</span></span></div>
-      <div class="rm-item"><span class="rn">4-2</span><span><span class="rt">LLM-as-Judge</span> <span class="rd">— scoring outputs with a model, rubric design, bias &amp; self-consistency $\kappa$</span></span></div>
+      <div class="rm-item"><span class="rn">4-2</span><span><span class="rt">LLM-as-Judge</span> <span class="rd">— scoring outputs with a model, rubric design, bias mitigation, agreement $\alpha$ &amp; position bias $\text{PB}$</span></span></div>
       <div class="rm-item"><span class="rn">4-3</span><span><span class="rt">Hallucination &amp; Injection</span> <span class="rd">— ungrounded generation, instruction hijacking, defensive prompt design</span></span></div>
       <div class="rm-item"><span class="rn">4-4</span><span><span class="rt">Reproducibility &amp; Determinism</span> <span class="rd">— $\text{temperature}=0$, seeds, version pinning, taming the variance $\sigma^{2}$</span></span></div>
       <div class="rm-item"><span class="rn">4-5</span><span><span class="rt">Benchmarks &amp; Contamination</span> <span class="rd">— how training-data leakage inflates scores, and honest measurement</span></span></div>
@@ -228,13 +228,13 @@
     </div>
 
     <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 파트가 끝나면 할 수 있게 된다</h4><ul>
-      <li>골든 데이터셋과 <strong>평가 하네스</strong>를 구축하고, <strong>LLM-as-Judge</strong>의 편향과 자기일관성 $\kappa$를 진단해 채점을 자동화한다.</li>
+      <li>골든 데이터셋과 <strong>평가 하네스</strong>를 구축하고, <strong>LLM-as-Judge</strong>의 편향을 일치도 $\alpha$·위치편향 $\text{PB}$로 진단해 채점을 자동화한다.</li>
       <li><strong>환각과 프롬프트 인젝션</strong>을 실패 모드로 분류하고 방어적 프롬프트로 시스템을 지킨다.</li>
       <li>$\text{temperature}$·시드·버전을 고정해 <strong>재현 가능한 파이프라인</strong>을 만들고, <strong>데이터 오염</strong> 없이 정직하게 벤치마크한다.</li>
       <li>토큰 <strong>비용</strong>과 $p95$ <strong>지연</strong>을 계측하며 <strong>프로덕션 운영</strong>을 설계한다.</li>
     </ul></div>
     <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this part you will be able to</h4><ul>
-      <li>Build a golden dataset and <strong>eval harness</strong>, and automate grading by diagnosing <strong>LLM-as-Judge</strong> bias and self-consistency $\kappa$.</li>
+      <li>Build a golden dataset and <strong>eval harness</strong>, and automate grading by diagnosing <strong>LLM-as-Judge</strong> bias via agreement $\alpha$ and position bias $\text{PB}$.</li>
       <li>Classify <strong>hallucination and prompt injection</strong> as failure modes and defend the system with defensive prompts.</li>
       <li>Pin <strong>temperature, seeds, and versions</strong> for a reproducible pipeline, and benchmark honestly without <strong>data contamination</strong>.</li>
       <li>Instrument token <strong>cost</strong> and $p95$ <strong>latency</strong>, and design <strong>production operations</strong>.</li>
@@ -476,7 +476,7 @@
         <button class="opt">③ 판정 불가 — 골든셋으로는 알 수 없다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 델타 $\Delta = S(v_{new})-S(v_{old}) = 0.72-0.78 = -0.06 < 0$이므로 회귀다. 오프라인 eval이 배포 게이트 역할을 하므로 이 버전은 사용자 노출 전에 차단된다. <span class="dim">오답 ①·③: ①점수 하락은 안정화가 아니라 회귀이고, ③골든셋+자동채점이 바로 이 판정을 숫자로 가능하게 한다.</span> <span class="agg">학급 n=41 · ① 5 · ② 32 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 델타 $\Delta = S(v_{new})-S(v_{old}) = 0.72-0.78 = -0.06 < 0$이므로 회귀다. 오프라인 eval이 배포 게이트 역할을 하므로 이 버전은 사용자 노출 전에 차단된다. <span class="dim">오답 ①·③: ①점수 하락은 안정화가 아니라 회귀이고, ③골든셋+자동채점이 바로 이 판정을 숫자로 가능하게 한다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>After changing the prompt $v_{old}\!\to\!v_{new}$, the golden-set mean went $S(v_{old})=0.78 \to S(v_{new})=0.72$. What is this?</p>
@@ -486,7 +486,7 @@
         <button class="opt">③ undecidable — a golden set cannot tell</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the delta $\Delta = S(v_{new})-S(v_{old}) = 0.72-0.78 = -0.06 < 0$, a regression. Since the offline eval acts as a deploy gate, this version is blocked before user exposure. <span class="dim">Wrong ①·③: ① a score drop is a regression, not stabilization; ③ the golden set plus auto-scoring is exactly what makes this verdict a number.</span> <span class="agg">class n=41 · ① 5 · ② 32 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the delta $\Delta = S(v_{new})-S(v_{old}) = 0.72-0.78 = -0.06 < 0$, a regression. Since the offline eval acts as a deploy gate, this version is blocked before user exposure. <span class="dim">Wrong ①·③: ① a score drop is a regression, not stabilization; ③ the golden set plus auto-scoring is exactly what makes this verdict a number.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>$N=25$ 골든셋(이진 채점)에서 95% CI 반폭은 약 $\pm0.20$이다. 관측된 $\Delta=+0.05$를 어떻게 해석해야 하는가?</p>
@@ -496,7 +496,7 @@
         <button class="opt">③ $\Delta>0$이면 표본 크기와 무관하게 항상 유의하다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 관측 델타 $0.05$가 신뢰구간 반폭 $0.20$보다 작으므로, 이 향상은 샘플링 노이즈로도 충분히 설명된다. $N$을 키우면(오차 $\propto 1/\sqrt{N}$) 반폭이 줄어 유의성을 판정할 수 있다. <span class="dim">오답 ①·③: ①작은 표본의 $\Delta$는 착시일 수 있고, ③유의성은 항상 표본 크기(신뢰구간)에 의존한다.</span> <span class="agg">학급 n=41 · ① 8 · ② 28 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 관측 델타 $0.05$가 신뢰구간 반폭 $0.20$보다 작으므로, 이 향상은 샘플링 노이즈로도 충분히 설명된다. $N$을 키우면(오차 $\propto 1/\sqrt{N}$) 반폭이 줄어 유의성을 판정할 수 있다. <span class="dim">오답 ①·③: ①작은 표본의 $\Delta$는 착시일 수 있고, ③유의성은 항상 표본 크기(신뢰구간)에 의존한다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>On an $N=25$ golden set (binary scoring), the 95% CI half-width is about $\pm0.20$. How should an observed $\Delta=+0.05$ be read?</p>
@@ -506,7 +506,7 @@
         <button class="opt">③ any $\Delta>0$ is always significant regardless of sample size</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the observed $0.05$ is below the $0.20$ CI half-width, so this "gain" is fully explainable by sampling noise. Increasing $N$ (error $\propto 1/\sqrt{N}$) shrinks the width and lets you decide significance. <span class="dim">Wrong ①·③: ① a small-sample $\Delta$ can be an illusion; ③ significance always depends on sample size (the confidence interval).</span> <span class="agg">class n=41 · ① 8 · ② 28 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the observed $0.05$ is below the $0.20$ CI half-width, so this "gain" is fully explainable by sampling noise. Increasing $N$ (error $\propto 1/\sqrt{N}$) shrinks the width and lets you decide significance. <span class="dim">Wrong ①·③: ① a small-sample $\Delta$ can be an illusion; ③ significance always depends on sample size (the confidence interval).</span></div>
     </div>
   </section>
 
@@ -542,28 +542,28 @@
     </div>
     <div class="prob lang-ko">
       <div class="prob-num">연습 2 · 응용 · 신뢰구간 반폭</div>
-      <p class="prob-statement">이진 채점, 최악 가정 $p=0.5$인 골든셋의 문항수가 $N=100$이다. 95% 신뢰구간 <strong>반폭</strong> $= 1.96\sqrt{0.25/N}$을 소수 둘째 자리까지 구하시오.</p>
-      <div class="given"><span class="chip">$N=100$</span><span class="chip">$p(1-p)=0.25$</span><span class="chip">$z=1.96$</span></div>
+      <p class="prob-statement">이진 채점, 최악 가정 $p=0.5$인 골든셋의 문항수가 $N=225$이다. 95% 신뢰구간 <strong>반폭</strong> $= 1.96\sqrt{0.25/N}$을 소수 셋째 자리까지 구하시오.</p>
+      <div class="given"><span class="chip">$N=225$</span><span class="chip">$p(1-p)=0.25$</span><span class="chip">$z=1.96$</span></div>
       <div class="find"><b>구할 것:</b> 95% CI 반폭 (점수)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.098" data-tol="0.05"/><span class="ans-unit">점수</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.065" data-tol="0.05"/><span class="ans-unit">점수</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
       <div class="revealable solution">
-        <div class="dstep2"><div class="step-label">Step 1 · 표준오차</div>$$ \mathrm{SE}=\sqrt{\frac{0.25}{100}}=\sqrt{0.0025}=0.05 $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · 반폭</div>$$ 1.96 \times 0.05 = 0.098 \approx 0.10 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ \text{반폭} \approx 0.10\ \text{점수} $$</div><b>정답:</b> $N=100$이면 참값이 관측 점수 $\pm 0.10$ 안에 있을 확률이 95% — $\Delta$가 이보다 커야 유의.</div>
+        <div class="dstep2"><div class="step-label">Step 1 · 표준오차</div>$$ \mathrm{SE}=\sqrt{\frac{0.25}{225}}=\sqrt{0.001111}\approx 0.0333 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 반폭</div>$$ 1.96 \times 0.0333 \approx 0.065 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{반폭} \approx 0.065\ \text{점수} $$</div><b>정답:</b> $N=225$이면 참값이 관측 점수 $\pm 0.065$ 안에 있을 확률이 95% — $\Delta$가 이보다 커야 유의.</div>
       </div>
     </div>
     <div class="prob lang-en">
       <div class="prob-num">Practice 2 · Applied · CI half-width</div>
-      <p class="prob-statement">A golden set (binary scoring, worst-case $p=0.5$) has $N=100$ items. Find the 95% confidence-interval <strong>half-width</strong> $= 1.96\sqrt{0.25/N}$ to two decimals.</p>
-      <div class="given"><span class="chip">$N=100$</span><span class="chip">$p(1-p)=0.25$</span><span class="chip">$z=1.96$</span></div>
+      <p class="prob-statement">A golden set (binary scoring, worst-case $p=0.5$) has $N=225$ items. Find the 95% confidence-interval <strong>half-width</strong> $= 1.96\sqrt{0.25/N}$ to three decimals.</p>
+      <div class="given"><span class="chip">$N=225$</span><span class="chip">$p(1-p)=0.25$</span><span class="chip">$z=1.96$</span></div>
       <div class="find"><b>Find:</b> 95% CI half-width (score)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.098" data-tol="0.05"/><span class="ans-unit">score</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.065" data-tol="0.05"/><span class="ans-unit">score</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
       <div class="revealable solution">
-        <div class="dstep2"><div class="step-label">Step 1 · standard error</div>$$ \mathrm{SE}=\sqrt{\frac{0.25}{100}}=\sqrt{0.0025}=0.05 $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · half-width</div>$$ 1.96 \times 0.05 = 0.098 \approx 0.10 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ \text{half-width} \approx 0.10\ \text{score} $$</div><b>Answer:</b> at $N=100$ the true value lies within $\pm 0.10$ of the observed score with 95% confidence — $\Delta$ must exceed this to be significant.</div>
+        <div class="dstep2"><div class="step-label">Step 1 · standard error</div>$$ \mathrm{SE}=\sqrt{\frac{0.25}{225}}=\sqrt{0.001111}\approx 0.0333 $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · half-width</div>$$ 1.96 \times 0.0333 \approx 0.065 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \text{half-width} \approx 0.065\ \text{score} $$</div><b>Answer:</b> at $N=225$ the true value lies within $\pm 0.065$ of the observed score with 95% confidence — $\Delta$ must exceed this to be significant.</div>
       </div>
     </div>
   </section>
@@ -617,7 +617,7 @@
     <h1 class="stage-h lang-ko">LLM-as-Judge — 모델이 모델을 채점하다</h1>
     <h1 class="stage-h lang-en">LLM-as-Judge — a Model Grades a Model</h1>
     <div class="analogy lang-ko"><span class="ic">⚖️</span><div class="tx"><b>직관</b> — 논술 답안 수천 장을 사람이 다 읽으려면 몇 주가 걸린다. 그래서 "채점 기준을 아는 <b>또 다른 심사위원</b>"에게 맡긴다 — 여기서는 그 심사위원이 <b>LLM</b>이다. 빠르고 값싸며 인간 선호와 상관이 높지만, 심사위원에게는 <b>버릇(편향)</b>이 있다: 앞에 놓인 답을 선호하고, 긴 답을 선호하고, 자기 문체를 닮은 답을 선호한다. <span class="src">(출처: Zheng et al. 2023, "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", NeurIPS Datasets &amp; Benchmarks)</span></div></div>
-    <div class="analogy lang-en"><span class="ic">⚖️</span><div class="tx"><b>Intuition</b> — Reading thousands of essay answers by hand takes parts, so we hand them to <b>another judge who knows the rubric</b> — here that judge is an <b>LLM</b>. It is fast, cheap, and correlates highly with human preference, yet the judge has <b>habits (biases)</b>: it favors the answer shown first, favors longer answers, and favors answers that resemble its own style. <span class="src">(Source: Zheng et al. 2023, "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", NeurIPS Datasets &amp; Benchmarks)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">⚖️</span><div class="tx"><b>Intuition</b> — Reading thousands of essay answers by hand takes weeks, so we hand them to <b>another judge who knows the rubric</b> — here that judge is an <b>LLM</b>. It is fast, cheap, and correlates highly with human preference, yet the judge has <b>habits (biases)</b>: it favors the answer shown first, favors longer answers, and favors answers that resemble its own style. <span class="src">(Source: Zheng et al. 2023, "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", NeurIPS Datasets &amp; Benchmarks)</span></div></div>
     <div class="two lang-ko">
       <div class="col2">
         <p class="lede"><strong>LLM-as-Judge</strong>는 생성 모델의 출력을 <strong>또 다른 LLM</strong>이 채점·비교하게 하는 자동 평가법입니다. 두 가지 기본 형태가 있습니다 — <strong>단일 점수(single scoring)</strong>: 답 하나에 rubric 기반 점수를 매김. <strong>쌍대비교(pairwise)</strong>: 답 A·B 중 어느 쪽이 나은지 판정. Zheng et al.(2023)은 이 판정이 <strong>인간 다수결과 약 80%대</strong>로 일치함을 보고했으나(대표값, 데이터셋 의존), 동시에 <strong>체계적 편향</strong>을 정량화했습니다.</p>
@@ -860,7 +860,7 @@
         <button class="opt">③ 자기선호(self-preference)</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 내용이 동일한데 <strong>제시 순서</strong>에 따라 판정이 뒤집히면 위치편향이다. 대응은 순서 뒤섞기 후 양쪽 합의(불일치 시 무승부). <span class="dim">오답 ②·③: ②는 답 길이에, ③은 judge 자기 계열 여부에 반응하는 편향이다.</span> <span class="agg">학급 n=41 · ① 30 · ② 7 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ①</b> — 내용이 동일한데 <strong>제시 순서</strong>에 따라 판정이 뒤집히면 위치편향이다. 대응은 순서 뒤섞기 후 양쪽 합의(불일치 시 무승부). <span class="dim">오답 ②·③: ②는 답 길이에, ③은 judge 자기 계열 여부에 반응하는 편향이다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Which bias is it when <strong>swapping order alone flips the winner</strong> in pairwise comparison?</p>
@@ -870,7 +870,7 @@
         <button class="opt">③ self-preference</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — when content is identical but the verdict flips with <strong>presentation order</strong>, that is position bias. Remedy: swap order and take both-order consensus (tie on disagreement). <span class="dim">Wrong ②·③: ② responds to answer length; ③ responds to whether the answer is the judge's own family.</span> <span class="agg">class n=41 · ① 30 · ② 7 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ①</b> — when content is identical but the verdict flips with <strong>presentation order</strong>, that is position bias. Remedy: swap order and take both-order consensus (tie on disagreement). <span class="dim">Wrong ②·③: ② responds to answer length; ③ responds to whether the answer is the judge's own family.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>LLM-as-Judge에 대해 <strong>가장 정확한</strong> 진술은?</p>
@@ -880,7 +880,7 @@
         <button class="opt">③ 긴 답을 선호하는 것은 편향이 아니라 항상 옳은 신호다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — Zheng et al.(2023)은 강한 judge가 인간 다수결을 <strong>근사</strong>하되 위치·장황함·자기선호 편향을 가지며, 순서 뒤섞기·rubric 명세·쌍대비교로 완화해야 함을 보였다. <span class="dim">오답 ①·③: ①judge는 편향이 있고 완전 대체가 아니며, ③길이 선호는 내용이 같을 때 편향(장황함편향)이다.</span> <span class="agg">학급 n=41 · ① 3 · ② 34 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — Zheng et al.(2023)은 강한 judge가 인간 다수결을 <strong>근사</strong>하되 위치·장황함·자기선호 편향을 가지며, 순서 뒤섞기·rubric 명세·쌍대비교로 완화해야 함을 보였다. <span class="dim">오답 ①·③: ①judge는 편향이 있고 완전 대체가 아니며, ③길이 선호는 내용이 같을 때 편향(장황함편향)이다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Which statement about LLM-as-Judge is <strong>most accurate</strong>?</p>
@@ -890,7 +890,7 @@
         <button class="opt">③ preferring longer answers is not a bias but always a correct signal</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — Zheng et al. (2023) showed a strong judge <strong>approximates</strong> the human majority yet carries position, verbosity, and self-preference biases, requiring order-swap, rubric spec, and pairwise mitigation. <span class="dim">Wrong ①·③: ① the judge is biased and not a full replacement; ③ preferring length at equal content is the verbosity bias.</span> <span class="agg">class n=41 · ① 3 · ② 34 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — Zheng et al. (2023) showed a strong judge <strong>approximates</strong> the human majority yet carries position, verbosity, and self-preference biases, requiring order-swap, rubric spec, and pairwise mitigation. <span class="dim">Wrong ①·③: ① the judge is biased and not a full replacement; ③ preferring length at equal content is the verbosity bias.</span></div>
     </div>
   </section>
 
@@ -926,28 +926,28 @@
     </div>
     <div class="prob lang-ko">
       <div class="prob-num">연습 2 · 응용 · 완화 후 일치도</div>
-      <p class="prob-statement">간이 모형 $\alpha=\alpha_0+s\,g_s+w\,g_r$에서 $\alpha_0=0.62$, 순서 뒤섞기 켬($s=1$, $g_s=0.08$), rubric 가중치 $w=0.5$, $g_r=0.10$이다. 상한(0.95) 미만이라고 가정할 때 <strong>완화 후 일치도 $\alpha$</strong>를 소수로 구하시오.</p>
-      <div class="given"><span class="chip">$\alpha_0=0.62$</span><span class="chip">$s=1,\ g_s=0.08$</span><span class="chip">$w=0.5,\ g_r=0.10$</span></div>
+      <p class="prob-statement">간이 모형 $\alpha=\alpha_0+s\,g_s+w\,g_r$에서 $\alpha_0=0.62$, 순서 뒤섞기 켬($s=1$, $g_s=0.08$), rubric 가중치 $w=0.8$, $g_r=0.10$이다. 상한(0.95) 미만이라고 가정할 때 <strong>완화 후 일치도 $\alpha$</strong>를 소수로 구하시오.</p>
+      <div class="given"><span class="chip">$\alpha_0=0.62$</span><span class="chip">$s=1,\ g_s=0.08$</span><span class="chip">$w=0.8,\ g_r=0.10$</span></div>
       <div class="find"><b>구할 것:</b> $\alpha$ (소수)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.75" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.78" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
       <div class="revealable solution">
-        <div class="dstep2"><div class="step-label">Step 1 · 항별 대입</div>$$ \alpha = 0.62 + (1)(0.08) + (0.5)(0.10) $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · 합산</div>$$ \alpha = 0.62 + 0.08 + 0.05 = 0.75 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ \alpha = 0.75 $$</div><b>정답:</b> 뒤섞기 이득 +0.08, rubric 이득 +0.05로 기저 0.62 → 0.75. 수치는 UNVERIFIED 개략치.</div>
+        <div class="dstep2"><div class="step-label">Step 1 · 항별 대입</div>$$ \alpha = 0.62 + (1)(0.08) + (0.8)(0.10) $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 합산</div>$$ \alpha = 0.62 + 0.08 + 0.08 = 0.78 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \alpha = 0.78 $$</div><b>정답:</b> 뒤섞기 이득 +0.08, rubric 이득 +0.08로 기저 0.62 → 0.78. 수치는 UNVERIFIED 개략치.</div>
       </div>
     </div>
     <div class="prob lang-en">
       <div class="prob-num">Practice 2 · Applied · agreement after mitigation</div>
-      <p class="prob-statement">In the toy model $\alpha=\alpha_0+s\,g_s+w\,g_r$, take $\alpha_0=0.62$, order-swap on ($s=1$, $g_s=0.08$), rubric weight $w=0.5$, $g_r=0.10$. Assuming it stays below the 0.95 cap, find the <strong>agreement $\alpha$ after mitigation</strong> as a decimal.</p>
-      <div class="given"><span class="chip">$\alpha_0=0.62$</span><span class="chip">$s=1,\ g_s=0.08$</span><span class="chip">$w=0.5,\ g_r=0.10$</span></div>
+      <p class="prob-statement">In the toy model $\alpha=\alpha_0+s\,g_s+w\,g_r$, take $\alpha_0=0.62$, order-swap on ($s=1$, $g_s=0.08$), rubric weight $w=0.8$, $g_r=0.10$. Assuming it stays below the 0.95 cap, find the <strong>agreement $\alpha$ after mitigation</strong> as a decimal.</p>
+      <div class="given"><span class="chip">$\alpha_0=0.62$</span><span class="chip">$s=1,\ g_s=0.08$</span><span class="chip">$w=0.8,\ g_r=0.10$</span></div>
       <div class="find"><b>Find:</b> $\alpha$ (decimal)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.75" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.78" data-tol="0.02"/><span class="ans-unit"></span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
       <div class="revealable solution">
-        <div class="dstep2"><div class="step-label">Step 1 · substitute terms</div>$$ \alpha = 0.62 + (1)(0.08) + (0.5)(0.10) $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · sum</div>$$ \alpha = 0.62 + 0.08 + 0.05 = 0.75 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ \alpha = 0.75 $$</div><b>Answer:</b> swap gain +0.08, rubric gain +0.05 lift baseline 0.62 → 0.75. Figures are UNVERIFIED illustrative.</div>
+        <div class="dstep2"><div class="step-label">Step 1 · substitute terms</div>$$ \alpha = 0.62 + (1)(0.08) + (0.8)(0.10) $$</div>
+        <div class="dstep2"><div class="step-label">Step 2 · sum</div>$$ \alpha = 0.62 + 0.08 + 0.08 = 0.78 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ \alpha = 0.78 $$</div><b>Answer:</b> swap gain +0.08, rubric gain +0.08 lift baseline 0.62 → 0.78. Figures are UNVERIFIED illustrative.</div>
       </div>
     </div>
   </section>
@@ -1234,7 +1234,7 @@
         <button class="opt">③ 사용자가 질문을 너무 길게 하기 때문</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 모델은 다음 토큰 우도를 최대화하도록 학습되어 <strong>유창함(확률)이 곧 진실이 아님</strong>(보정 실패). 그래서 자신감과 정확도가 분리된다. <span class="dim">오답 ①·③: ①데이터 양이 아니라 목적함수 문제이며, ③질문 길이는 근본 원인이 아니다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 모델은 다음 토큰 우도를 최대화하도록 학습되어 <strong>유창함(확률)이 곧 진실이 아님</strong>(보정 실패). 그래서 자신감과 정확도가 분리된다. <span class="dim">오답 ①·③: ①데이터 양이 아니라 목적함수 문제이며, ③질문 길이는 근본 원인이 아니다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>What is the <strong>most fundamental cause</strong> of LLM hallucination?</p>
@@ -1244,7 +1244,7 @@
         <button class="opt">③ users asking questions that are too long</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the model is trained to maximize next-token likelihood, so <strong>fluency (probability) is not truth</strong> (miscalibration). Hence confidence and accuracy decouple. <span class="dim">Wrong ①·③: ① it is the objective, not data volume; ③ question length is not the root cause.</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — the model is trained to maximize next-token likelihood, so <strong>fluency (probability) is not truth</strong> (miscalibration). Hence confidence and accuracy decouple. <span class="dim">Wrong ①·③: ① it is the objective, not data volume; ③ question length is not the root cause.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span><strong>간접 프롬프트 인젝션</strong>(Greshake 2023)에 가장 효과적인 <strong>구조적 완화</strong>는?</p>
@@ -1254,7 +1254,7 @@
         <button class="opt" data-correct="1">③ 외부 문서를 데이터로만 취급(격리) + 도구 권한 최소화 + 승인 게이트</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ③</b> — 근본 원인은 지시/데이터의 신뢰경계 부재이므로, 외부 콘텐츠를 <strong>데이터로 격리</strong>하고 <strong>권한을 최소화</strong>하며 위험한 실행에 <strong>사람 승인</strong>을 붙이는 다층 방어가 핵심이다. <span class="dim">오답 ①·②: ①온도는 무작위성일 뿐 인젝션과 무관하고, ②긴 시스템 프롬프트만으론 흉내·우회로 뚫린다.</span> <span class="agg">학급 n=41 · ① 5 · ② 9 · ③ 27</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ③</b> — 근본 원인은 지시/데이터의 신뢰경계 부재이므로, 외부 콘텐츠를 <strong>데이터로 격리</strong>하고 <strong>권한을 최소화</strong>하며 위험한 실행에 <strong>사람 승인</strong>을 붙이는 다층 방어가 핵심이다. <span class="dim">오답 ①·②: ①온도는 무작위성일 뿐 인젝션과 무관하고, ②긴 시스템 프롬프트만으론 흉내·우회로 뚫린다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What is the most effective <strong>structural mitigation</strong> for <strong>indirect prompt injection</strong> (Greshake 2023)?</p>
@@ -1264,7 +1264,7 @@
         <button class="opt" data-correct="1">③ treat external documents as data only (isolate) + minimize tool privileges + approval gate</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ③</b> — the root cause is the missing trust boundary between instruction and data, so the key is defense-in-depth: <strong>isolate external content as data</strong>, <strong>minimize privileges</strong>, and require <strong>human approval</strong> for risky actions. <span class="dim">Wrong ①·②: ① temperature is only randomness, unrelated to injection; ② a longer system prompt alone is bypassed by mimicry.</span> <span class="agg">class n=41 · ① 5 · ② 9 · ③ 27</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ③</b> — the root cause is the missing trust boundary between instruction and data, so the key is defense-in-depth: <strong>isolate external content as data</strong>, <strong>minimize privileges</strong>, and require <strong>human approval</strong> for risky actions. <span class="dim">Wrong ①·②: ① temperature is only randomness, unrelated to injection; ② a longer system prompt alone is bypassed by mimicry.</span></div>
     </div>
   </section>
 
@@ -1606,7 +1606,7 @@
         <button class="opt">③ 예 — seed만 고정하면 하드웨어와 무관하게 동일하다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $T=0$은 각 스텝에서 argmax를 고르지만, 로짓 계산 자체가 GPU reduction 순서·배치 크기·MoE 라우팅에 따라 마지막 자리에서 흔들려 상위 두 토큰이 뒤집힐 수 있다. <span class="dim">오답 ①·③: ①이론상 argmax라도 로짓의 부동소수 오차가 순위를 뒤집는다; ③seed는 샘플링 난수만 통제하고 FP·배치·MoE는 통제하지 못한다.</span> <span class="agg">학급 n=41 · ① 9 · ② 28 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — $T=0$은 각 스텝에서 argmax를 고르지만, 로짓 계산 자체가 GPU reduction 순서·배치 크기·MoE 라우팅에 따라 마지막 자리에서 흔들려 상위 두 토큰이 뒤집힐 수 있다. <span class="dim">오답 ①·③: ①이론상 argmax라도 로짓의 부동소수 오차가 순위를 뒤집는다; ③seed는 샘플링 난수만 통제하고 FP·배치·MoE는 통제하지 못한다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Does setting temperature $=0$ always make LLM output perfectly identical?</p>
@@ -1616,7 +1616,7 @@
         <button class="opt">③ Yes — fixing the seed alone makes it identical regardless of hardware</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — $T=0$ picks the argmax at each step, but logit computation itself jitters in its last digits with GPU reduction order, batch size, and MoE routing, so the top two tokens can flip. <span class="dim">Wrong ①·③: ① even an ideal argmax is undone by FP error in the logits flipping the ranking; ③ the seed controls only sampling RNG, not FP/batch/MoE.</span> <span class="agg">class n=41 · ① 9 · ② 28 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — $T=0$ picks the argmax at each step, but logit computation itself jitters in its last digits with GPU reduction order, batch size, and MoE routing, so the top two tokens can flip. <span class="dim">Wrong ①·③: ① even an ideal argmax is undone by FP error in the logits flipping the ranking; ③ the seed controls only sampling RNG, not FP/batch/MoE.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>재현성을 확보하기 위한 <strong>운영상 조치</strong>로 가장 적절한 것은?</p>
@@ -1626,7 +1626,7 @@
         <button class="opt">③ temperature만 0으로 두면 다른 기록은 필요 없다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 재현성은 알고리즘이 아니라 규율에서 나온다. 프롬프트·파라미터($T$·top_p·max_tokens)·seed·모델 버전·system_fingerprint를 함께 기록·고정해야 나중에 같은 조건을 복원할 수 있다. <span class="dim">오답 ①·③: ①버전 자동 갱신은 fingerprint를 바꿔 재현을 깬다; ③$T=0$만으로는 부족하며 로그·핀이 없으면 조건 복원이 불가능하다.</span> <span class="agg">학급 n=41 · ① 3 · ② 33 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 재현성은 알고리즘이 아니라 규율에서 나온다. 프롬프트·파라미터($T$·top_p·max_tokens)·seed·모델 버전·system_fingerprint를 함께 기록·고정해야 나중에 같은 조건을 복원할 수 있다. <span class="dim">오답 ①·③: ①버전 자동 갱신은 fingerprint를 바꿔 재현을 깬다; ③$T=0$만으로는 부족하며 로그·핀이 없으면 조건 복원이 불가능하다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Which is the most appropriate <strong>operational measure</strong> to secure reproducibility?</p>
@@ -1636,7 +1636,7 @@
         <button class="opt">③ Just set temperature to 0; no other records are needed</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — reproducibility comes from discipline, not the algorithm. Recording and pinning the prompt, parameters ($T$, top_p, max_tokens), seed, model version and system_fingerprint lets you later restore the same conditions. <span class="dim">Wrong ①·③: ① auto-updating versions changes the fingerprint and breaks reproduction; ③ $T=0$ alone is insufficient — without logging/pinning the conditions cannot be restored.</span> <span class="agg">class n=41 · ① 3 · ② 33 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — reproducibility comes from discipline, not the algorithm. Recording and pinning the prompt, parameters ($T$, top_p, max_tokens), seed, model version and system_fingerprint lets you later restore the same conditions. <span class="dim">Wrong ①·③: ① auto-updating versions changes the fingerprint and breaks reproduction; ③ $T=0$ alone is insufficient — without logging/pinning the conditions cannot be restored.</span></div>
     </div>
   </section>
 
@@ -1672,28 +1672,28 @@
     </div>
     <div class="prob lang-ko">
       <div class="prob-num">연습 2 · 응용 · 반절 지점 호출 수</div>
-      <p class="prob-statement">$\varepsilon=0.01$일 때, <strong>적어도 한 번 불일치할 확률이 $P\ge 0.5$</strong>가 되는 최소 호출 수 $n$을 근사식 $n\approx \dfrac{\ln 2}{\varepsilon}$로 추정하시오. (정수로 반올림, $\ln 2\approx0.693$)</p>
-      <div class="given"><span class="chip">$\varepsilon=0.01$</span><span class="chip">$\ln 2\approx0.693$</span><span class="chip">$n\approx \ln 2/\varepsilon$</span></div>
+      <p class="prob-statement">$\varepsilon=0.005$일 때, <strong>적어도 한 번 불일치할 확률이 $P\ge 0.5$</strong>가 되는 최소 호출 수 $n$을 근사식 $n\approx \dfrac{\ln 2}{\varepsilon}$로 추정하시오. (정수로 반올림, $\ln 2\approx0.693$)</p>
+      <div class="given"><span class="chip">$\varepsilon=0.005$</span><span class="chip">$\ln 2\approx0.693$</span><span class="chip">$n\approx \ln 2/\varepsilon$</span></div>
       <div class="find"><b>구할 것:</b> $n$ (회)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="69" data-tol="0.03"/><span class="ans-unit">회</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="139" data-tol="0.03"/><span class="ans-unit">회</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>풀이 보기</span><span class="caret">▾</span></button>
       <div class="revealable solution">
         <div class="dstep2"><div class="step-label">Step 1 · 조건 설정</div>$$ 1-(1-\varepsilon)^n \ge 0.5 \ \Rightarrow\ (1-\varepsilon)^n \le 0.5 $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · 로그 근사</div>$$ n \ge \frac{\ln 2}{-\ln(1-\varepsilon)} \approx \frac{\ln 2}{\varepsilon} = \frac{0.693}{0.01} \approx 69 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ n \approx 69\ \text{회} $$</div><b>정답:</b> 약 69회 호출이면 절반의 확률로 최소 한 번 다른 출력. $\varepsilon$이 작을수록 $-\ln(1-\varepsilon)\approx\varepsilon$ 근사가 정확.</div>
+        <div class="dstep2"><div class="step-label">Step 2 · 로그 근사</div>$$ n \ge \frac{\ln 2}{-\ln(1-\varepsilon)} \approx \frac{\ln 2}{\varepsilon} = \frac{0.693}{0.005} \approx 139 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ n \approx 139\ \text{회} $$</div><b>정답:</b> 약 139회 호출이면 절반의 확률로 최소 한 번 다른 출력. $\varepsilon$이 작을수록 $-\ln(1-\varepsilon)\approx\varepsilon$ 근사가 정확.</div>
       </div>
     </div>
     <div class="prob lang-en">
       <div class="prob-num">Practice 2 · Applied · half-way call count</div>
-      <p class="prob-statement">For $\varepsilon=0.01$, estimate the minimum number of calls $n$ at which <strong>the probability of at least one mismatch reaches $P\ge 0.5$</strong>, using $n\approx \dfrac{\ln 2}{\varepsilon}$. (round to an integer, $\ln 2\approx0.693$)</p>
-      <div class="given"><span class="chip">$\varepsilon=0.01$</span><span class="chip">$\ln 2\approx0.693$</span><span class="chip">$n\approx \ln 2/\varepsilon$</span></div>
+      <p class="prob-statement">For $\varepsilon=0.005$, estimate the minimum number of calls $n$ at which <strong>the probability of at least one mismatch reaches $P\ge 0.5$</strong>, using $n\approx \dfrac{\ln 2}{\varepsilon}$. (round to an integer, $\ln 2\approx0.693$)</p>
+      <div class="given"><span class="chip">$\varepsilon=0.005$</span><span class="chip">$\ln 2\approx0.693$</span><span class="chip">$n\approx \ln 2/\varepsilon$</span></div>
       <div class="find"><b>Find:</b> $n$ (calls)</div>
-      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="69" data-tol="0.03"/><span class="ans-unit">calls</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
+      <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="139" data-tol="0.03"/><span class="ans-unit">calls</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
       <button class="reveal-btn"><span>Show solution</span><span class="caret">▾</span></button>
       <div class="revealable solution">
         <div class="dstep2"><div class="step-label">Step 1 · set condition</div>$$ 1-(1-\varepsilon)^n \ge 0.5 \ \Rightarrow\ (1-\varepsilon)^n \le 0.5 $$</div>
-        <div class="dstep2"><div class="step-label">Step 2 · log approximation</div>$$ n \ge \frac{\ln 2}{-\ln(1-\varepsilon)} \approx \frac{\ln 2}{\varepsilon} = \frac{0.693}{0.01} \approx 69 $$</div>
-        <div class="ans-final"><div class="ans-eq">$$ n \approx 69\ \text{calls} $$</div><b>Answer:</b> about 69 calls give a 50% chance of at least one differing output. The smaller $\varepsilon$, the more accurate the $-\ln(1-\varepsilon)\approx\varepsilon$ approximation.</div>
+        <div class="dstep2"><div class="step-label">Step 2 · log approximation</div>$$ n \ge \frac{\ln 2}{-\ln(1-\varepsilon)} \approx \frac{\ln 2}{\varepsilon} = \frac{0.693}{0.005} \approx 139 $$</div>
+        <div class="ans-final"><div class="ans-eq">$$ n \approx 139\ \text{calls} $$</div><b>Answer:</b> about 139 calls give a 50% chance of at least one differing output. The smaller $\varepsilon$, the more accurate the $-\ln(1-\varepsilon)\approx\varepsilon$ approximation.</div>
       </div>
     </div>
   </section>
@@ -1768,7 +1768,7 @@
           <div class="term"><b>HELM</b> 다지표 통합 평가 프레임워크 (Liang et al. 2022)</div>
           <div class="term"><b>canary string</b> 유출 탐지용 고유 표식 문자열</div>
         </div>
-        <div class="callout key"><div class="ct">핵심</div>벤치 점수는 <strong>능력의 대리 지표(proxy)</strong>일 뿐입니다. 오염이 있으면 $S_{obs}$가 부풀려져 <strong>순위와 신뢰가 왜곡</strong>됩니다. "높은 점수 ≠ 실사용 성능"을 항상 의심하세요.</div>
+        <div class="callout key"><div class="ct">핵심</div>벤치 점수는 <strong>능력의 대리 지표(proxy)</strong>일 뿐입니다. 오염이 있으면 $S_{obs}$가 부풀려져 <strong>순위와 신뢰가 왜곡</strong>됩니다. "높은 점수 = 실사용 성능"을 항상 의심하세요.</div>
       </div>
     </div>
     <div class="two lang-en">
@@ -1791,7 +1791,7 @@
           <div class="term"><b>HELM</b> multi-metric holistic evaluation framework (Liang et al. 2022)</div>
           <div class="term"><b>canary string</b> unique marker for leak detection</div>
         </div>
-        <div class="callout key"><div class="ct">Key</div>A benchmark score is only a <strong>proxy for ability</strong>. Contamination inflates $S_{obs}$, distorting <strong>rankings and trust</strong>. Always doubt "high score $\neq$ real-world performance."</div>
+        <div class="callout key"><div class="ct">Key</div>A benchmark score is only a <strong>proxy for ability</strong>. Contamination inflates $S_{obs}$, distorting <strong>rankings and trust</strong>. Always doubt "high score = real-world performance."</div>
       </div>
     </div>
   </section>
@@ -1822,28 +1822,28 @@
   <section class="screen" data-ch="4-5" data-chtitle="벤치마크와 데이터 오염" data-stage="읽을거리">
     <div class="eyebrow lang-ko">4-5 · 읽을거리 · Reading</div>
     <div class="eyebrow lang-en">4-5 · Reading</div>
-    <h1 class="stage-h lang-ko">HELM, canary string, 그리고 벤치마크 게이밍</h1>
-    <h1 class="stage-h lang-en">HELM, Canary Strings, and Benchmark Gaming</h1>
+    <h1 class="stage-h lang-ko">오염을 어떻게 잡아내나 — canary string, n-gram, 게이밍</h1>
+    <h1 class="stage-h lang-en">Catching Contamination — Canary Strings, N-grams, and Gaming</h1>
     <div class="two lang-ko">
       <div class="col2 reading">
-        <p>2022년 스탠퍼드의 <strong>Liang et al.</strong>는 <strong>HELM(Holistic Evaluation of Language Models)</strong>를 제안하며, 단일 정확도가 아니라 정확도·강건성·공정성·효율성 등 <strong>다지표</strong>로 모델을 조명해야 한다고 주장했습니다. 그 핵심 동기 중 하나가 <strong>단일 벤치 점수의 과신 위험</strong>이었습니다.</p>
-        <p class="pullquote">벤치마크 점수는 능력의 <em>그림자</em>일 뿐, 능력 그 자체가 아니다.</p>
-        <p>오염을 막는 실용 장치가 <strong>canary string</strong>입니다. BIG-bench 등은 데이터셋에 고유한 표식 문자열을 심어, 나중에 모델이 그 문자열을 재생성하면 <strong>해당 데이터가 학습에 들어갔음</strong>을 역추적합니다. 오염 탐지의 또 다른 축은 <strong>n-gram 겹침</strong>(train·test 사이 긴 연속 토큰 일치)입니다. 더 나아가, 순위를 노린 <strong>벤치마크 게이밍</strong>(test set 미세조정·프롬프트 과최적화)은 점수를 인위적으로 끌어올려 평가의 의미를 훼손합니다.</p>
+        <p><strong>Sainz et al.(2023, EMNLP)</strong>은 데이터 오염이 가끔 나는 사고가 아니라 <strong>벤치마크마다 측정하고 보고해야 할 상시 변수</strong>라고 주장했습니다. 실제로 <strong>GPT-4 기술 보고서</strong>(OpenAI 2023)는 학습 데이터와 각 벤치마크 사이의 <strong>부분 문자열 겹침</strong>을 검사해, 오염 문항을 제거한 보정 점수를 원 점수와 나란히 공개했습니다 — 오염 보정 전후를 함께 내놓는 것이 정직한 보고의 기준선이 된 것입니다.</p>
+        <p class="pullquote">시험지가 새어나갔다면, 점수를 자랑할 게 아니라 시험을 다시 내야 한다.</p>
+        <p>오염을 막는 실용 장치가 <strong>canary string</strong>입니다. BIG-bench 등은 데이터셋 파일에 고유한 표식 문자열(GUID)을 심어, 나중에 모델이 그 문자열을 재생성하면 <strong>해당 데이터가 학습에 들어갔음</strong>을 역추적합니다. 오염 탐지의 또 다른 축은 <strong>n-gram 겹침</strong>(train·test 사이 긴 연속 토큰 일치)입니다. 더 나아가, 순위를 노린 <strong>벤치마크 게이밍</strong>(test set 미세조정·프롬프트 과최적화)은 점수를 인위적으로 끌어올려 평가의 의미를 훼손합니다. 단일 점수 과신의 위험과 다지표 평가(HELM)의 교훈은 <strong>4-1 읽을거리</strong>를 참조하세요.</p>
       </div>
       <div class="col2">
-        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>오염 탐지 = <strong>n-gram 겹침</strong> + <strong>canary string</strong> 재생성 검사.</li><li>HELM의 교훈: <strong>단일 점수 과신 금지</strong>, 다지표로 본다.</li><li>게이밍은 $S_{obs}$만 올릴 뿐 $S_{true}$는 그대로 — 순위 오염.</li></ul></div>
-        <p class="readmeta">참고: Liang et al.(2022) <em>HELM</em>, arXiv:2211.09110 / Srivastava et al.(2022) BIG-bench / Sainz et al.(2023) EMNLP</p>
+        <div class="callout key"><div class="ct">꼭 알아야 할 점</div><ul><li>오염 탐지 = <strong>n-gram 겹침</strong> + <strong>canary string</strong> 재생성 검사.</li><li>오염은 <strong>벤치마크별로 측정·보고</strong> — 보정 전후 점수를 나란히 (Sainz et al. 2023 / GPT-4 보고서).</li><li>게이밍은 $S_{obs}$만 올릴 뿐 $S_{true}$는 그대로 — 순위 오염.</li></ul></div>
+        <p class="readmeta">참고: Sainz et al.(2023) EMNLP / OpenAI(2023) <em>GPT-4 Technical Report</em> 오염 분석 / Srivastava et al.(2022) BIG-bench canary — 다지표 평가는 4-1 HELM 참조</p>
       </div>
     </div>
     <div class="two lang-en">
       <div class="col2 reading">
-        <p>In 2022, Stanford's <strong>Liang et al.</strong> proposed <strong>HELM (Holistic Evaluation of Language Models)</strong>, arguing that models must be illuminated by <strong>many metrics</strong> — accuracy, robustness, fairness, efficiency — not a single accuracy number. A key motivation was the <strong>danger of over-trusting a single benchmark score</strong>.</p>
-        <p class="pullquote">A benchmark score is only a <em>shadow</em> of ability, not the ability itself.</p>
-        <p>A practical safeguard against contamination is the <strong>canary string</strong>. Benchmarks like BIG-bench embed a unique marker string in the dataset; if a model later regenerates it, one can trace that <strong>this data entered training</strong>. Another detection axis is <strong>n-gram overlap</strong> (long contiguous token matches between train and test). Beyond that, <strong>benchmark gaming</strong> for rank (fine-tuning on the test set, over-optimizing prompts) artificially lifts scores and erodes the meaning of evaluation.</p>
+        <p><strong>Sainz et al. (2023, EMNLP)</strong> argued that data contamination is not an occasional accident but a <strong>standing variable to be measured and reported for each benchmark</strong>. Indeed, the <strong>GPT-4 technical report</strong> (OpenAI 2023) checked <strong>substring overlap</strong> between the training data and each benchmark, publishing contamination-adjusted scores alongside the raw ones — reporting pre- and post-adjustment side by side has become the baseline of honest reporting.</p>
+        <p class="pullquote">If the exam leaked, don't celebrate the score — write a new exam.</p>
+        <p>A practical safeguard against contamination is the <strong>canary string</strong>. Benchmarks like BIG-bench embed a unique marker string (a GUID) in the dataset files; if a model later regenerates it, one can trace that <strong>this data entered training</strong>. Another detection axis is <strong>n-gram overlap</strong> (long contiguous token matches between train and test). Beyond that, <strong>benchmark gaming</strong> for rank (fine-tuning on the test set, over-optimizing prompts) artificially lifts scores and erodes the meaning of evaluation. For the danger of over-trusting a single score and the multi-metric lesson (HELM), see the <strong>4-1 Reading</strong>.</p>
       </div>
       <div class="col2">
-        <div class="callout key"><div class="ct">Must know</div><ul><li>Contamination detection = <strong>n-gram overlap</strong> + <strong>canary string</strong> regeneration checks.</li><li>HELM's lesson: <strong>never over-trust one score</strong>; view via many metrics.</li><li>Gaming raises only $S_{obs}$, not $S_{true}$ — polluting the ranking.</li></ul></div>
-        <p class="readmeta">Refs: Liang et al. (2022) <em>HELM</em>, arXiv:2211.09110 / Srivastava et al. (2022) BIG-bench / Sainz et al. (2023) EMNLP</p>
+        <div class="callout key"><div class="ct">Must know</div><ul><li>Contamination detection = <strong>n-gram overlap</strong> + <strong>canary string</strong> regeneration checks.</li><li>Measure &amp; report contamination <strong>per benchmark</strong> — adjusted and raw scores side by side (Sainz et al. 2023 / GPT-4 report).</li><li>Gaming raises only $S_{obs}$, not $S_{true}$ — polluting the ranking.</li></ul></div>
+        <p class="readmeta">Refs: Sainz et al. (2023) EMNLP / OpenAI (2023) <em>GPT-4 Technical Report</em> contamination analysis / Srivastava et al. (2022) BIG-bench canary — for multi-metric evaluation see 4-1 HELM</p>
       </div>
     </div>
   </section>
@@ -1974,7 +1974,7 @@
         <button class="opt">③ 모델이 편향된 답변을 생성하는 현상</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 데이터 오염은 평가에 쓸 test 문항이 학습 코퍼스에 섞여 들어간 상태로, 모델이 추론이 아닌 암기로 답을 맞혀 점수가 부풀려진다. <span class="dim">오답 ①·③: ①은 데이터 품질 문제, ③은 편향(bias) 문제로 오염과 별개다.</span> <span class="agg">학급 n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 데이터 오염은 평가에 쓸 test 문항이 학습 코퍼스에 섞여 들어간 상태로, 모델이 추론이 아닌 암기로 답을 맞혀 점수가 부풀려진다. <span class="dim">오답 ①·③: ①은 데이터 품질 문제, ③은 편향(bias) 문제로 오염과 별개다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>Which is the correct definition of <strong>data contamination</strong>?</p>
@@ -1984,7 +1984,7 @@
         <button class="opt">③ the model producing biased answers</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — contamination is when the test items used for evaluation slip into the training corpus, so the model answers by memory rather than reasoning and its score inflates. <span class="dim">Wrong ①·③: ① is a data-quality issue; ③ is bias — both distinct from contamination.</span> <span class="agg">class n=41 · ① 6 · ② 31 · ③ 4</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — contamination is when the test items used for evaluation slip into the training corpus, so the model answers by memory rather than reasoning and its score inflates. <span class="dim">Wrong ①·③: ① is a data-quality issue; ③ is bias — both distinct from contamination.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>오염 <strong>탐지 방법</strong>으로 가장 적절한 짝은?</p>
@@ -1994,7 +1994,7 @@
         <button class="opt">③ 응답 길이 측정 + 온도(temperature) 조절</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 긴 연속 토큰(n-gram) 일치는 유출을 직접 시사하고, 데이터셋에 심은 canary string을 모델이 재생성하면 그 데이터가 학습에 들어갔음을 역추적할 수 있다. <span class="dim">오답 ①·③: 파라미터 수·응답 길이·온도는 오염과 무관한 지표다.</span> <span class="agg">학급 n=41 · ① 5 · ② 29 · ③ 7</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 긴 연속 토큰(n-gram) 일치는 유출을 직접 시사하고, 데이터셋에 심은 canary string을 모델이 재생성하면 그 데이터가 학습에 들어갔음을 역추적할 수 있다. <span class="dim">오답 ①·③: 파라미터 수·응답 길이·온도는 오염과 무관한 지표다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>Which pair are the most appropriate <strong>contamination detection</strong> methods?</p>
@@ -2004,7 +2004,7 @@
         <button class="opt">③ measuring response length + tuning temperature</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — long contiguous token (n-gram) matches directly signal leakage, and if a model regenerates a canary string embedded in the dataset, one can trace that the data entered training. <span class="dim">Wrong ①·③: parameter count, response length, and temperature are unrelated to contamination.</span> <span class="agg">class n=41 · ① 5 · ② 29 · ③ 7</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — long contiguous token (n-gram) matches directly signal leakage, and if a model regenerates a canary string embedded in the dataset, one can trace that the data entered training. <span class="dim">Wrong ①·③: parameter count, response length, and temperature are unrelated to contamination.</span></div>
     </div>
   </section>
 
@@ -2131,7 +2131,7 @@
       <div class="col2">
         <div class="keq-label">핵심 용어</div>
         <div class="terms">
-          <div class="term"><b>$p_{in},p_{out}$</b> 입력·출력 <strong>토큰당 단가</strong> (보통 $/1\text{M}$ 토큰). 출력이 입력보다 <strong>비싸다</strong></div>
+          <div class="term"><b>$p_{in},p_{out}$</b> 입력·출력 <strong>토큰당 단가</strong> (보통 $\textdollar/1\text{M}$ 토큰). 출력이 입력보다 <strong>비싸다</strong></div>
           <div class="term"><b>TTFT</b> Time-To-First-Token — 요청→첫 토큰. prefill(입력 처리) 지배</div>
           <div class="term"><b>TPOT</b> Time-Per-Output-Token — 토큰 사이 간격. decode 단계, 배치 크기 의존</div>
           <div class="term"><b>배칭</b> 여러 요청을 GPU에 동시 투입 → 처리량↑ 하지만 TPOT↑ (트레이드오프)</div>
@@ -2154,7 +2154,7 @@
       <div class="col2">
         <div class="keq-label">Key terms</div>
         <div class="terms">
-          <div class="term"><b>$p_{in},p_{out}$</b> per-token <strong>rates</strong> for input/output (usually $/1\text{M}$ tokens). Output costs <strong>more</strong> than input</div>
+          <div class="term"><b>$p_{in},p_{out}$</b> per-token <strong>rates</strong> for input/output (usually $\textdollar/1\text{M}$ tokens). Output costs <strong>more</strong> than input</div>
           <div class="term"><b>TTFT</b> Time-To-First-Token — request→first token; dominated by prefill</div>
           <div class="term"><b>TPOT</b> Time-Per-Output-Token — inter-token gap; the decode stage, batch-size dependent</div>
           <div class="term"><b>Batching</b> concurrent requests on the GPU → throughput↑ but TPOT↑ (a tradeoff)</div>
@@ -2175,7 +2175,7 @@
     <p class="lede lang-ko"><b>공통 관점:</b> 요청 비용은 토큰 수 × 단가의 <b>선형식</b>입니다. 여기에 두 레버 — <b>프롬프트 캐싱</b>(입력 접두 재사용)과 <b>모델 라우팅</b>(쉬운 요청은 작은 모델)을 곱하면 실효 비용이 내려갑니다. 각 레버를 단계적으로 유도합니다.</p>
     <p class="lede lang-en"><b>Unifying view:</b> request cost is a <b>linear form</b> — tokens × rate. Two levers multiply into it: <b>prompt caching</b> (reuse an input prefix) and <b>model routing</b> (send easy requests to a small model). We derive each step by step.</p>
     <div class="deriv lang-ko">
-      <div class="dcard"><h4>기본 요청 비용</h4><div class="sub">토큰 × 단가</div><div class="ana">🧾 미터기 — 두 구간을 각각 계산</div><div class="eq">$ C = n_{in}\,p_{in} + n_{out}\,p_{out} $</div><p>입력 $n_{in}$ 토큰과 출력 $n_{out}$ 토큰에 각 단가를 곱해 합산. 단가는 보통 <strong>$/1\text{M}$ 토큰</strong> 단위이므로 실제 계산 시 $10^{6}$으로 나눕니다.</p></div>
+      <div class="dcard"><h4>기본 요청 비용</h4><div class="sub">토큰 × 단가</div><div class="ana">🧾 미터기 — 두 구간을 각각 계산</div><div class="eq">$ C = n_{in}\,p_{in} + n_{out}\,p_{out} $</div><p>입력 $n_{in}$ 토큰과 출력 $n_{out}$ 토큰에 각 단가를 곱해 합산. 단가는 보통 <strong>$\textdollar/1\text{M}$ 토큰</strong> 단위이므로 실제 계산 시 $10^{6}$으로 나눕니다.</p></div>
       <div class="dcard"><h4>캐시 히트 반영</h4><div class="sub">히트율 $h$, 캐시 단가 $p_{c}$</div><div class="ana">📎 재사용 — 접두는 값싸게 다시 읽음</div><div class="eq">$ C = n_{in}\big[(1-h)p_{in} + h\,p_{c}\big] + n_{out}\,p_{out} $</div><p>입력 중 <strong>$h$ 비율</strong>이 캐시에서 읽히면($p_{c}\ll p_{in}$, 대표적으로 $\approx 0.1\,p_{in}$), 입력 비용이 그만큼 줄어듭니다.</p></div>
       <div class="dcard"><h4>라우팅 기대비용</h4><div class="sub">작은↔큰 모델 분기</div><div class="ana">🚦 신호등 — 쉬우면 값싼 길로</div><div class="eq">$ \mathbb{E}[C] = (1-r)\,C_{\text{small}} + r\,C_{\text{big}} $</div><p>비율 $r$만 큰 모델로 <strong>에스컬레이션</strong>하고 나머지는 작은 모델로. $r$이 작을수록 기대비용은 $C_{\text{small}}$에 가까워집니다.</p></div>
     </div>
@@ -2256,8 +2256,8 @@
       <div>
         <div class="vcap">대표 지표·단가 (representative, 2026 스냅샷)</div>
         <table class="ktab"><thead><tr><th>항목</th><th>대표값</th><th style="text-align:right">비고</th></tr></thead><tbody>
-          <tr><td>입력 단가 $p_{in}$</td><td class="k">$3\!\sim\!10\,/1\text{M}$</td><td>모델 tier별</td></tr>
-          <tr><td>출력 단가 $p_{out}$</td><td class="k">$15\!\sim\!50\,/1\text{M}$</td><td>입력의 $\approx 5\times$</td></tr>
+          <tr><td>입력 단가 $p_{in}$</td><td class="k">$\$3\!\sim\!\$10\,/1\text{M}$</td><td>모델 tier별</td></tr>
+          <tr><td>출력 단가 $p_{out}$</td><td class="k">$\$15\!\sim\!\$50\,/1\text{M}$</td><td>입력의 $\approx 5\times$</td></tr>
           <tr><td>캐시 읽기 $p_c$</td><td class="k">$\approx 0.1\,p_{in}$</td><td>제공사 문서</td></tr>
           <tr><td>TTFT (p95)</td><td class="k">UNVERIFIED</td><td>워크로드 의존</td></tr>
           <tr><td>TPOT (p95)</td><td class="k">UNVERIFIED</td><td>배치·모델 의존</td></tr>
@@ -2297,8 +2297,8 @@
       <div>
         <div class="vcap">Representative metrics·rates (2026 snapshot)</div>
         <table class="ktab"><thead><tr><th>Item</th><th>Repr. value</th><th style="text-align:right">Note</th></tr></thead><tbody>
-          <tr><td>Input rate $p_{in}$</td><td class="k">$3\!\sim\!10\,/1\text{M}$</td><td>by model tier</td></tr>
-          <tr><td>Output rate $p_{out}$</td><td class="k">$15\!\sim\!50\,/1\text{M}$</td><td>$\approx 5\times$ input</td></tr>
+          <tr><td>Input rate $p_{in}$</td><td class="k">$\$3\!\sim\!\$10\,/1\text{M}$</td><td>by model tier</td></tr>
+          <tr><td>Output rate $p_{out}$</td><td class="k">$\$15\!\sim\!\$50\,/1\text{M}$</td><td>$\approx 5\times$ input</td></tr>
           <tr><td>Cache read $p_c$</td><td class="k">$\approx 0.1\,p_{in}$</td><td>provider docs</td></tr>
           <tr><td>TTFT (p95)</td><td class="k">UNVERIFIED</td><td>workload-dependent</td></tr>
           <tr><td>TPOT (p95)</td><td class="k">UNVERIFIED</td><td>batch·model-dependent</td></tr>
@@ -2317,7 +2317,7 @@
     <p class="lede lang-ko">단가는 <strong>100만 토큰당 달러</strong>이므로, 토큰 수 × (단가 $/\,10^{6}$)로 요청당 달러 비용이 나옵니다. 슬라이더로 <strong>입력·출력 토큰 수</strong>와 <strong>단가</strong>를 바꾸며 출력 토큰이 비용을 얼마나 지배하는지 확인하세요. 기본값(입력 2000·출력 500·$p_{in}=3$·$p_{out}=15$)은 대표 tier 수준입니다.</p>
     <p class="lede lang-en">Rates are <strong>dollars per 1M tokens</strong>, so per-request dollars = tokens × (rate $/\,10^{6}$). Move the sliders for <strong>input/output token counts</strong> and <strong>rates</strong> to see how output tokens dominate cost. Defaults (in 2000·out 500·$p_{in}=3$·$p_{out}=15$) reflect a representative tier.</p>
     <div class="calc lang-ko"
-      data-title="요청당 비용 $C = n_{in}\,p_{in} + n_{out}\,p_{out}$ (단가 $\,/\,10^{6}$ 토큰)"
+      data-title="요청당 비용 $C = n_{in}\,p_{in} + n_{out}\,p_{out}$ (단가 $\$\,/\,10^{6}$ 토큰)"
       data-desc="단가는 100만 토큰당 달러. 기본값: 입력 2000·출력 500 토큰, p_in=3, p_out=15 → C = 0.0135 달러/요청 (입력 0.006 + 출력 0.0075). 출력 500토큰이 입력 2000토큰보다 더 비싼 데 주목."
       data-vars='[{"sym":"nin","label":"$n_{in}$ · 입력 토큰","min":0,"max":100000,"val":2000,"step":100,"unit":"tok"},{"sym":"nout","label":"$n_{out}$ · 출력 토큰","min":0,"max":8000,"val":500,"step":50,"unit":"tok"},{"sym":"pin","label":"$p_{in}$ · 입력 단가","min":0.5,"max":15,"val":3,"step":0.5,"unit":"/1M"},{"sym":"pout","label":"$p_{out}$ · 출력 단가","min":1,"max":75,"val":15,"step":1,"unit":"/1M"}]'
       data-expr="(nin*pin + nout*pout)/1000000"
@@ -2325,7 +2325,7 @@
       data-barmax="0.2"
       data-note="출력 500토큰분(0.0075 달러)이 입력 2000토큰분(0.006 달러)보다 크다 — 출력이 토큰당 5배 비싸 500토큰만으로 입력 2000토큰을 넘어선다."></div>
     <div class="calc lang-en"
-      data-title="Cost per request $C = n_{in}\,p_{in} + n_{out}\,p_{out}$ (rates $\,/\,10^{6}$ tokens)"
+      data-title="Cost per request $C = n_{in}\,p_{in} + n_{out}\,p_{out}$ (rates $\$\,/\,10^{6}$ tokens)"
       data-desc="Rates are dollars per million tokens. Defaults: in 2000·out 500 tokens, p_in=3, p_out=15 → C = 0.0135 dollars/req (input 0.006 + output 0.0075). Note 500 output tokens cost more than 2000 input tokens."
       data-vars='[{"sym":"nin","label":"$n_{in}$ · input tokens","min":0,"max":100000,"val":2000,"step":100,"unit":"tok"},{"sym":"nout","label":"$n_{out}$ · output tokens","min":0,"max":8000,"val":500,"step":50,"unit":"tok"},{"sym":"pin","label":"$p_{in}$ · input rate","min":0.5,"max":15,"val":3,"step":0.5,"unit":"/1M"},{"sym":"pout","label":"$p_{out}$ · output rate","min":1,"max":75,"val":15,"step":1,"unit":"/1M"}]'
       data-expr="(nin*pin + nout*pout)/1000000"
@@ -2348,7 +2348,7 @@
         <button class="opt">③ 출력 토큰 사이의 평균 간격</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — TTFT(Time-To-First-Token)는 요청 시점부터 첫 토큰이 나올 때까지의 시간으로, 입력을 처리하는 <strong>prefill 단계</strong>가 지배한다. <span class="dim">오답 ①·③: ①은 총 지연 $L$, ③은 토큰당 지연 <strong>TPOT</strong>이다.</span> <span class="agg">학급 n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — TTFT(Time-To-First-Token)는 요청 시점부터 첫 토큰이 나올 때까지의 시간으로, 입력을 처리하는 <strong>prefill 단계</strong>가 지배한다. <span class="dim">오답 ①·③: ①은 총 지연 $L$, ③은 토큰당 지연 <strong>TPOT</strong>이다.</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q1.</span>In a streaming request, what does <strong>TTFT</strong> measure?</p>
@@ -2358,7 +2358,7 @@
         <button class="opt">③ average gap between output tokens</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — TTFT (Time-To-First-Token) is from the request until the first token appears, dominated by the <strong>prefill stage</strong> that processes the input. <span class="dim">Wrong ①·③: ① is total latency $L$; ③ is per-token latency <strong>TPOT</strong>.</span> <span class="agg">class n=41 · ① 6 · ② 30 · ③ 5</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — TTFT (Time-To-First-Token) is from the request until the first token appears, dominated by the <strong>prefill stage</strong> that processes the input. <span class="dim">Wrong ①·③: ① is total latency $L$; ③ is per-token latency <strong>TPOT</strong>.</span></div>
     </div>
     <div class="cq lang-ko">
       <p class="qtext"><span class="qn">Q2.</span>배치 크기를 키울 때 일반적으로 나타나는 트레이드오프는?</p>
@@ -2368,7 +2368,7 @@
         <button class="opt">③ 비용 단가($/토큰)가 반드시 반값이 된다</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">제출</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 연속 배칭은 GPU를 꽉 채워 <strong>처리량</strong>을 높이지만, 한 decode 스텝이 여러 요청을 처리하므로 개별 요청의 <strong>TPOT</strong>이 늘어난다(체감 저하). <span class="dim">오답 ①·③: ①공짜 점심은 없다; ③배치는 하드웨어 활용을 높일 뿐, 토큰당 <strong>과금 단가</strong>를 자동으로 반값으로 만들지 않는다(별도의 배치 API 할인은 다른 개념).</span> <span class="agg">학급 n=41 · ① 9 · ② 26 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">해설</b> <b class="ok">정답 ②</b> — 연속 배칭은 GPU를 꽉 채워 <strong>처리량</strong>을 높이지만, 한 decode 스텝이 여러 요청을 처리하므로 개별 요청의 <strong>TPOT</strong>이 늘어난다(체감 저하). <span class="dim">오답 ①·③: ①공짜 점심은 없다; ③배치는 하드웨어 활용을 높일 뿐, 토큰당 <strong>과금 단가</strong>를 자동으로 반값으로 만들지 않는다(별도의 배치 API 할인은 다른 개념).</span></div>
     </div>
     <div class="cq lang-en">
       <p class="qtext"><span class="qn">Q2.</span>What tradeoff typically appears when you increase batch size?</p>
@@ -2378,7 +2378,7 @@
         <button class="opt">③ the per-token price ($/token) is always halved</button>
       </div>
       <div class="submit-row"><button class="btn primary cp-submit">Submit</button><span class="submit-fb cp-fb"></span></div>
-      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — continuous batching packs the GPU and raises <strong>throughput</strong>, but since one decode step serves many requests, per-request <strong>TPOT</strong> rises (worse perceived speed). <span class="dim">Wrong ①·③: ① no free lunch; ③ batching raises hardware utilization but does not automatically halve the per-token <strong>billed price</strong> (separate batch-API discounts are a different concept).</span> <span class="agg">class n=41 · ① 9 · ② 26 · ③ 6</span></div>
+      <div class="cp-exp"><b class="exp-h">Explanation</b> <b class="ok">Answer ②</b> — continuous batching packs the GPU and raises <strong>throughput</strong>, but since one decode step serves many requests, per-request <strong>TPOT</strong> rises (worse perceived speed). <span class="dim">Wrong ①·③: ① no free lunch; ③ batching raises hardware utilization but does not automatically halve the per-token <strong>billed price</strong> (separate batch-API discounts are a different concept).</span></div>
     </div>
   </section>
 
@@ -2388,7 +2388,7 @@
     <div class="panel-head lang-en"><span class="tag">Practice</span><span class="panel-title">Engineering calc · auto-graded</span></div>
     <div class="prob lang-ko">
       <div class="prob-num">연습 1 · 기본 · 요청 비용 계산</div>
-      <p class="prob-statement">한 요청이 입력 $n_{in}=4000$ 토큰, 출력 $n_{out}=1000$ 토큰을 쓴다. 단가는 $p_{in}=5\,\$/1\text{M}$, $p_{out}=25\,\$/1\text{M}$이다. <strong>요청당 비용 $C$</strong>를 $\$$ 단위로 구하시오.</p>
+      <p class="prob-statement">한 요청이 입력 $n_{in}=4000$ 토큰, 출력 $n_{out}=1000$ 토큰을 쓴다. 단가는 $p_{in}=5\,\textdollar/1\text{M}$, $p_{out}=25\,\textdollar/1\text{M}$이다. <strong>요청당 비용 $C$</strong>를 $\$$ 단위로 구하시오.</p>
       <div class="given"><span class="chip">$n_{in}=4000$</span><span class="chip">$n_{out}=1000$</span><span class="chip">$p_{in}=5/1\text{M}$</span><span class="chip">$p_{out}=25/1\text{M}$</span></div>
       <div class="find"><b>구할 것:</b> $C\ [\$/\text{req}]$</div>
       <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="내 답" data-answer="0.045" data-tol="0.02"/><span class="ans-unit">$\$$</span><button class="btn pr-check">확인</button><span class="check-fb pr-fb"></span></div>
@@ -2402,7 +2402,7 @@
     </div>
     <div class="prob lang-en">
       <div class="prob-num">Practice 1 · Basic · request cost</div>
-      <p class="prob-statement">A request uses $n_{in}=4000$ input tokens and $n_{out}=1000$ output tokens. Rates are $p_{in}=5\,\$/1\text{M}$ and $p_{out}=25\,\$/1\text{M}$. Find the <strong>cost per request $C$</strong> in $\$$.</p>
+      <p class="prob-statement">A request uses $n_{in}=4000$ input tokens and $n_{out}=1000$ output tokens. Rates are $p_{in}=5\,\textdollar/1\text{M}$ and $p_{out}=25\,\textdollar/1\text{M}$. Find the <strong>cost per request $C$</strong> in $\$$.</p>
       <div class="given"><span class="chip">$n_{in}=4000$</span><span class="chip">$n_{out}=1000$</span><span class="chip">$p_{in}=5/1\text{M}$</span><span class="chip">$p_{out}=25/1\text{M}$</span></div>
       <div class="find"><b>Find:</b> $C\ [\$/\text{req}]$</div>
       <div class="ans-row"><input class="ans-input" type="text" inputmode="decimal" placeholder="your answer" data-answer="0.045" data-tol="0.02"/><span class="ans-unit">$\$$</span><button class="btn pr-check">Check</button><span class="check-fb pr-fb"></span></div>
@@ -2460,7 +2460,7 @@
         <li>시스템 프롬프트 앞에 타임스탬프 삽입 → 캐시 히트율 $h\to 0$.</li>
       </ul></div>
       <div class="sumcard exam full"><h4>시험 포인트</h4><ul>
-        <li>토큰 수·단가 → 요청당 $C$ 계산 (단가 $/1\text{M}$ 주의, $10^6$ 나눗셈).</li>
+        <li>토큰 수·단가 → 요청당 $C$ 계산 (단가 $\textdollar/1\text{M}$ 주의, $10^6$ 나눗셈).</li>
         <li>캐시 히트율 $h$ → 상대 입력 비용 $(1-h)+h\,p_c/p_{in}$.</li>
         <li>TTFT vs TPOT 구분 / 배칭 트레이드오프 / 스트리밍이 개선하는 것은 체감뿐.</li>
       </ul></div>
@@ -2477,7 +2477,7 @@
         <li>Prepending a timestamp to the system prompt → cache hit rate $h\to 0$.</li>
       </ul></div>
       <div class="sumcard exam full"><h4>Exam focus</h4><ul>
-        <li>Tokens·rates → cost $C$ per request (rates are $/1\text{M}$; divide by $10^6$).</li>
+        <li>Tokens·rates → cost $C$ per request (rates are $\textdollar/1\text{M}$; divide by $10^6$).</li>
         <li>Cache hit rate $h$ → relative input cost $(1-h)+h\,p_c/p_{in}$.</li>
         <li>TTFT vs TPOT / batching tradeoff / streaming improves only perceived latency.</li>
       </ul></div>
