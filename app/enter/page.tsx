@@ -154,7 +154,7 @@ function EnterForm() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-white px-4 text-[#18181b]">
       <div className={`w-full max-w-sm rounded-2xl border border-[#e4e4e7] bg-white p-8 shadow-sm ${shake ? "animate-shake" : ""}`}>
-        <div className="mb-1 text-sm font-semibold tracking-widest text-accent">프롬프트 엔지니어링 심화 · WEEK {wk}</div>
+        <div className="mb-1 text-sm font-semibold tracking-widest text-accent">프롬프트 엔지니어링 심화 · PART {wk}</div>
         <h1 className="mb-1 text-2xl font-bold">{WEEK_TITLE[wk] ?? "강의실 입장"}</h1>
 
         {step === "id" && (

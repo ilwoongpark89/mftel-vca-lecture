@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.4" />
-<title>프롬프트 엔지니어링 심화 · Week 3</title>
+<title>프롬프트 엔지니어링 심화 · Part 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -140,7 +140,7 @@
   .sumcard h4{ font-size:12.5px; font-weight:800; letter-spacing:.03em; margin-bottom:9px; display:flex; align-items:center; gap:6px; } .sumcard.key h4{ color:var(--accent); }
   .sumcard ul{ margin:0; padding-left:17px; } .sumcard li{ font-size:13px; line-height:1.6; color:var(--gray); margin-bottom:4px; } .sumcard li strong{ color:var(--ink); }
 
-  /* week intro */
+  /* part intro */
   .intro{ max-width:940px; }
   .intro-eyebrow{ font-size:12.5px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
   .intro-h{ font-size:38px; font-weight:800; line-height:1.18; letter-spacing:-.015em; margin-bottom:14px; } .intro-h .hl{ color:var(--accent); }
@@ -184,14 +184,14 @@
 </style>
 </head>
 <body>
-<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Week 3</span>상변화열전달<span class="sep">·</span>Week N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
+<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Part 3</span>상변화열전달<span class="sep">·</span>Part N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
 <div class="stepbar" id="stepbar"></div>
 <main><div class="stage" id="stage">
 <!-- ════════ 시작1 / 환영 ════════ -->
-<section class="screen" data-ch="시작1" data-chtitle="3주차 개요" data-stage="환영">
+<section class="screen" data-ch="시작1" data-chtitle="파트 3 개요" data-stage="환영">
   <div class="intro">
-    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 3주차 · 시작</div>
-    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 3 · Intro</div>
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 파트 3 · 시작</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Part 3 · Intro</div>
 
     <h1 class="intro-h lang-ko">프롬프트를 넘어,<br><span class="hl">컨텍스트를 설계한다 — RAG와 에이전트</span></h1>
     <h1 class="intro-h lang-en">Beyond the prompt:<br><span class="hl">engineering context — RAG and agents</span></h1>
@@ -202,13 +202,13 @@
 </section>
 
 <!-- ════════ 시작2 / 여정 ════════ -->
-<section class="screen" data-ch="시작2" data-chtitle="3주차 지도" data-stage="여정">
+<section class="screen" data-ch="시작2" data-chtitle="파트 3 지도" data-stage="여정">
   <div class="intro">
-    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 3주차 지도</div>
-    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 3 Roadmap</div>
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 파트 3 지도</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Part 3 Roadmap</div>
 
-    <h1 class="intro-h lang-ko">이번 주, <span class="hl">네 개의 챕터</span>로 컨텍스트 설계를 완성한다</h1>
-    <h1 class="intro-h lang-en">This week: <span class="hl">four chapters</span> to master context engineering</h1>
+    <h1 class="intro-h lang-ko">이번 파트, <span class="hl">네 개의 챕터</span>로 컨텍스트 설계를 완성한다</h1>
+    <h1 class="intro-h lang-en">This part: <span class="hl">four chapters</span> to master context engineering</h1>
 
     <div class="roadmap lang-ko" style="margin-top:14px">
       <div class="rm-item"><span class="rn">3-1</span><span><span class="rt">RAG 기초와 검색</span> <span class="rd">— 임베딩·벡터 유사도 $\cos\theta$·상위 $k$ 검색으로 컨텍스트를 채운다</span></span></div>
@@ -223,13 +223,13 @@
       <div class="rm-item"><span class="rn">3-4</span><span><span class="rt">Spec-Driven &amp; Multi-Agent</span> <span class="rd">— pinning work with a spec and orchestrating role-specialized agents</span></span></div>
     </div>
 
-    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 주가 끝나면 할 수 있게 된다</h4><ul>
+    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 파트가 끝나면 할 수 있게 된다</h4><ul>
       <li>임베딩과 벡터 유사도로 <strong>RAG 검색 파이프라인</strong>을 구성하고 상위 $k$를 선택한다.</li>
       <li><strong>청킹·재순위·캐싱</strong>을 조합해 토큰 예산 $B$ 안에서 컨텍스트 품질을 최적화한다.</li>
       <li>도구 호출과 되먹임으로 <strong>에이전트 루프</strong>를 설계하고 안전한 종료 조건을 정의한다.</li>
       <li><strong>명세주도 워크플로</strong>와 멀티에이전트 협업으로 복잡한 작업을 분해·조율한다.</li>
     </ul></div>
-    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this week you will be able to</h4><ul>
+    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this part you will be able to</h4><ul>
       <li>Build a <strong>RAG retrieval pipeline</strong> with embeddings and vector similarity, and select the top $k$.</li>
       <li>Combine <strong>chunking, reranking, and caching</strong> to optimize context quality within a token budget $B$.</li>
       <li>Design an <strong>agent loop</strong> from tool calls and feedback, and define safe stop conditions.</li>

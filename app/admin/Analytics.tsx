@@ -191,7 +191,7 @@ export default function Analytics({ roster, allNotes }: { roster: RosterRow[]; a
                     ))}
                   </div>
                 </div>
-                <p className="mb-3 text-xs text-[#a1a1aa]">셀 = 주차×챕터별 8단계. 초록=정답/충분히 학습, 빨강=오답, 회색=미방문·연타(체류시간 기반). 챕터 클릭 → 단계별 상세.</p>
+                <p className="mb-3 text-xs text-[#a1a1aa]">셀 = 파트×챕터별 8단계. 초록=정답/충분히 학습, 빨강=오답, 회색=미방문·연타(체류시간 기반). 챕터 클릭 → 단계별 상세.</p>
 
                 <div className="flex flex-col gap-1.5 overflow-x-auto rounded-xl border border-[#e4e4e7] bg-white p-3">
                   {CURRICULUM.map((w) => (

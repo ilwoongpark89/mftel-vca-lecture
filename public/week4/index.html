@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.4" />
-<title>프롬프트 엔지니어링 심화 · Week 4</title>
+<title>프롬프트 엔지니어링 심화 · Part 4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -140,7 +140,7 @@
   .sumcard h4{ font-size:12.5px; font-weight:800; letter-spacing:.03em; margin-bottom:9px; display:flex; align-items:center; gap:6px; } .sumcard.key h4{ color:var(--accent); }
   .sumcard ul{ margin:0; padding-left:17px; } .sumcard li{ font-size:13px; line-height:1.6; color:var(--gray); margin-bottom:4px; } .sumcard li strong{ color:var(--ink); }
 
-  /* week intro */
+  /* part intro */
   .intro{ max-width:940px; }
   .intro-eyebrow{ font-size:12.5px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
   .intro-h{ font-size:38px; font-weight:800; line-height:1.18; letter-spacing:-.015em; margin-bottom:14px; } .intro-h .hl{ color:var(--accent); }
@@ -184,31 +184,31 @@
 </style>
 </head>
 <body>
-<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Week 4</span>상변화열전달<span class="sep">·</span>Week N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
+<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Part 4</span>상변화열전달<span class="sep">·</span>Part N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
 <div class="stepbar" id="stepbar"></div>
 <main><div class="stage" id="stage">
 <!-- ════════ 시작1 / 환영 ════════ -->
-<section class="screen" data-ch="시작1" data-chtitle="4주차 개요" data-stage="환영">
+<section class="screen" data-ch="시작1" data-chtitle="파트 4 개요" data-stage="환영">
   <div class="intro">
-    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 4주차 · 시작</div>
-    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 4 · Intro</div>
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 파트 4 · 시작</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Part 4 · Intro</div>
 
     <h1 class="intro-h lang-ko">데모에서는 완벽했는데,<br><span class="hl">왜 프로덕션에서는 조용히 무너질까?</span></h1>
     <h1 class="intro-h lang-en">It was flawless in the demo —<br><span class="hl">so why does it quietly fail in production?</span></h1>
 
-    <p class="lede lang-ko">잘 만든 프롬프트 하나로 열 번 중 아홉 번 성공하면 인상적으로 보인다. 하지만 실패율 $p = 0.1$인 단계를 $n = 20$개 엮으면 전체 성공 확률은 $(1-p)^{n} = 0.9^{20} \approx 0.12$로 무너진다. <strong>믿을 수 있는 AI 시스템</strong>은 운 좋은 한 번이 아니라 <strong>측정된 신뢰도</strong> 위에 선다. 이번 주는 세 개의 축을 다룬다 — 성능을 수치로 고정하는 <strong>평가(evaluation)</strong>, 시스템이 무너지는 방식을 이해하는 <strong>실패 모드(failure modes)</strong>, 같은 입력이 같은 결과를 내는 <strong>재현성(reproducibility)</strong>. 프롬프트를 예술에서 <strong>공학</strong>으로 바꾸는 것이 목표다. <span class="src">[Anthropic, <i>Building Effective Agents</i>, 2024; Chip Huyen, <i>AI Engineering</i>, Ch.4]</span></p>
-    <p class="lede lang-en">One well-crafted prompt that succeeds nine times out of ten looks impressive. Yet chain $n = 20$ such steps, each with failure rate $p = 0.1$, and the overall success probability collapses to $(1-p)^{n} = 0.9^{20} \approx 0.12$. A <strong>trustworthy AI system</strong> rests not on a lucky run but on <strong>measured reliability</strong>. This week works along three axes — <strong>evaluation</strong> that pins performance to numbers, an understanding of the <strong>failure modes</strong> by which systems break, and the <strong>reproducibility</strong> that makes the same input yield the same result. The goal: turn prompting from an art into an <strong>engineering discipline</strong>. <span class="src">[Anthropic, <i>Building Effective Agents</i>, 2024; Chip Huyen, <i>AI Engineering</i>, Ch.4]</span></p>
+    <p class="lede lang-ko">잘 만든 프롬프트 하나로 열 번 중 아홉 번 성공하면 인상적으로 보인다. 하지만 실패율 $p = 0.1$인 단계를 $n = 20$개 엮으면 전체 성공 확률은 $(1-p)^{n} = 0.9^{20} \approx 0.12$로 무너진다. <strong>믿을 수 있는 AI 시스템</strong>은 운 좋은 한 번이 아니라 <strong>측정된 신뢰도</strong> 위에 선다. 이번 파트는 세 개의 축을 다룬다 — 성능을 수치로 고정하는 <strong>평가(evaluation)</strong>, 시스템이 무너지는 방식을 이해하는 <strong>실패 모드(failure modes)</strong>, 같은 입력이 같은 결과를 내는 <strong>재현성(reproducibility)</strong>. 프롬프트를 예술에서 <strong>공학</strong>으로 바꾸는 것이 목표다. <span class="src">[Anthropic, <i>Building Effective Agents</i>, 2024; Chip Huyen, <i>AI Engineering</i>, Ch.4]</span></p>
+    <p class="lede lang-en">One well-crafted prompt that succeeds nine times out of ten looks impressive. Yet chain $n = 20$ such steps, each with failure rate $p = 0.1$, and the overall success probability collapses to $(1-p)^{n} = 0.9^{20} \approx 0.12$. A <strong>trustworthy AI system</strong> rests not on a lucky run but on <strong>measured reliability</strong>. This part works along three axes — <strong>evaluation</strong> that pins performance to numbers, an understanding of the <strong>failure modes</strong> by which systems break, and the <strong>reproducibility</strong> that makes the same input yield the same result. The goal: turn prompting from an art into an <strong>engineering discipline</strong>. <span class="src">[Anthropic, <i>Building Effective Agents</i>, 2024; Chip Huyen, <i>AI Engineering</i>, Ch.4]</span></p>
   </div>
 </section>
 
 <!-- ════════ 시작2 / 여정 ════════ -->
-<section class="screen" data-ch="시작2" data-chtitle="4주차 지도" data-stage="여정">
+<section class="screen" data-ch="시작2" data-chtitle="파트 4 지도" data-stage="여정">
   <div class="intro">
-    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 4주차 지도</div>
-    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 4 Roadmap</div>
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 파트 4 지도</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Part 4 Roadmap</div>
 
-    <h1 class="intro-h lang-ko">이번 주, <span class="hl">네 개의 챕터</span>로 신뢰의 골격을 세운다</h1>
-    <h1 class="intro-h lang-en">This week: <span class="hl">four chapters</span> that build the skeleton of trust</h1>
+    <h1 class="intro-h lang-ko">이번 파트, <span class="hl">네 개의 챕터</span>로 신뢰의 골격을 세운다</h1>
+    <h1 class="intro-h lang-en">This part: <span class="hl">four chapters</span> that build the skeleton of trust</h1>
 
     <div class="roadmap lang-ko" style="margin-top:14px">
       <div class="rm-item"><span class="rn">4-1</span><span><span class="rt">평가 하네스·회귀</span> <span class="rd">— 골든 데이터셋, 자동화된 회귀 테스트, 프롬프트 변경 전후 점수 추적</span></span></div>
@@ -223,13 +223,13 @@
       <div class="rm-item"><span class="rn">4-4</span><span><span class="rt">Reproducibility &amp; Determinism</span> <span class="rd">— $\text{temperature}=0$, seeds, version pinning, taming the variance $\sigma^{2}$</span></span></div>
     </div>
 
-    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 주가 끝나면 할 수 있게 된다</h4><ul>
+    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 파트가 끝나면 할 수 있게 된다</h4><ul>
       <li>골든 데이터셋과 <strong>평가 하네스</strong>를 구축해 프롬프트 변경을 회귀 테스트로 검증한다.</li>
       <li><strong>LLM-as-Judge</strong> 루브릭을 설계하고 판정자의 편향과 자기일관성 $\kappa$를 진단한다.</li>
       <li><strong>환각과 프롬프트 인젝션</strong>을 실패 모드로 분류하고 방어적 프롬프트를 작성한다.</li>
       <li>$\text{temperature}$·시드·버전을 고정해 <strong>재현 가능한 파이프라인</strong>을 만든다.</li>
     </ul></div>
-    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this week you will be able to</h4><ul>
+    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this part you will be able to</h4><ul>
       <li>Build a golden dataset and <strong>eval harness</strong> to validate prompt changes as regression tests.</li>
       <li>Design an <strong>LLM-as-Judge</strong> rubric and diagnose judge bias and self-consistency $\kappa$.</li>
       <li>Classify <strong>hallucination and prompt injection</strong> as failure modes and write defensive prompts.</li>
@@ -613,7 +613,7 @@
     <h1 class="stage-h lang-ko">LLM-as-Judge — 모델이 모델을 채점하다</h1>
     <h1 class="stage-h lang-en">LLM-as-Judge — a Model Grades a Model</h1>
     <div class="analogy lang-ko"><span class="ic">⚖️</span><div class="tx"><b>직관</b> — 논술 답안 수천 장을 사람이 다 읽으려면 몇 주가 걸린다. 그래서 "채점 기준을 아는 <b>또 다른 심사위원</b>"에게 맡긴다 — 여기서는 그 심사위원이 <b>LLM</b>이다. 빠르고 값싸며 인간 선호와 상관이 높지만, 심사위원에게는 <b>버릇(편향)</b>이 있다: 앞에 놓인 답을 선호하고, 긴 답을 선호하고, 자기 문체를 닮은 답을 선호한다. <span class="src">(출처: Zheng et al. 2023, "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", NeurIPS Datasets &amp; Benchmarks)</span></div></div>
-    <div class="analogy lang-en"><span class="ic">⚖️</span><div class="tx"><b>Intuition</b> — Reading thousands of essay answers by hand takes weeks, so we hand them to <b>another judge who knows the rubric</b> — here that judge is an <b>LLM</b>. It is fast, cheap, and correlates highly with human preference, yet the judge has <b>habits (biases)</b>: it favors the answer shown first, favors longer answers, and favors answers that resemble its own style. <span class="src">(Source: Zheng et al. 2023, "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", NeurIPS Datasets &amp; Benchmarks)</span></div></div>
+    <div class="analogy lang-en"><span class="ic">⚖️</span><div class="tx"><b>Intuition</b> — Reading thousands of essay answers by hand takes parts, so we hand them to <b>another judge who knows the rubric</b> — here that judge is an <b>LLM</b>. It is fast, cheap, and correlates highly with human preference, yet the judge has <b>habits (biases)</b>: it favors the answer shown first, favors longer answers, and favors answers that resemble its own style. <span class="src">(Source: Zheng et al. 2023, "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", NeurIPS Datasets &amp; Benchmarks)</span></div></div>
     <div class="two lang-ko">
       <div class="col2">
         <p class="lede"><strong>LLM-as-Judge</strong>는 생성 모델의 출력을 <strong>또 다른 LLM</strong>이 채점·비교하게 하는 자동 평가법입니다. 두 가지 기본 형태가 있습니다 — <strong>단일 점수(single scoring)</strong>: 답 하나에 rubric 기반 점수를 매김. <strong>쌍대비교(pairwise)</strong>: 답 A·B 중 어느 쪽이 나은지 판정. Zheng et al.(2023)은 이 판정이 <strong>인간 다수결과 약 80%대</strong>로 일치함을 보고했으나(대표값, 데이터셋 의존), 동시에 <strong>체계적 편향</strong>을 정량화했습니다.</p>

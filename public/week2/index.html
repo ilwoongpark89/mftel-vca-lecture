@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.4" />
-<title>프롬프트 엔지니어링 심화 · Week 2</title>
+<title>프롬프트 엔지니어링 심화 · Part 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -140,7 +140,7 @@
   .sumcard h4{ font-size:12.5px; font-weight:800; letter-spacing:.03em; margin-bottom:9px; display:flex; align-items:center; gap:6px; } .sumcard.key h4{ color:var(--accent); }
   .sumcard ul{ margin:0; padding-left:17px; } .sumcard li{ font-size:13px; line-height:1.6; color:var(--gray); margin-bottom:4px; } .sumcard li strong{ color:var(--ink); }
 
-  /* week intro */
+  /* part intro */
   .intro{ max-width:940px; }
   .intro-eyebrow{ font-size:12.5px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
   .intro-h{ font-size:38px; font-weight:800; line-height:1.18; letter-spacing:-.015em; margin-bottom:14px; } .intro-h .hl{ color:var(--accent); }
@@ -184,31 +184,31 @@
 </style>
 </head>
 <body>
-<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Week 2</span>상변화열전달<span class="sep">·</span>Week N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
+<header><span class="brand">MFTEL-VCA<span class="sep">·</span>프롬프트 엔지니어링 심화<span class="sep">·</span>Part 2</span>상변화열전달<span class="sep">·</span>Part N</span><div class="chrail" id="chrail"></div><button id="langToggle" class="langtog" type="button" aria-label="Language">EN</button></header>
 <div class="stepbar" id="stepbar"></div>
 <main><div class="stage" id="stage">
 <!-- ════════ 시작1 / 환영 ════════ -->
-<section class="screen" data-ch="시작1" data-chtitle="2주차 개요" data-stage="환영">
+<section class="screen" data-ch="시작1" data-chtitle="파트 2 개요" data-stage="환영">
   <div class="intro">
-    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 2주차 · 시작</div>
-    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 2 · Intro</div>
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 파트 2 · 시작</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Part 2 · Intro</div>
 
     <h1 class="intro-h lang-ko">왜 어떤 프롬프트는 되고<br><span class="hl">어떤 프롬프트는 안 될까 — 감이 아니라 근거로</span></h1>
     <h1 class="intro-h lang-en">Why do some prompts work<br><span class="hl">and others fail — grounded in evidence, not intuition</span></h1>
 
-    <p class="lede lang-ko">"이렇게 쓰면 잘 되더라"는 <strong>일화(anecdote)</strong>는 재현되지 않는다. 이번 주는 커뮤니티 팁을 걷어내고, <strong>동료 심사를 거친 논문으로 검증된 기법</strong>만 다룬다. 예를 들어 사고 사슬(chain-of-thought)은 GSM8K 산술 추론에서 정확도를 $17.9\%$에서 $58.1\%$로 끌어올렸고, 자기일관성(self-consistency)은 여기서 다시 $+17.9$ 포인트를 더했다. 각 기법은 <strong>언제 이득이 나고 언제 오히려 손해인지</strong> 조건까지 함께 배운다 — 모델 규모, 과제 유형, 민감도가 그 경계를 정한다. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
-    <p class="lede lang-en">"It worked for me when I wrote it this way" is an <strong>anecdote</strong>, and anecdotes do not reproduce. This week we set aside community folklore and cover only <strong>techniques validated in peer-reviewed papers</strong>. For instance, chain-of-thought prompting lifted GSM8K arithmetic-reasoning accuracy from $17.9\%$ to $58.1\%$, and self-consistency added a further $+17.9$ points on top. For every method we also learn its <strong>conditions — when it helps and when it hurts</strong>: model scale, task type, and sensitivity define those boundaries. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
+    <p class="lede lang-ko">"이렇게 쓰면 잘 되더라"는 <strong>일화(anecdote)</strong>는 재현되지 않는다. 이번 파트는 커뮤니티 팁을 걷어내고, <strong>동료 심사를 거친 논문으로 검증된 기법</strong>만 다룬다. 예를 들어 사고 사슬(chain-of-thought)은 GSM8K 산술 추론에서 정확도를 $17.9\%$에서 $58.1\%$로 끌어올렸고, 자기일관성(self-consistency)은 여기서 다시 $+17.9$ 포인트를 더했다. 각 기법은 <strong>언제 이득이 나고 언제 오히려 손해인지</strong> 조건까지 함께 배운다 — 모델 규모, 과제 유형, 민감도가 그 경계를 정한다. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
+    <p class="lede lang-en">"It worked for me when I wrote it this way" is an <strong>anecdote</strong>, and anecdotes do not reproduce. This part we set aside community folklore and cover only <strong>techniques validated in peer-reviewed papers</strong>. For instance, chain-of-thought prompting lifted GSM8K arithmetic-reasoning accuracy from $17.9\%$ to $58.1\%$, and self-consistency added a further $+17.9$ points on top. For every method we also learn its <strong>conditions — when it helps and when it hurts</strong>: model scale, task type, and sensitivity define those boundaries. <span class="src">[Wei et&nbsp;al., <i>Chain-of-Thought Prompting</i>, NeurIPS 2022; Wang et&nbsp;al., <i>Self-Consistency</i>, ICLR 2023]</span></p>
   </div>
 </section>
 
 <!-- ════════ 시작2 / 여정 ════════ -->
-<section class="screen" data-ch="시작2" data-chtitle="2주차 지도" data-stage="여정">
+<section class="screen" data-ch="시작2" data-chtitle="파트 2 지도" data-stage="여정">
   <div class="intro">
-    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 2주차 지도</div>
-    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Week 2 Roadmap</div>
+    <div class="intro-eyebrow lang-ko">AI 바이브코딩 프롬프트 엔지니어링 심화 · 파트 2 지도</div>
+    <div class="intro-eyebrow lang-en">Advanced Prompt Engineering · Part 2 Roadmap</div>
 
-    <h1 class="intro-h lang-ko">이번 주, <span class="hl">네 개의 챕터</span>로 추론형 프롬프트를 파고든다</h1>
-    <h1 class="intro-h lang-en">This week: <span class="hl">four chapters</span> into reasoning-style prompting</h1>
+    <h1 class="intro-h lang-ko">이번 파트, <span class="hl">네 개의 챕터</span>로 추론형 프롬프트를 파고든다</h1>
+    <h1 class="intro-h lang-en">This part: <span class="hl">four chapters</span> into reasoning-style prompting</h1>
 
     <div class="roadmap lang-ko" style="margin-top:14px">
       <div class="rm-item"><span class="rn">2-1</span><span><span class="rt">제로/퓨샷·민감도</span> <span class="rd">— 예시 $k$개의 효과, 예시 순서·형식에 대한 성능 민감도와 그 함정</span></span></div>
@@ -223,13 +223,13 @@
       <div class="rm-item"><span class="rn">2-4</span><span><span class="rt">ToT &amp; Decomposition</span> <span class="rd">— Tree-of-Thoughts search and problem decomposition for hard tasks</span></span></div>
     </div>
 
-    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 주가 끝나면 할 수 있게 된다</h4><ul>
+    <div class="outcomes lang-ko" style="margin-top:18px"><h4>이번 파트가 끝나면 할 수 있게 된다</h4><ul>
       <li>제로/퓨샷을 <strong>과제 특성과 예시 수 $k$</strong>에 맞춰 선택하고 민감도 함정을 피한다.</li>
       <li>사고 사슬과 자기일관성을 <strong>언제 쓰고 언제 피할지</strong> 모델 규모·비용과 함께 판단한다.</li>
       <li>ReAct 루프로 <strong>추론과 도구 호출</strong>을 엮어 검증 가능한 답을 설계한다.</li>
       <li>사고트리·분해로 복잡 과제를 <strong>구조화된 하위 문제</strong>로 나눠 공략한다.</li>
     </ul></div>
-    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this week you will be able to</h4><ul>
+    <div class="outcomes lang-en" style="margin-top:18px"><h4>By the end of this part you will be able to</h4><ul>
       <li>Choose zero- vs few-shot to match <strong>task characteristics and the number of examples $k$</strong>, avoiding sensitivity pitfalls.</li>
       <li>Decide <strong>when to use and when to avoid</strong> CoT and self-consistency, weighing model scale and cost.</li>
       <li>Design verifiable answers by interleaving <strong>reasoning and tool calls</strong> with the ReAct loop.</li>
